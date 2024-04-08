@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "description": "Our Ludum Dare 55 entry",
   "scripts": {
-    "start": "parcel src/index.html",
+    "start": "concurrently -n assets,server \"npm run watch-manifest\" \"npm run dev-server\"",
+    "dev-server": "parcel src/index.html",
     "build": "parcel build src/index.html",
     "tsc": "tsc --noEmit",
     "tsc-watch": "tsc --noEmit --watch",
     "prettier": "prettier --write src",
-    "generate-asset-types": "./bin/generate-asset-types.js -d ./resources"
+    "generate-manifest": "./bin/generate-asset-types.js -d ./resources",
+    "watch-manifest": "./bin/generate-asset-types.js -d ./resources watch"
   },
   "repository": {
     "type": "git",
@@ -19,25 +21,24 @@
   "homepage": "https://github.com/simonbw/ld-55#readme",
   "dependencies": {
     "@parcel/macros": "^2.12.0",
+    "@parcel/resolver-glob": "^2.12.0",
     "@types/node": "^20.12.5",
     "@types/p2": "^0.7.44",
     "@types/react": "^18.2.74",
     "@types/react-dom": "^18.2.24",
     "@types/yargs": "^17.0.32",
     "camelcase": "^8.0.0",
+    "chokidar": "^3.6.0",
     "glob": "^10.3.12",
     "p2": "^0.7.1",
     "parcel": "^2.12.0",
     "pixi.js": "^8.0.5",
     "prettier": "^3.2.5",
+    "process": "^0.11.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.4",
     "yargs": "^17.7.2"
-  },
-  "devDependencies": {
-    "@parcel/resolver-glob": "^2.12.0",
-    "process": "^0.11.10"
   }
 }

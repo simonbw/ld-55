@@ -11,6 +11,7 @@ async function main() {
   const { globSync } = await import("glob");
   const path = await import("path");
   const yargs = require("yargs");
+  const chokidar = await import("chokidar");
 
   // mapping extensions to their variable prefix
   const extensionToPrefix = {
@@ -188,7 +189,6 @@ async function main() {
   }
 
   function cleanAndGenerate(assetsFolder) {
-    console.log(`Updating asset types in "${assetsFolder}" . . .`);
     const removed = new Set(cleanTypes(assetsFolder, true));
     const generated = new Set(generateTypes(assetsFolder, true));
     const newFiles = [];
@@ -207,11 +207,29 @@ async function main() {
       console.log(deletedFiles.map((f) => ` - removed ${f}`).join("\n"));
     }
     if (newFiles.length) {
-      console.log(newFiles.map((f) => ` - created ${f}`).join("\n"));
+      console.log(newFiles.map((f) => ` + created ${f}`).join("\n"));
     }
     if (newFiles.length === 0 && deletedFiles.length === 0) {
       console.log("Nothing has changed");
     }
+  }
+
+  function watch(assetsFolder) {
+    const resourceGlob = `${assetsFolder}/**/*.{${extensions.join(",")}}`;
+    console.log(`Watching for resource changes in ${resourceGlob}`);
+
+    // Run once at the beginning
+    cleanAndGenerate(assetsFolder);
+
+    // Then run it on every new or removed file
+    chokidar
+      .watch(resourceGlob, { ignoreInitial: true })
+      .on("add", (path, stats) => {
+        cleanAndGenerate(assetsFolder);
+      })
+      .on("unlink", (path, stats) => {
+        cleanAndGenerate(assetsFolder);
+      });
   }
 
   yargs(process.argv.slice(2))
@@ -234,6 +252,7 @@ async function main() {
       "cleans and generates",
       () => {},
       (argv) => {
+        console.log(`Updating asset types in "${assetsFolder}" . . .`);
         cleanAndGenerate(argv.directory);
       }
     )
@@ -242,7 +261,7 @@ async function main() {
       "keeps everything up to date",
       () => {},
       (argv) => {
-        cleanAndGenerate(argv.directory);
+        watch(argv.directory);
       }
     )
     .command(
