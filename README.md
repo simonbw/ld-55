@@ -1,5 +1,8 @@
 # INSERT GAME TITLE HERE
 
+This repo houses the source code for [our submission to Ludum Dare 55](https://ldjam.com/events/ludum-dare/55/$384591).
+You can play the most recent version [here](https://ld-55.simonbw.com/).
+
 ## How to run locally
 
 1. Make sure you have a recent version of [node.js](https://nodejs.org/en) installed
@@ -8,41 +11,50 @@
 4. Run `npm start` to start the dev server
 5. You should now be able to play the game at http://localhost:1234
 
+## Contributing
+
+### Contributing Code
+
+### Contributing Assets
+
 ## Structure of this project
 
-### `src/`
+#### `src/`
 
 The folder where all the source code goes.
 
-### `src/core`
+#### `src/core`
 
 This is the engine code that I (Simon) have built up over many years and games.
 
-### `src/ld-55`
+#### `src/ld-55`
 
 This is where our game's code lives.
 
-### `src/index.html`
+#### `src/index.html`
 
 This is the entrypoint to our code from the browser.
 
-### `resources`
+#### `resources`
 
 This is where all of our assets like images, sound effects, music, fonts, etc. go.
 
-### `resources/audio`
+#### `resources/audio`
 
 This is where all of our audio files go.
 
-### `resources/images`
+#### `resources/images`
 
 This is where all of our images go.
 
-### `resources/fonts`
+#### `resources/fonts`
 
 This is where all of our fonts go.
 
 ## Technologies Used
+
+This game is built on an engine I have cobbled together over the years.
+There are a few big libraries in it that do the heavy lifting.
 
 ### TypeScript
 
