@@ -60,11 +60,6 @@ There are a few big libraries in it that do the heavy lifting.
 
 The code for this project is written in [TypeScript](https://www.typescriptlang.org/), a superset of JavaScript that adds static type analysis.
 
-### Parcel
-
-This project uses [Parcel](https://parceljs.org/) as the bundler and dev server.
-It handles
-
 ### Pixi.js
 
 This game uses a 2d rendering engine called [Pixi.js](https://pixijs.com/).
@@ -74,3 +69,9 @@ This game uses a 2d rendering engine called [Pixi.js](https://pixijs.com/).
 This game uses a 2d physics engine called [p2.js](https://github.com/schteppe/p2.js/).
 It isn't the most performant or featureful engine, but the API is really simple, which is why I originally chose it.
 I'm hoping to replace it soon.
+
+### Parcel
+
+This project uses [Parcel](https://parceljs.org/) as the bundler and dev server.
+It handles everything with almost zero configuration and tends to _just work_.
+Hopefully you shouldn't have to mess with this.

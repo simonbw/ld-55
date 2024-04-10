@@ -1,10 +1,12 @@
 import { Body, Circle } from "p2";
 import BaseEntity from "../../core/entity/BaseEntity";
-import { Graphics } from "pixi.js";
+import { Graphics, Sprite } from "pixi.js";
 import { V2d } from "../../core/Vector";
-import Entity from "../../core/entity/Entity";
+import Entity, { GameSprite } from "../../core/entity/Entity";
+import { imageName } from "../../core/resources/resourceUtils";
 
 export class Ball extends BaseEntity implements Entity {
+  sprite: GameSprite & Sprite;
   body: Body;
   tags = ["ball"];
 
@@ -17,15 +19,14 @@ export class Ball extends BaseEntity implements Entity {
       fixedRotation: true,
     });
 
-    const shape = new Circle({ radius: 1 });
+    const ballRadius = 1;
+
+    const shape = new Circle({ radius: ballRadius });
     this.body.addShape(shape);
 
-    const graphics = (this.sprite = new Graphics());
-    graphics
-      .circle(0, 0, 1)
-      .fill(0xff0000)
-      .setStrokeStyle({ width: 0.1, color: 0xffff00 })
-      .stroke();
+    this.sprite = Sprite.from(imageName("favicon"));
+    this.sprite.anchor.set(0.5);
+    this.sprite.scale = (2 * ballRadius) / this.sprite.texture.width;
   }
 
   onTick(dt: number) {

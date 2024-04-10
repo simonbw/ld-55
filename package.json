@@ -5,12 +5,12 @@
   "scripts": {
     "start": "concurrently -n assets,server \"npm run watch-manifest\" \"npm run dev-server\"",
     "dev-server": "parcel src/index.html",
+    "watch-manifest": "./bin/generate-asset-types.js -d ./resources watch",
     "build": "parcel build src/index.html",
     "tsc": "tsc --noEmit",
     "tsc-watch": "tsc --noEmit --watch",
     "prettier": "prettier --write src",
-    "generate-manifest": "./bin/generate-asset-types.js -d ./resources",
-    "watch-manifest": "./bin/generate-asset-types.js -d ./resources watch"
+    "generate-manifest": "./bin/generate-asset-types.js -d ./resources"
   },
   "repository": {
     "type": "git",
