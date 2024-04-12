@@ -5,6 +5,7 @@ import { V2d } from "../../core/Vector";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
 
+/** An example Entity to show some features of the engine */
 export class Ball extends BaseEntity implements Entity {
   sprite: GameSprite & Sprite;
   body: Body;
@@ -24,13 +25,14 @@ export class Ball extends BaseEntity implements Entity {
     const shape = new Circle({ radius: ballRadius });
     this.body.addShape(shape);
 
-    this.sprite = Sprite.from(imageName("favicon"));
+    this.sprite = Sprite.from(imageName("ball"));
     this.sprite.anchor.set(0.5);
     this.sprite.scale = (2 * ballRadius) / this.sprite.texture.width;
   }
 
+  /** Called every update cycle */
   onTick(dt: number) {
-    if (this.game!.io.keyIsDown("KeyA")) {
+    if (this.game!.io.keyIsDown("Space")) {
       this.body.applyForce([-10, 0]);
     }
     if (this.game!.io.keyIsDown("KeyD")) {
@@ -42,9 +44,21 @@ export class Ball extends BaseEntity implements Entity {
     if (this.game!.io.keyIsDown("KeyW")) {
       this.body.applyForce([0, -10]);
     }
+
+    if (this.body.position[1] > 1) {
+      this.game?.dispatch({ type: "bounce" });
+      this.body.velocity[1] *= -1;
+    }
   }
 
+  /** Called every frame, right before rendering */
   onRender(dt: number): void {
     this.sprite?.position.set(...this.body.position);
   }
+
+  handlers = {
+    bounce: () => {
+      console.log("Bounce!");
+    },
+  };
 }

@@ -122,6 +122,7 @@ export class SoundInstance extends BaseEntity implements Entity {
     this.sourceNode.start(startTime);
   }
 
+  /** Creates the  */
   makeChain({ audio, slowMo }: Game): AudioNode {
     this.sourceNode = audio.createBufferSource();
     this.sourceNode.buffer = getSoundBuffer(this.soundName)!;

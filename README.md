@@ -16,11 +16,8 @@ You can play the most recent version [here](https://ld-55.simonbw.com/).
 ### Contributing Code
 
 - Don't break `main`
-
-A few more tips:
-
+- Check out [src/core](src/core) for an overview of the engine.
 - Try to add placeholder assets (images, sounds) where possible. This makes it easy for artists to just go and upload a new version when they have a real version ready.
--
 
 ### Contributing Non-Code Assets
 

@@ -9,7 +9,8 @@ const sounds = {
 export type SoundName = keyof typeof sounds;
 
 const images = {
-    favicon: require("./images/favicon.png")
+    favicon: require("./images/favicon.png"),
+  ball: require("./images/ball.png")
 };
 export type ImageName = keyof typeof images;
 
