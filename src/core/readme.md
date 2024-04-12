@@ -110,16 +110,19 @@ You shouldn't need to deal with this often.
 You can define handlers for any type of custom event you want using the `handlers` field.
 
 For example, say we have a `LevelManager` class somewhere that determines when we start a level.
-It can
+It can dispatch a `levelStarted` event using `Game#dispatch`...
 
 ```TypeScript
-class Ball extends BaseEntity implements Entity {
+class LevelManager extends BaseEntity implements Entity {
+  //...
   onTick() {
     //...level management stuff
     this.game.dispatch({ type: 'levelStarted', level: 1 });
   }
 }
 ```
+
+and then we can listen for that event in our `Ball` class to do something at the start of a level.
 
 ```TypeScript
 class Ball extends BaseEntity implements Entity
@@ -132,7 +135,7 @@ class Ball extends BaseEntity implements Entity
 
 ## Finding Entities
 
-There are a few
+There are a few...
 
 ## Graphics
 
