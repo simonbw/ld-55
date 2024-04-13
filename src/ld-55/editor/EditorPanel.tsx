@@ -93,7 +93,10 @@ export class EditorPanel extends ReactEntity<any> implements Entity {
     }
 
     for (const ind of this.selectedEntityIndices) {
-      rootController.children![ind].onSelected();
+      const e = rootController.children![ind];
+      if (e instanceof EditPositionController) {
+        e.onSelected();
+      }
     }
 
   }
