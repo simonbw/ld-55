@@ -3,6 +3,7 @@ import Game from "../../core/Game";
 import { ReactEntity } from "../../core/ReactEntity";
 import { V } from "../../core/Vector";
 import Entity from "../../core/entity/Entity";
+import { EditAngleController } from "./EditAngleController";
 import { EditPositionController } from "./EditPositionController";
 import { serializeLevel } from "./serializeLevel";
 
@@ -20,7 +21,12 @@ export class EditorPanel extends ReactEntity<any> implements Entity {
           case 'position':
           case 'position1':
           case 'position2':
+          case 'hinge':
+          case 'end':
             this.addChild(new EditPositionController(V(value as any)));
+            break;
+          case 'angle':
+            this.addChild(new EditAngleController(e.position, value));
             break;
         }
       }

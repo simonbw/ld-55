@@ -3,6 +3,8 @@ import Entity from "../../core/entity/Entity";
 import { Camera2d } from "../../core/graphics/Camera2d";
 import { V } from "../../core/Vector";
 
+const CAMERA_SPEED = 10; 
+
 export default class PlayerCameraController extends BaseEntity implements Entity {
 
   constructor(
@@ -12,29 +14,30 @@ export default class PlayerCameraController extends BaseEntity implements Entity
   }
 
   onAdd() {
-    this.camera.z = 65;
+    this.camera.z = 40;
     const player = this.game?.entities.getTagged("player")[0];
     if (player) {
-      this.camera.smoothCenter(V(player.body!.position));
-    } else {
-      this.camera.smoothSetVelocity(V(0, 0));
+      this.camera.center(V(player.body!.position));
     }
+    console.log(this.game);
   }
 
   /** Called every update cycle */
   onTick(dt: number) {
+    let targetV = V(0, 0);
     if (this.game!.io.keyIsDown("KeyW")) {
-      this.camera.smoothSetVelocity(V(0, 11));
+      targetV.y -= CAMERA_SPEED;
     }
     if (this.game!.io.keyIsDown("KeyD")) {
-      this.camera.smoothSetVelocity(V(1, 0));
+      targetV.x += CAMERA_SPEED;
     }
     if (this.game!.io.keyIsDown("KeyS")) {
-      this.camera.smoothSetVelocity(V(0, 1));
+      targetV.y += CAMERA_SPEED;
     }
     if (this.game!.io.keyIsDown("KeyA")) {
-      this.camera.smoothSetVelocity(V(-1, 0));
+      targetV.x -= CAMERA_SPEED;
     }
+    this.camera.smoothSetVelocity(targetV);
   }
 
   onRender() {
