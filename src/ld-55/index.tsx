@@ -1,6 +1,6 @@
 import Game from "../core/Game.ts";
 import { GamePreloader } from "./GamePreloader.tsx";
-import CameraController from "./entities/CameraController.ts";
+import PlayerCameraController from "./entities/PlayerCameraController.ts";
 import HallwayLevel from "./environment/HallwayLevel.ts";
 
 // Do this so we can access the game from the console
@@ -21,7 +21,7 @@ async function main() {
   preloader.destroy();
 
   HallwayLevel.addLevelEntities(game);
-  game.addEntity(new CameraController(game.camera));
+  game.addEntity(new PlayerCameraController(game.camera));
 
   // ExampleLevel.addLevelEntities(game);
 }
