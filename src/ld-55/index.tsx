@@ -37,7 +37,7 @@ async function main() {
 
   game.addEntity(new Door(V(0, 0), V(4, 0)));
 
-  game.addEntity(new Enemy(V(7, 5)));
+  game.addEntity(new Enemy(V(10, 5), Math.PI));
 }
 
 window.addEventListener("load", main);

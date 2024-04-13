@@ -1,14 +1,10 @@
-import { Body, Circle, ContactEquation, Convex, Shape } from "p2";
+import { Body, Circle, ContactEquation, Convex, Ray, RaycastResult, Shape } from "p2";
 import { Graphics, Sprite } from "pixi.js";
 import { V, V2d } from "../../core/Vector";
 import BaseEntity from "../../core/entity/BaseEntity";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
-import Game from "../../core/Game";
 import { degToRad, polarToVec } from "../../core/util/MathUtil";
-import { PositionalSound } from "../../core/sound/PositionalSound";
-import { choose } from "../../core/util/Random";
-import { SoundInstance } from "../../core/sound/SoundInstance";
 
 export class Enemy extends BaseEntity implements Entity {
   sprite: GameSprite & Sprite;
@@ -17,7 +13,7 @@ export class Enemy extends BaseEntity implements Entity {
 
   visionCone: VisionCone;
 
-  constructor(position: V2d) {
+  constructor(position: V2d, angle: number) {
     super();
 
     this.body = new Body({
@@ -36,6 +32,8 @@ export class Enemy extends BaseEntity implements Entity {
     this.sprite.scale = (2 * radius) / this.sprite.texture.width;
 
     this.visionCone = this.addChild(new VisionCone());
+
+    this.body.angle = angle;
   }
 
   onTick(dt: number): void {
@@ -43,7 +41,7 @@ export class Enemy extends BaseEntity implements Entity {
 
     const player = this.game?.entities.getTagged("player")[0];
     const walkStrength = 100;
-    if (player) {
+    if (player && this.visionCone.canSee(player)) {
       const playerPosition = V(player.body!.position);
       const direction = playerPosition.sub(this.body.position).normalize();
       this.body.applyForce(direction.mul(walkStrength));
@@ -81,7 +79,7 @@ class VisionCone extends BaseEntity implements Entity {
 
     this.body = new Body({
       type: Body.KINEMATIC,
-      collisionResponse: false,
+      collisionResponse: false
     });
 
     const radius = 8; // meters
@@ -108,25 +106,62 @@ class VisionCone extends BaseEntity implements Entity {
     this.sprite = graphics;
   }
 
+  canSee(entity: Entity): boolean {
+    const p = V(entity.body!.position);
+    const radius = 8; // meters
+    const theta = degToRad(90);
+
+    const delta = p.sub(V(this.body!.position));
+    const tooFar = delta.magnitude > radius;
+    if (tooFar) {
+      return false;
+    }
+
+    const tau = Math.PI * 2
+    // Handle three cases in case angle has wrapped around
+    const inArc = delta.angle <= this.body.angle + theta / 2 && delta.angle >= this.body.angle - theta / 2
+      || delta.angle + tau <= this.body.angle + theta / 2 && delta.angle + tau >= this.body.angle - theta / 2
+      || delta.angle - tau <= this.body.angle + theta / 2 && delta.angle - tau >= this.body.angle - theta / 2;
+    if (!inArc) {
+      return false;
+    }
+
+    const result = new RaycastResult();
+    const ray = new Ray({
+      from: this.body.position,
+      to: [p[0], p[1]],
+      mode: Ray.CLOSEST,
+      skipBackfaces: true,
+    });
+
+    this.body.world.raycast(result, ray);
+    const visionBlocked = result.body != entity.body;
+    if (visionBlocked) {
+      return false;
+    }
+
+    return true;
+  }
+
   onRender(dt: number): void {
     this.sprite.position.set(...this.body.position);
     this.sprite.rotation = this.body.angle;
   }
 
-  onBeginContact(
-    other?: Entity | undefined,
-    thisShape?: Shape | undefined,
-    otherShape?: Shape | undefined,
-    contactEquations?: ContactEquation[] | undefined
-  ): void {
-    if (other?.tags?.includes("player")) {
-      console.log("Player in vision cone!");
+  // onBeginContact(
+  //   other?: Entity | undefined,
+  //   thisShape?: Shape | undefined,
+  //   otherShape?: Shape | undefined,
+  //   contactEquations?: ContactEquation[] | undefined
+  // ): void {
+  //   if (other?.tags?.includes("player") && this.canSee(other)) {
+  //     console.log("Player in vision cone!");
 
-      this.game?.addEntity(
-        new SoundInstance(
-          choose("fleshHit1", "fleshHit2", "fleshHit3", "fleshHit4")
-        )
-      );
-    }
-  }
+  //     this.game?.addEntity(
+  //       new SoundInstance(
+  //         choose("fleshHit1", "fleshHit2", "fleshHit3", "fleshHit4")
+  //       )
+  //     );
+  //   }
+  // }
 }
