@@ -1,7 +1,7 @@
 import { Body, Circle } from "p2";
-import BaseEntity from "../../core/entity/BaseEntity";
-import { Graphics, Sprite } from "pixi.js";
+import { Sprite } from "pixi.js";
 import { V2d } from "../../core/Vector";
+import BaseEntity from "../../core/entity/BaseEntity";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
 
@@ -53,10 +53,4 @@ export class Ball extends BaseEntity implements Entity {
   onRender(dt: number): void {
     this.sprite?.position.set(...this.body.position);
   }
-
-  handlers = {
-    bounce: () => {
-      console.log("Bounce!");
-    },
-  };
 }
