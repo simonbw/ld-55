@@ -28,6 +28,7 @@ export default class DampedRotationalSpring extends RotationalSpring {
     const u = bodyB.angularVelocity - bodyA.angularVelocity;
 
     const torque = clamp(-k * (x - l) - d * u, -this.maxTorque, this.maxTorque);
+    // const torque = -k * (x - l) - d * u;
 
     bodyA.angularForce -= torque;
     bodyB.angularForce += torque;

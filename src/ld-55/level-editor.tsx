@@ -1,8 +1,8 @@
 import Game from "../core/Game.ts";
 import { GamePreloader } from "./GamePreloader.tsx";
-import { initLayers } from "./config/layers.ts";
-import SlowMoController from "./entities/SlowMoController.ts";
-import PlayerCameraController from "./entities/PlayerCameraController.ts";
+import { EditorPanel } from "./editor/EditorPanel.tsx";
+import GodCameraController from "./editor/GodCameraController.tsx";
+import { deserializeLevel, serializeLevel } from "./editor/serializeLevel.tsx";
 import HallwayLevel from "./environment/HallwayLevel.ts";
 
 // Do this so we can access the game from the console
@@ -14,21 +14,22 @@ declare global {
 
 async function main() {
   const game = new Game();
-  await game.init();
   // Make the game accessible from the console
+  await game.init();
   window.DEBUG = { game };
 
   const preloader = game.addEntity(GamePreloader);
   await preloader.waitTillLoaded();
   preloader.destroy();
 
-  initLayers(game);  
-
   HallwayLevel.addLevelEntities(game);
-  game.addEntity(new PlayerCameraController(game.camera));
-  game.addEntity(new SlowMoController());
+  const stuff = serializeLevel(game);
+  game.clearScene();
 
-  // ExampleLevel.addLevelEntities(game);
+  deserializeLevel(game, stuff);
+  game.addEntity(new GodCameraController(game.camera));
+  game.addEntity(new EditorPanel(game));
+
 }
 
 window.addEventListener("load", main);

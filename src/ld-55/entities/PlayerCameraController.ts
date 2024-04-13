@@ -3,7 +3,7 @@ import Entity from "../../core/entity/Entity";
 import { Camera2d } from "../../core/graphics/Camera2d";
 import { V } from "../../core/Vector";
 
-export default class CameraController extends BaseEntity implements Entity {
+export default class PlayerCameraController extends BaseEntity implements Entity {
 
   constructor(
     private camera: Camera2d

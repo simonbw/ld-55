@@ -46,7 +46,7 @@ function addLevelEntities(game: Game) {
 
   game.addEntity(new Wall(V(10, 36), V(11, 36)));
   game.addEntity(new Door(V(11, 36), V(12.5, 36)));
-  game.addEntity(new Door(V(12.5, 36), V(14, 36)));
+  game.addEntity(new Door(V(14, 36), V(12.5, 36)));
   game.addEntity(new Wall(V(14, 36), V(15, 36)));
 
   game.addEntity(new Enemy(V(5, 5), 0));

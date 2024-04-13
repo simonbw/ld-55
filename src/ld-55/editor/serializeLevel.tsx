@@ -33,7 +33,10 @@ function serializeLevel(game: Game): Level {
 
 function deserializeLevel(game: Game, level: Level) {
   for (const e of level.entities) {
-    game.addEntity((SerializableEntity.typeNameToType(e.type) as any).deserialize(e));
+    const t = SerializableEntity.typeNameToType(e.type);
+    if (t) {
+      game.addEntity((t as any).deserialize(e));
+    }
   }
 }
 
