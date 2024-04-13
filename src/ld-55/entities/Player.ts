@@ -37,7 +37,12 @@ export class Player extends SerializableEntity implements Entity {
   onTick(dt: number) {
     this.body.applyDamping(200 * dt);
 
-    const walkStrength = 200;
+    let walkStrength = 100;
+
+    if (this.game!.io.keyIsDown("ShiftLeft")) {
+      walkStrength = 200;
+    }
+
     if (this.game!.io.keyIsDown("KeyW")) {
       this.body.applyForce([0, -walkStrength]);
     }
