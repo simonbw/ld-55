@@ -33,20 +33,13 @@ export class EditPositionController extends BaseEntity implements Entity {
     }
   }
 
-  onSelected() {
+  onSelected(position: V2d) {
     this.selected = true;
-    this.sprite
+    this.sprite!.position.set(...position);
   }
 
   onUnselected() {
     this.selected = false;
-  }
-
-  onTick() {
-    if (this.selected) {
-      const clickPosition = this.game!.camera.toWorld(this.game!.io.mousePosition);
-      this.sprite!.position.set(...clickPosition);
-    }
   }
 
 }
