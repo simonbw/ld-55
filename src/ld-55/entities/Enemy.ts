@@ -1,10 +1,18 @@
-import { Body, Circle, ContactEquation, Convex, Ray, RaycastResult, Shape } from "p2";
+import {
+  Body,
+  Circle,
+  ContactEquation,
+  Convex,
+  Ray,
+  RaycastResult,
+  Shape,
+} from "p2";
 import { Graphics, Sprite } from "pixi.js";
 import { V, V2d } from "../../core/Vector";
 import BaseEntity from "../../core/entity/BaseEntity";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
-import { degToRad, polarToVec } from "../../core/util/MathUtil";
+import { angleDelta, degToRad, polarToVec } from "../../core/util/MathUtil";
 import { SerializedEntity } from "../editor/serializeTypes";
 
 export class Enemy extends BaseEntity implements Entity {
@@ -86,34 +94,34 @@ class VisionCone extends BaseEntity implements Entity {
   sprite: GameSprite & Graphics;
   body: Body;
 
+  theta = degToRad(45); // half width of vision cone
+
   constructor() {
     super();
 
     this.body = new Body({
       type: Body.KINEMATIC,
-      collisionResponse: false
+      collisionResponse: false,
     });
 
     const radius = 8; // meters
-    const theta = degToRad(90);
 
-    // TODO: Shape
     const vertices: V2d[] = [];
     vertices.push(V(0, 0));
-    for (let i = -theta / 2; i <= theta / 2; i += degToRad(5)) {
+    for (let i = -this.theta; i <= this.theta; i += degToRad(5)) {
       vertices.push(polarToVec(i, radius));
     }
     this.body.addShape(new Convex({ vertices }));
 
-    const start = polarToVec(-theta / 2, radius);
+    const start = polarToVec(-this.theta, radius);
     const graphics = new Graphics();
     graphics
       .moveTo(0, 0)
       .lineTo(start.x, start.y)
-      .arc(0, 0, radius, -theta / 2, theta / 2)
+      .arc(0, 0, radius, -this.theta, this.theta)
       .lineTo(0, 0)
       .closePath()
-      .fill({ color: 0xff0000, alpha: 0.5 });
+      .fill({ color: 0xffffff, alpha: 0.5 });
 
     this.sprite = graphics;
   }
@@ -121,7 +129,6 @@ class VisionCone extends BaseEntity implements Entity {
   canSee(entity: Entity): boolean {
     const p = V(entity.body!.position);
     const radius = 8; // meters
-    const theta = degToRad(90);
 
     const delta = p.sub(V(this.body!.position));
     const tooFar = delta.magnitude > radius;
@@ -129,12 +136,8 @@ class VisionCone extends BaseEntity implements Entity {
       return false;
     }
 
-    const tau = Math.PI * 2
-    // Handle three cases in case angle has wrapped around
-    const inArc = delta.angle <= this.body.angle + theta / 2 && delta.angle >= this.body.angle - theta / 2
-      || delta.angle + tau <= this.body.angle + theta / 2 && delta.angle + tau >= this.body.angle - theta / 2
-      || delta.angle - tau <= this.body.angle + theta / 2 && delta.angle - tau >= this.body.angle - theta / 2;
-    if (!inArc) {
+    const angleDisplacement = angleDelta(delta.angle, this.body.angle);
+    if (Math.abs(angleDisplacement) > this.theta) {
       return false;
     }
 
@@ -158,6 +161,12 @@ class VisionCone extends BaseEntity implements Entity {
   onRender(dt: number): void {
     this.sprite.position.set(...this.body.position);
     this.sprite.rotation = this.body.angle;
+
+    if (this.canSee(this.game?.entities.getTagged("player")[0]!)) {
+      this.sprite.tint = 0xff0000;
+    } else {
+      this.sprite.tint = 0xffffff;
+    }
   }
 
   // onBeginContact(
