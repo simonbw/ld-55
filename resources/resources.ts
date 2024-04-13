@@ -15,7 +15,9 @@ const sounds = {
   footstepSoft1: require("./audio/footstep-soft-1.flac"),
   footstepSlide: require("./audio/footstep-slide.flac"),
   footstepLoud2: require("./audio/footstep-loud-2.flac"),
-  footstepLoud1: require("./audio/footstep-loud-1.flac")
+  footstepLoud1: require("./audio/footstep-loud-1.flac"),
+  doorShut: require("./audio/door shut.flac"),
+  doorKnobClick: require("./audio/door knob click.flac")
 };
 export type SoundName = keyof typeof sounds;
 
