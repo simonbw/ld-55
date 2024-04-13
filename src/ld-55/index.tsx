@@ -1,7 +1,8 @@
 import Game from "../core/Game.ts";
 import { V } from "../core/Vector";
 import { GamePreloader } from "./GamePreloader.tsx";
-import { Ball } from "./entities/Ball.ts";
+import { Enemy } from "./entities/Enemy.ts";
+import { Player } from "./entities/Player.ts";
 import { Wall } from "./entities/Wall.ts";
 
 // Do this so we can access the game from the console
@@ -25,10 +26,12 @@ async function main() {
   // Think of these like indexes in a DB
   // game.entities.addFilter(isHuman);
 
-  game.addEntity(new Ball(V(2, 2)));
+  game.addEntity(new Player(V(2, 2)));
 
   game.addEntity(new Wall(V(0, 0), V(0, 10)));
   game.addEntity(new Wall(V(5, 0), V(5, 10)));
+
+  game.addEntity(new Enemy(V(7, 5)));
 }
 
 window.addEventListener("load", main);

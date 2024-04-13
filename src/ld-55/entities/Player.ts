@@ -6,10 +6,10 @@ import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
 
 /** An example Entity to show some features of the engine */
-export class Ball extends BaseEntity implements Entity {
+export class Player extends BaseEntity implements Entity {
   sprite: GameSprite & Sprite;
   body: Body;
-  tags = ["ball"];
+  tags = ["player"];
 
   constructor(position: V2d) {
     super();
@@ -20,14 +20,14 @@ export class Ball extends BaseEntity implements Entity {
       fixedRotation: true,
     });
 
-    const ballRadius = 1; // meters
+    const radius = 1; // meters
 
-    const shape = new Circle({ radius: ballRadius });
+    const shape = new Circle({ radius: radius });
     this.body.addShape(shape);
 
-    this.sprite = Sprite.from(imageName("ball"));
+    this.sprite = Sprite.from(imageName("player"));
     this.sprite.anchor.set(0.5);
-    this.sprite.scale = (2 * ballRadius) / this.sprite.texture.width;
+    this.sprite.scale = (2 * radius) / this.sprite.texture.width;
   }
 
   /** Called every update cycle */
