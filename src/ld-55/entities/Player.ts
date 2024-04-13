@@ -43,13 +43,6 @@ export class Player extends SerializableEntity implements Entity {
       walkStrength = 200;
     }
 
-    if (this.game && this.game.io.keyIsDown("KeyQ")) {
-      this.game.slowMo = 0.5;
-    }
-    else if (this.game) {
-      this.game.slowMo = 1;
-    }
-
     if (this.game!.io.keyIsDown("KeyW")) {
       this.body.applyForce([0, -walkStrength]);
     }
