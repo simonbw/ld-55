@@ -1,0 +1,430 @@
+{
+  "version": 1,
+  "entities": [
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        0,
+        0
+      ],
+      "position2": [
+        25,
+        0
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        25,
+        0
+      ],
+      "position2": [
+        25,
+        40
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        25,
+        40
+      ],
+      "position2": [
+        10,
+        40
+      ]
+    },
+    {
+      "type": "Door",
+      "version": 1,
+      "hinge": [
+        10,
+        40
+      ],
+      "end": [
+        9,
+        39
+      ]
+    },
+    {
+      "type": "Door",
+      "version": 1,
+      "hinge": [
+        8,
+        38
+      ],
+      "end": [
+        9,
+        39
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        8,
+        38
+      ],
+      "position2": [
+        8,
+        36
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        8,
+        36
+      ],
+      "position2": [
+        0,
+        36
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        0,
+        36
+      ],
+      "position2": [
+        0,
+        0
+      ]
+    },
+    {
+      "type": "Player",
+      "version": 1,
+      "position": [
+        12.5,
+        2
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        0,
+        12
+      ],
+      "position2": [
+        10,
+        12
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        0,
+        24
+      ],
+      "position2": [
+        10,
+        24
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        15,
+        12
+      ],
+      "position2": [
+        25,
+        12
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        15,
+        24
+      ],
+      "position2": [
+        25,
+        24
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        15,
+        32
+      ],
+      "position2": [
+        25,
+        32
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        10,
+        0
+      ],
+      "position2": [
+        10,
+        1
+      ]
+    },
+    {
+      "type": "Door",
+      "version": 1,
+      "hinge": [
+        10,
+        1
+      ],
+      "end": [
+        10,
+        3
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        10,
+        3
+      ],
+      "position2": [
+        10,
+        13
+      ]
+    },
+    {
+      "type": "Door",
+      "version": 1,
+      "hinge": [
+        10,
+        13
+      ],
+      "end": [
+        10,
+        15
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        10,
+        15
+      ],
+      "position2": [
+        10,
+        25
+      ]
+    },
+    {
+      "type": "Door",
+      "version": 1,
+      "hinge": [
+        10,
+        25
+      ],
+      "end": [
+        10,
+        27
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        10,
+        27
+      ],
+      "position2": [
+        10,
+        36
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        10,
+        36
+      ],
+      "position2": [
+        8,
+        36
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        15,
+        0
+      ],
+      "position2": [
+        15,
+        1
+      ]
+    },
+    {
+      "type": "Door",
+      "version": 1,
+      "hinge": [
+        15,
+        1
+      ],
+      "end": [
+        15,
+        3
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        15,
+        3
+      ],
+      "position2": [
+        15,
+        13
+      ]
+    },
+    {
+      "type": "Door",
+      "version": 1,
+      "hinge": [
+        15,
+        13
+      ],
+      "end": [
+        15,
+        15
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        15,
+        15
+      ],
+      "position2": [
+        15,
+        25
+      ]
+    },
+    {
+      "type": "Door",
+      "version": 1,
+      "hinge": [
+        15,
+        25
+      ],
+      "end": [
+        15,
+        27
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        15,
+        27
+      ],
+      "position2": [
+        15,
+        33
+      ]
+    },
+    {
+      "type": "Door",
+      "version": 1,
+      "hinge": [
+        15,
+        33
+      ],
+      "end": [
+        15,
+        35
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        15,
+        35
+      ],
+      "position2": [
+        15,
+        40
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        10,
+        36
+      ],
+      "position2": [
+        11,
+        36
+      ]
+    },
+    {
+      "type": "Door",
+      "version": 1,
+      "hinge": [
+        11,
+        36
+      ],
+      "end": [
+        12.5,
+        36
+      ]
+    },
+    {
+      "type": "Door",
+      "version": 1,
+      "hinge": [
+        12.5,
+        36
+      ],
+      "end": [
+        14,
+        36
+      ]
+    },
+    {
+      "type": "Wall",
+      "version": 1,
+      "position1": [
+        14,
+        36
+      ],
+      "position2": [
+        15,
+        36
+      ]
+    },
+    {
+      "type": "Enemy",
+      "version": 1,
+      "position": [
+        5,
+        5
+      ],
+      "angle": 0
+    }
+  ]
+}
