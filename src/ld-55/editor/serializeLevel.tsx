@@ -1,16 +1,5 @@
 import Game from "../../core/Game.ts";
-import { Door } from "../entities/Door.ts";
-import { Enemy } from "../entities/Enemy.ts";
-import { Player } from "../entities/Player.ts";
-import { Wall } from "../entities/Wall.ts";
 import { SerializableEntity, SerializedEntity } from "./serializeTypes.tsx";
-
-const typeNameToType: {[key:string]: any} = {
-  'Wall': Wall,
-  'Player': Player,
-  'Enemy': Enemy,
-  'Door': Door,
-};
 
 const version = 1;
 
@@ -26,11 +15,6 @@ function serializeLevel(game: Game): Level {
   };
   for (const e of game.entities) {
     let sE;
-    if (e.constructor.name == 'Enemy') {
-      console.log(e.constructor.name);
-      console.log(e instanceof SerializableEntity);
-      console.log(e);
-    }
     if (e instanceof SerializableEntity) {
       sE = e.serialize();
     }
@@ -49,10 +33,7 @@ function serializeLevel(game: Game): Level {
 
 function deserializeLevel(game: Game, level: Level) {
   for (const e of level.entities) {
-    // console.log(e.type);
-    if (e.type in typeNameToType) {
-      game.addEntity(typeNameToType[e.type].deserialize(e));
-    }
+    game.addEntity((SerializableEntity.typeNameToType(e.type) as any).deserialize(e));
   }
 }
 
