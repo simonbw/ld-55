@@ -18,7 +18,7 @@ export abstract class SerializableEntity extends BaseEntity {
     throw new Error("not implemented!");
   }
 
-  static typeNameToType(typeName: string): Function {
-    return SerializableEntity.derived.get(typeName)!;
+  static typeNameToType(typeName: string): Function | undefined {
+    return SerializableEntity.derived.get(typeName);
   }
 };

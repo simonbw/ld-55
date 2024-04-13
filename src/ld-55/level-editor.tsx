@@ -1,5 +1,7 @@
 import Game from "../core/Game.ts";
 import { GamePreloader } from "./GamePreloader.tsx";
+import { EditorPanel } from "./editor/EditorPanel.tsx";
+import { deserializeLevel, serializeLevel } from "./editor/serializeLevel.tsx";
 import CameraController from "./entities/CameraController.ts";
 import HallwayLevel from "./environment/HallwayLevel.ts";
 
@@ -20,14 +22,15 @@ async function main() {
   await preloader.waitTillLoaded();
   preloader.destroy();
 
-  // Add some filters for fast lookup of certain entities later
-  // Think of these like indexes in a DB
-  // game.entities.addFilter(isHuman);
-
   HallwayLevel.addLevelEntities(game);
+  const stuff = serializeLevel(game);
+  game.clearScene();
+  
+  deserializeLevel(game, stuff);
   game.addEntity(new CameraController(game.camera));
+  game.addEntity(new EditorPanel(game));
+  
 
-  // ExampleLevel.addLevelEntities(game);
 }
 
 window.addEventListener("load", main);
