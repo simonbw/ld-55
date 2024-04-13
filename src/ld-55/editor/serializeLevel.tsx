@@ -1,12 +1,13 @@
 import Game from "../../core/Game.ts";
+import Entity from "../../core/entity/Entity.ts";
 import { LevelData, SerializableEntity } from "./serializeTypes.tsx";
 
 const version = 1;
 
 function serializeLevel(game: Game): LevelData {
-  const serializedLevel : LevelData = {
+  const serializedLevel: LevelData = {
     version,
-    entities : [],
+    entities: [],
   };
   for (const e of game.entities) {
     let sE;
@@ -15,12 +16,11 @@ function serializeLevel(game: Game): LevelData {
     }
 
     if (sE) {
-      serializedLevel.entities.push(
-        {
-          type: e.constructor.name,
-          version: 1, // can be overriden by .serialize method
-          ...sE
-        });
+      serializedLevel.entities.push({
+        type: e.constructor.name,
+        version: 1, // can be overriden by .serialize method
+        ...sE,
+      });
     }
   }
   return serializedLevel;
@@ -37,7 +37,4 @@ function deserializeLevel(level: LevelData): Entity[] {
   return arr;
 }
 
-export {
-  deserializeLevel, serializeLevel
-};
-
+export { deserializeLevel, serializeLevel };
