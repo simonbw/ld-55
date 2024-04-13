@@ -36,11 +36,11 @@ export class GameRenderer2d {
       .then(() => {
         document.body.appendChild(this.canvas);
 
-        const makeFullScreen = () => {
-          this.canvas.requestFullscreen();
-          this.canvas.removeEventListener("click", makeFullScreen);
-        };
-        this.canvas.addEventListener("click", makeFullScreen);
+        // const makeFullScreen = () => {
+        //   this.canvas.requestFullscreen();
+        //   this.canvas.removeEventListener("click", makeFullScreen);
+        // };
+        // this.canvas.addEventListener("click", makeFullScreen);
       });
   }
 

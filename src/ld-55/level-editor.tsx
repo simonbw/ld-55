@@ -2,7 +2,7 @@ import Game from "../core/Game.ts";
 import { GamePreloader } from "./GamePreloader.tsx";
 import { EditorPanel } from "./editor/EditorPanel.tsx";
 import GodCameraController from "./editor/GodCameraController.tsx";
-import { deserializeLevel, serializeLevel } from "./editor/serializeLevel.tsx";
+import { serializeLevel } from "./editor/serializeLevel.tsx";
 import HallwayLevel from "./environment/HallwayLevel.ts";
 
 // Do this so we can access the game from the console
@@ -26,9 +26,8 @@ async function main() {
   const stuff = serializeLevel(game);
   game.clearScene();
 
-  deserializeLevel(game, stuff);
+  game.addEntity(new EditorPanel(game, stuff));
   game.addEntity(new GodCameraController(game.camera));
-  game.addEntity(new EditorPanel(game));
 
 }
 

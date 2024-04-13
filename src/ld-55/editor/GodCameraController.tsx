@@ -5,7 +5,7 @@ import { V } from "../../core/Vector";
 
 const CAMERA_SPEED = 10; 
 
-export default class PlayerCameraController extends BaseEntity implements Entity {
+export default class GodCameraController extends BaseEntity implements Entity {
 
   constructor(
     private camera: Camera2d
@@ -18,8 +18,9 @@ export default class PlayerCameraController extends BaseEntity implements Entity
     const player = this.game?.entities.getTagged("player")[0];
     if (player) {
       this.camera.center(V(player.body!.position));
+    } else {
+      this.camera.center(V(0, 0));
     }
-    console.log(this.game);
   }
 
   /** Called every update cycle */

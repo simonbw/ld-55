@@ -22,3 +22,8 @@ export abstract class SerializableEntity extends BaseEntity {
     return SerializableEntity.derived.get(typeName);
   }
 };
+
+export type LevelData = {
+  version: number,
+  entities: SerializedEntity[],
+};
