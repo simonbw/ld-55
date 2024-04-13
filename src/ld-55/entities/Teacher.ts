@@ -7,7 +7,7 @@ import {
   RaycastResult,
   Shape,
 } from "p2";
-import { Graphics, Sprite } from "pixi.js";
+import { AnimatedSprite, Graphics } from "pixi.js";
 import { V, V2d } from "../../core/Vector";
 import BaseEntity from "../../core/entity/BaseEntity";
 import Entity, { GameSprite } from "../../core/entity/Entity";
@@ -15,13 +15,19 @@ import { imageName } from "../../core/resources/resourceUtils";
 import { angleDelta, degToRad, polarToVec } from "../../core/util/MathUtil";
 import { CollisionGroups } from "../CollisionGroups";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
+import { WalkSoundPlayer } from "./WalkSoundPlayer";
 
-export class Enemy extends SerializableEntity implements Entity {
-  sprite: GameSprite & Sprite;
+const RUNNING_STEPS_PER_SECOND = 5;
+const WALKING_STEPS_PER_SECOND = 2;
+
+export class Teacher extends SerializableEntity implements Entity {
+  sprite: GameSprite & AnimatedSprite;
   body: Body;
   tags = ["enemy"];
 
   visionCone: VisionCone;
+
+  walkSoundPlayer: WalkSoundPlayer;
 
   constructor(
     private position: V2d,
@@ -42,25 +48,58 @@ export class Enemy extends SerializableEntity implements Entity {
     shape.collisionMask = CollisionGroups.All;
     this.body.addShape(shape);
 
-    this.sprite = Sprite.from(imageName("enemy"));
+    this.sprite = AnimatedSprite.fromImages([
+      imageName("teacherGym1"),
+      imageName("teacherGym2"),
+      imageName("teacherGym3"),
+      imageName("teacherGym4"),
+      imageName("teacherGym5"),
+      imageName("teacherGym6"),
+      imageName("teacherGym7"),
+      imageName("teacherGym8"),
+    ]);
     this.sprite.anchor.set(0.5);
     this.sprite.scale = (2 * radius) / this.sprite.texture.width;
+    this.sprite.play();
 
     this.visionCone = this.addChild(new VisionCone());
 
     this.body.angle = angle;
+
+    this.walkSoundPlayer = this.addChild(new WalkSoundPlayer());
   }
 
   onTick(dt: number): void {
     this.body.applyDamping(200 * dt);
 
     const player = this.game?.entities.getTagged("player")[0];
-    const walkStrength = 100;
+    const walkStrength = 180;
     if (player && this.visionCone.canSee(player)) {
       const playerPosition = V(player.body!.position);
       const direction = playerPosition.sub(this.body.position).normalize();
       this.body.applyForce(direction.mul(walkStrength));
       this.body.angle = direction.angle;
+
+      // Always running for now, later we can change
+      const sprinting = true;
+
+      const framesPerStep = 4;
+      if (sprinting) {
+        this.sprite.animationSpeed =
+          (RUNNING_STEPS_PER_SECOND / framesPerStep / 4) * this.game!.slowMo;
+      } else {
+        this.sprite.animationSpeed =
+          (RUNNING_STEPS_PER_SECOND / framesPerStep / 4) * this.game!.slowMo;
+      }
+
+      this.walkSoundPlayer.advance(
+        dt * (sprinting ? RUNNING_STEPS_PER_SECOND : WALKING_STEPS_PER_SECOND),
+        sprinting
+      );
+    } else {
+      this.walkSoundPlayer.stop();
+      this.sprite.animationSpeed = 0;
+      this.sprite.currentFrame = 0;
     }
 
     this.visionCone.body.position = this.body.position;
@@ -80,12 +119,12 @@ export class Enemy extends SerializableEntity implements Entity {
 
   /** Called every frame, right before rendering */
   onRender(dt: number): void {
-    this.sprite?.position.set(...this.body.position);
-    this.sprite.rotation = this.body.angle;
+    this.sprite.position.set(...this.body.position);
+    this.sprite.rotation = this.body.angle + Math.PI / 2;
   }
 
-  static deserialize(e: SerializedEntity): Enemy {
-    return new Enemy(V(e.position), e.angle);
+  static deserialize(e: SerializedEntity): Teacher {
+    return new Teacher(V(e.position), e.angle);
   }
 
   serialize(): SerializedEntity {
@@ -177,21 +216,4 @@ class VisionCone extends BaseEntity implements Entity {
       this.sprite.tint = 0xffffff;
     }
   }
-
-  // onBeginContact(
-  //   other?: Entity | undefined,
-  //   thisShape?: Shape | undefined,
-  //   otherShape?: Shape | undefined,
-  //   contactEquations?: ContactEquation[] | undefined
-  // ): void {
-  //   if (other?.tags?.includes("player") && this.canSee(other)) {
-  //     console.log("Player in vision cone!");
-
-  //     this.game?.addEntity(
-  //       new SoundInstance(
-  //         choose("fleshHit1", "fleshHit2", "fleshHit3", "fleshHit4")
-  //       )
-  //     );
-  //   }
-  // }
 }

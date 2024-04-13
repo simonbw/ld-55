@@ -1,14 +1,12 @@
 import { Body, Circle } from "p2";
 import { AnimatedSprite } from "pixi.js";
-import { SoundName } from "../../../resources/resources";
 import { V, V2d } from "../../core/Vector";
-import BaseEntity from "../../core/entity/BaseEntity";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
 import { SoundInstance } from "../../core/sound/SoundInstance";
-import { choose, rUniform } from "../../core/util/Random";
 import { CollisionGroups } from "../CollisionGroups";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
+import { WalkSoundPlayer } from "./WalkSoundPlayer";
 
 const RUNNING_STEPS_PER_SECOND = 5;
 const WALKING_STEPS_PER_SECOND = 2;
@@ -50,6 +48,7 @@ export class Player extends SerializableEntity implements Entity {
     ]);
     this.sprite.anchor.set(0.5);
     this.sprite.setSize(2 * radius);
+    this.sprite.play();
 
     this.walkSoundPlayer = this.addChild(new WalkSoundPlayer());
   }
@@ -136,33 +135,5 @@ export class Player extends SerializableEntity implements Entity {
     return {
       position: [...this.position],
     };
-  }
-}
-
-const walkSounds: SoundName[] = [
-  "footstepSoft1",
-  "footstepSoft2",
-  "footstepSoft3",
-];
-const runSounds: SoundName[] = ["footstepLoud1", "footstepLoud2"];
-
-class WalkSoundPlayer extends BaseEntity {
-  stepProgress: number = 0.5;
-
-  advance(walkAmount: number, sprinting: boolean) {
-    this.stepProgress += walkAmount;
-    if (this.stepProgress > 1) {
-      this.stepProgress -= 1;
-      const name = sprinting ? choose(...runSounds) : choose(...walkSounds);
-      this.addChild(
-        new SoundInstance(name, {
-          speed: rUniform(0.9, 1.1),
-        })
-      );
-    }
-  }
-
-  stop() {
-    this.stepProgress = 0.5;
   }
 }

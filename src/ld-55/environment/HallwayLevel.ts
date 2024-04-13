@@ -1,7 +1,7 @@
 import Game from "../../core/Game.ts";
 import { V } from "../../core/Vector";
 import { Door } from "../entities/Door.ts";
-import { Enemy } from "../entities/Enemy.ts";
+import { Teacher } from "../entities/Teacher.ts";
 import { Player } from "../entities/Player.ts";
 import { Wall } from "../entities/Wall.ts";
 
@@ -63,7 +63,7 @@ function addLevelEntities(game: Game) {
   game.addEntity(new Door(V(14, 36), V(12.5, 36)));
   game.addEntity(new Wall(V(14, 36), V(15, 36)));
 
-  game.addEntity(new Enemy(V(5, 5), 0));
+  game.addEntity(new Teacher(V(5, 5), 0));
 }
 
 export default { addLevelEntities };
