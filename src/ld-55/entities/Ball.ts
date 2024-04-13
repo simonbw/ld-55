@@ -20,7 +20,7 @@ export class Ball extends BaseEntity implements Entity {
       fixedRotation: true,
     });
 
-    const ballRadius = 1;
+    const ballRadius = 1; // meters
 
     const shape = new Circle({ radius: ballRadius });
     this.body.addShape(shape);
@@ -32,22 +32,20 @@ export class Ball extends BaseEntity implements Entity {
 
   /** Called every update cycle */
   onTick(dt: number) {
-    if (this.game!.io.keyIsDown("Space")) {
-      this.body.applyForce([-10, 0]);
+    this.body.applyDamping(200 * dt);
+
+    const walkStrength = 200;
+    if (this.game!.io.keyIsDown("KeyW")) {
+      this.body.applyForce([0, -walkStrength]);
     }
     if (this.game!.io.keyIsDown("KeyD")) {
-      this.body.applyForce([10, 0]);
+      this.body.applyForce([walkStrength, 0]);
     }
     if (this.game!.io.keyIsDown("KeyS")) {
-      this.body.applyForce([0, 10]);
+      this.body.applyForce([0, walkStrength]);
     }
-    if (this.game!.io.keyIsDown("KeyW")) {
-      this.body.applyForce([0, -10]);
-    }
-
-    if (this.body.position[1] > 1) {
-      this.game?.dispatch({ type: "bounce" });
-      this.body.velocity[1] *= -1;
+    if (this.game!.io.keyIsDown("KeyA")) {
+      this.body.applyForce([-walkStrength, 0]);
     }
   }
 
