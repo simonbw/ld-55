@@ -132,7 +132,10 @@ class VisionCone extends BaseEntity implements Entity {
     this.sprite = graphics;
   }
 
-  canSee(entity: Entity): boolean {
+  canSee(entity?: Entity): boolean {
+    if (!entity || !entity.body) {
+      return false;
+    }
     const p = V(entity.body!.position);
     const radius = 8; // meters
 
@@ -168,7 +171,7 @@ class VisionCone extends BaseEntity implements Entity {
     this.sprite.position.set(...this.body.position);
     this.sprite.rotation = this.body.angle;
 
-    if (this.canSee(this.game?.entities.getTagged("player")[0]!)) {
+    if (this.canSee(this.game?.entities.getTagged("player")[0])) {
       this.sprite.tint = 0xff0000;
     } else {
       this.sprite.tint = 0xffffff;
