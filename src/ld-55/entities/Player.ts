@@ -1,15 +1,15 @@
 import { Body, Circle } from "p2";
-import BaseEntity from "../../core/entity/BaseEntity";
-import { Graphics, Sprite } from "pixi.js";
+import { Sprite } from "pixi.js";
 import { V2d } from "../../core/Vector";
+import BaseEntity from "../../core/entity/BaseEntity";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
 
 /** An example Entity to show some features of the engine */
-export class Ball extends BaseEntity implements Entity {
+export class Player extends BaseEntity implements Entity {
   sprite: GameSprite & Sprite;
   body: Body;
-  tags = ["ball"];
+  tags = ["player"];
 
   constructor(position: V2d) {
     super();
@@ -20,34 +20,32 @@ export class Ball extends BaseEntity implements Entity {
       fixedRotation: true,
     });
 
-    const ballRadius = 1;
+    const radius = 1; // meters
 
-    const shape = new Circle({ radius: ballRadius });
+    const shape = new Circle({ radius: radius });
     this.body.addShape(shape);
 
-    this.sprite = Sprite.from(imageName("ball"));
+    this.sprite = Sprite.from(imageName("player"));
     this.sprite.anchor.set(0.5);
-    this.sprite.scale = (2 * ballRadius) / this.sprite.texture.width;
+    this.sprite.scale = (2 * radius) / this.sprite.texture.width;
   }
 
   /** Called every update cycle */
   onTick(dt: number) {
-    if (this.game!.io.keyIsDown("Space")) {
-      this.body.applyForce([-10, 0]);
+    this.body.applyDamping(200 * dt);
+
+    const walkStrength = 200;
+    if (this.game!.io.keyIsDown("KeyW")) {
+      this.body.applyForce([0, -walkStrength]);
     }
     if (this.game!.io.keyIsDown("KeyD")) {
-      this.body.applyForce([10, 0]);
+      this.body.applyForce([walkStrength, 0]);
     }
     if (this.game!.io.keyIsDown("KeyS")) {
-      this.body.applyForce([0, 10]);
+      this.body.applyForce([0, walkStrength]);
     }
-    if (this.game!.io.keyIsDown("KeyW")) {
-      this.body.applyForce([0, -10]);
-    }
-
-    if (this.body.position[1] > 1) {
-      this.game?.dispatch({ type: "bounce" });
-      this.body.velocity[1] *= -1;
+    if (this.game!.io.keyIsDown("KeyA")) {
+      this.body.applyForce([-walkStrength, 0]);
     }
   }
 
@@ -55,10 +53,4 @@ export class Ball extends BaseEntity implements Entity {
   onRender(dt: number): void {
     this.sprite?.position.set(...this.body.position);
   }
-
-  handlers = {
-    bounce: () => {
-      console.log("Bounce!");
-    },
-  };
 }

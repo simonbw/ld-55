@@ -29,6 +29,7 @@
     "@types/yargs": "^17.0.32",
     "camelcase": "^8.0.0",
     "chokidar": "^3.6.0",
+    "concurrently": "^8.2.2",
     "glob": "^10.3.12",
     "p2": "^0.7.1",
     "parcel": "^2.12.0",
