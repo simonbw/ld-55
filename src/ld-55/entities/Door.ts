@@ -1,17 +1,21 @@
-import p2, { Body, RotationalSpring } from "p2";
+import p2, { Body } from "p2";
 import { Graphics } from "pixi.js";
 import Game from "../../core/Game";
 import { V, V2d } from "../../core/Vector";
 import Entity from "../../core/entity/Entity";
+import DampedRotationalSpring from "../../core/physics/DampedRotationalSpring";
+import { PositionalSound } from "../../core/sound/PositionalSound";
 import { degToRad, normalizeAngle } from "../../core/util/MathUtil";
+import { rUniform } from "../../core/util/Random";
 import { CollisionGroups } from "../CollisionGroups";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
-import DampedRotationalSpring from "../../core/physics/DampedRotationalSpring";
 
 export class Door extends SerializableEntity implements Entity {
   //sprite: GameSprite;
   body: Body;
   restAngle: number;
+
+  lastDistanceFromClosed: number = 0;
 
   constructor(
     public hinge: V2d,
@@ -95,10 +99,48 @@ export class Door extends SerializableEntity implements Entity {
         worldAnchorB: this.body.position,
         restAngle: this.restAngle,
         damping: 400,
-        stiffness: 800,
-        maxTorque: 40,
+        stiffness: 2000,
+        maxTorque: 30,
+      }),
+
+      new DampedRotationalSpring(game.ground, this.body, {
+        worldAnchorA: this.body.position,
+        worldAnchorB: this.body.position,
+        restAngle: this.restAngle,
+        damping: 10,
+        stiffness: 2000,
+        maxTorque: 10,
       }),
     ];
+  }
+
+  onTick(dt: number): void {
+    const distanceFromClosed = Math.abs(this.body.angle - this.restAngle);
+
+    const threshold = degToRad(1);
+    if (
+      distanceFromClosed < threshold &&
+      this.lastDistanceFromClosed > threshold
+    ) {
+      this.addChild(
+        new PositionalSound("doorShut1", this.end, {
+          speed: rUniform(0.99, 1.1),
+        })
+      );
+    }
+
+    if (
+      distanceFromClosed > threshold &&
+      this.lastDistanceFromClosed < threshold
+    ) {
+      this.addChild(
+        new PositionalSound("doorOpen1", this.end, {
+          speed: rUniform(0.99, 1.1),
+        })
+      );
+    }
+
+    this.lastDistanceFromClosed = distanceFromClosed;
   }
 
   /** Called every frame, right before rendering */

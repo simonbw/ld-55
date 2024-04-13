@@ -7,6 +7,8 @@ const sounds = {
   rawSoftFootsteps: require("./audio/raw_soft-footsteps.flac"),
   rawFootstepsToeHeel: require("./audio/raw_footsteps-toe-heel.flac"),
   rawFootsteps2: require("./audio/raw_footsteps-2.flac"),
+  rawDoorShut: require("./audio/raw_door-shut.flac"),
+  rawDoorKnobClick: require("./audio/raw_door-knob-click.flac"),
   paAnnouncement3: require("./audio/pa-announcement-3.flac"),
   paAnnouncement2: require("./audio/pa-announcement-2.flac"),
   paAnnouncement1: require("./audio/pa-announcement-1.flac"),
@@ -16,8 +18,8 @@ const sounds = {
   footstepSlide: require("./audio/footstep-slide.flac"),
   footstepLoud2: require("./audio/footstep-loud-2.flac"),
   footstepLoud1: require("./audio/footstep-loud-1.flac"),
-  doorShut: require("./audio/door shut.flac"),
-  doorKnobClick: require("./audio/door knob click.flac")
+  doorShut1: require("./audio/door-shut-1.flac"),
+  doorOpen1: require("./audio/door-open-1.flac")
 };
 export type SoundName = keyof typeof sounds;
 

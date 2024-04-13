@@ -66,7 +66,7 @@ export class Teacher extends SerializableEntity implements Entity {
 
     this.body.angle = angle;
 
-    this.walkSoundPlayer = this.addChild(new WalkSoundPlayer());
+    this.walkSoundPlayer = this.addChild(new WalkSoundPlayer(this.body));
   }
 
   onTick(dt: number): void {
