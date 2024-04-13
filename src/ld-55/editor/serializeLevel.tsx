@@ -1,4 +1,5 @@
 import Game from "../../core/Game.ts";
+import { Door } from "../entities/Door.ts";
 import { Enemy } from "../entities/Enemy.ts";
 import { Player } from "../entities/Player.ts";
 import { Wall } from "../entities/Wall.ts";
@@ -8,6 +9,7 @@ const typeNameToType: {[key:string]: any} = {
   'Wall': Wall,
   'Player': Player,
   'Enemy': Enemy,
+  'Door': Door,
 };
 
 const version = 1;

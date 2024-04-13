@@ -1,54 +1,75 @@
 import p2, { Body } from "p2";
 import { Graphics } from "pixi.js";
 import Game from "../../core/Game";
-import { V2d } from "../../core/Vector";
-import BaseEntity from "../../core/entity/BaseEntity";
+import { V, V2d } from "../../core/Vector";
 import Entity from "../../core/entity/Entity";
+import DampedRotationalSpring from "../../core/physics/DampedRotationalSpring";
+import { degToRad } from "../../core/util/MathUtil";
+import { CollisionGroups } from "../CollisionGroups";
+import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 
-export class Door extends BaseEntity implements Entity {
+export class Door extends SerializableEntity implements Entity {
   //sprite: GameSprite;
   body: Body;
-  width: V2d;
-  
-  constructor(hinge: V2d, end: V2d) {
+
+  constructor(
+    public hinge: V2d,
+    public end: V2d
+  ) {
     super();
 
-    const angle = hinge.sub(end).angle;
-    const position = hinge.add(end).mul(0.5);
+    const restAngle = hinge.sub(end).angle;
 
     this.body = new Body({
       mass: 0.5,
-      position,
-      angle,
-    });    
+      position: hinge.clone(),
+      angle: restAngle,
+    });
+    this.body.angle = restAngle;
 
-    this.width = hinge.sub(end);
+    const width = hinge.sub(end).magnitude;
 
     const shape = new p2.Box({
       height: 0.5,
-      width: this.width.magnitude,
+      width,
     });
-    this.body.addShape(shape);
+    shape.collisionGroup = CollisionGroups.Walls;
+    shape.collisionMask = CollisionGroups.All ^ CollisionGroups.Walls; // Don't run into other walls
+    this.body.addShape(shape, [width / 2, 0]);
 
     const graphics = new Graphics();
     graphics
-      .rect(-shape.width / 2, -shape.height / 2, shape.width, shape.height)
+      .rect(0, -shape.height / 2, shape.width, shape.height)
       .fill(0x00bb00);
 
     this.sprite = graphics;
-    this.sprite.position.set(...position);
-    this.sprite.rotation = angle;
+    this.sprite.position.set(...hinge);
+    this.sprite.rotation = restAngle;
   }
 
-  afterAdded(game: Game): void {
-    this.constraints = [
-      new p2.RevoluteConstraint(this.body, game.ground, {
-        localPivotA: [this.body.shapes[0].width / 2, 0],
-        localPivotB: [0, 0]
+  onAdd(game: Game): void {
+    const restAngle = this.hinge.sub(this.end).angle;
+
+    const constraint = new p2.RevoluteConstraint(this.body, game.ground, {
+      worldPivot: this.hinge.clone(),
+    });
+    const swingLimit = degToRad(110);
+    constraint.upperLimit = restAngle + swingLimit;
+    constraint.lowerLimit = restAngle - swingLimit;
+    constraint.upperLimitEnabled = true;
+    constraint.lowerLimitEnabled = true;
+    this.constraints = [constraint];
+
+    this.springs = [
+      new DampedRotationalSpring(this.body, game.ground, {
+        worldAnchorA: this.body.position,
+        worldAnchorB: this.body.position,
+        restAngle: restAngle,
+        damping: 30,
+        stiffness: 500,
+        maxTorque: 50,
       }),
     ];
-
-    game.world.addConstraint(this.constraints[0]);
   }
 
   /** Called every frame, right before rendering */
@@ -57,5 +78,16 @@ export class Door extends BaseEntity implements Entity {
       this.sprite.position.set(...this.body.position);
       this.sprite.rotation = this.body.angle;
     }
+  }
+
+  static deserialize(e: SerializedEntity): Entity {
+    return new Door(V(e.hinge), V(e.end));
+  }
+
+  serialize(): SerializedEntity {
+    return {
+      hinge: [...this.hinge],
+      end: [...this.end],
+    };
   }
 }

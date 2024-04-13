@@ -2,10 +2,12 @@ import p2, { Body } from "p2";
 import { Graphics } from "pixi.js";
 import { V, V2d } from "../../core/Vector";
 import Entity from "../../core/entity/Entity";
+import { CollisionGroups } from "../CollisionGroups";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 
 export class Wall extends SerializableEntity implements Entity {
   constructor(private position1: V2d, private position2: V2d) {
+  
     super();
 
     const angle = position1.sub(position2).angle;
@@ -20,6 +22,8 @@ export class Wall extends SerializableEntity implements Entity {
       height: 0.2,
       width: position1.sub(position2).magnitude + 0.2,
     });
+    shape.collisionGroup = CollisionGroups.Walls;
+    shape.collisionMask = CollisionGroups.All;
     this.body.addShape(shape);
 
     const graphics = new Graphics();
@@ -36,10 +40,10 @@ export class Wall extends SerializableEntity implements Entity {
     return new Wall(V(e.position1), V(e.position2));
   }
 
-  serialize() : SerializedEntity {
+  serialize(): SerializedEntity {
     return {
-      'position1': [ ...this.position1],
-      'position2': [ ...this.position2],
+      position1: [...this.position1],
+      position2: [...this.position2],
     };
   }
 }

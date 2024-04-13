@@ -3,6 +3,7 @@ import { Sprite } from "pixi.js";
 import { V, V2d } from "../../core/Vector";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
+import { CollisionGroups } from "../CollisionGroups";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 
 /** An example Entity to show some features of the engine */
@@ -23,6 +24,8 @@ export class Player extends SerializableEntity implements Entity {
     const radius = 0.5; // meters
 
     const shape = new Circle({ radius: radius });
+    shape.collisionGroup = CollisionGroups.Player;
+    shape.collisionMask = CollisionGroups.All;
     this.body.addShape(shape);
 
     this.sprite = Sprite.from(imageName("player"));
@@ -58,9 +61,9 @@ export class Player extends SerializableEntity implements Entity {
     return new Player(V(e.position));
   }
 
-  serialize() : SerializedEntity {
+  serialize(): SerializedEntity {
     return {
-      'position': [ ...this.position ],
+      position: [...this.position],
     };
   }
 }
