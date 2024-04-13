@@ -25,7 +25,7 @@ export class Wall extends BaseEntity implements Entity {
     const graphics = new Graphics();
     graphics
       .rect(-shape.width / 2, -shape.height / 2, shape.width, shape.height)
-      .fill(0xff0000);
+      .fill(0xbbbbbb);
 
     this.sprite = graphics;
     this.sprite.position.set(...position);
