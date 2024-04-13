@@ -1,13 +1,12 @@
 import { Body, Circle } from "p2";
 import { Sprite } from "pixi.js";
 import { V, V2d } from "../../core/Vector";
-import BaseEntity from "../../core/entity/BaseEntity";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
-import { SerializedEntity } from "../editor/serializeTypes";
+import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 
 /** An example Entity to show some features of the engine */
-export class Player extends BaseEntity implements Entity {
+export class Player extends SerializableEntity implements Entity {
   sprite: GameSprite & Sprite;
   body: Body;
   tags = ["player"];

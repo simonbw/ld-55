@@ -13,9 +13,9 @@ import BaseEntity from "../../core/entity/BaseEntity";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
 import { angleDelta, degToRad, polarToVec } from "../../core/util/MathUtil";
-import { SerializedEntity } from "../editor/serializeTypes";
+import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 
-export class Enemy extends BaseEntity implements Entity {
+export class Enemy extends SerializableEntity implements Entity {
   sprite: GameSprite & Sprite;
   body: Body;
   tags = ["enemy"];
