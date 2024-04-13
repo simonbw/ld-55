@@ -32,7 +32,7 @@ If you replace
 
 #### Audio
 
-- Go in `resources/fonts`
+- Go in `resources/audio`
 - `.flac` format is preferred, `.mp3` or `.wav` are probably also fine
 - These should all be made by us, so we shouldn't have to worry about copyright/licenses
 
