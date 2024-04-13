@@ -112,7 +112,7 @@ export class EditorController extends BaseEntity implements Entity {
 
     if (snapToGrid) {
       for (let x = Math.floor(worldViewPort.left); x < Math.ceil(worldViewPort.right); x++) {
-        this.sprite
+        (this.sprite! as Graphics)
           // .moveTo(x, worldViewPort.top)
           // .lineTo(x, worldViewPort.bottom/2)
           .moveTo(worldViewPort.top, x)
@@ -120,7 +120,7 @@ export class EditorController extends BaseEntity implements Entity {
           .stroke({ color: 0xbbbbbb, width: 0.05 });
       }
       for (let y = Math.floor(worldViewPort.top); y < Math.ceil(worldViewPort.bottom); y++) {
-        this.sprite
+        (this.sprite! as Graphics)
           // .moveTo(worldViewPort.left, y)
           // .lineTo(worldViewPort.right/2, y)
           .moveTo(y, worldViewPort.left)
@@ -128,7 +128,7 @@ export class EditorController extends BaseEntity implements Entity {
           .stroke({ color: 0xbbbbbb, width: 0.05 });
       }
     } else {
-      this.sprite.clear();
+      (this.sprite! as Graphics).clear();
     }
   }
 }
