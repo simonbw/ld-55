@@ -1,16 +1,17 @@
-import p2, { Body } from "p2";
+import p2, { Body, RotationalSpring } from "p2";
 import { Graphics } from "pixi.js";
 import Game from "../../core/Game";
 import { V, V2d } from "../../core/Vector";
 import Entity from "../../core/entity/Entity";
-import DampedRotationalSpring from "../../core/physics/DampedRotationalSpring";
-import { degToRad } from "../../core/util/MathUtil";
+import { degToRad, normalizeAngle } from "../../core/util/MathUtil";
 import { CollisionGroups } from "../CollisionGroups";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
+import DampedRotationalSpring from "../../core/physics/DampedRotationalSpring";
 
 export class Door extends SerializableEntity implements Entity {
   //sprite: GameSprite;
   body: Body;
+  restAngle: number;
 
   constructor(
     public hinge: V2d,
@@ -18,56 +19,84 @@ export class Door extends SerializableEntity implements Entity {
   ) {
     super();
 
-    const restAngle = hinge.sub(end).angle;
+    this.restAngle = normalizeAngle(end.sub(hinge).angle);
 
     this.body = new Body({
       mass: 0.5,
       position: hinge.clone(),
-      angle: restAngle,
+      angle: this.restAngle,
     });
-    this.body.angle = restAngle;
+    this.body.angle = this.restAngle;
 
     const width = hinge.sub(end).magnitude;
+    const height = 0.3;
 
-    const shape = new p2.Box({
-      height: 0.5,
-      width,
-    });
+    const shape = new p2.Box({ height, width });
     shape.collisionGroup = CollisionGroups.Walls;
     shape.collisionMask = CollisionGroups.All ^ CollisionGroups.Walls; // Don't run into other walls
     this.body.addShape(shape, [width / 2, 0]);
 
     const graphics = new Graphics();
+    // door handle stuff
+    const handleX = width - 0.4;
+    const handleLength = 0.4;
+    const handleThickness = 0.07;
+    const stemLengthStickout = 0.1;
+    const stemThickness = 0.15;
+
     graphics
-      .rect(0, -shape.height / 2, shape.width, shape.height)
-      .fill(0x00bb00);
+      .rect(0, -height / 2, width, height)
+      .fill(0x00bb00)
+      // door handle
+      // stem
+      .rect(
+        handleX,
+        -height / 2 - stemLengthStickout,
+        stemThickness,
+        stemLengthStickout
+      )
+      // handle
+      .rect(
+        handleX - (handleLength - stemThickness),
+        -height / 2 - stemLengthStickout - handleThickness,
+        handleLength,
+        handleThickness
+      )
+      .fill(0x999999)
+      .rect(handleX, height / 2, stemThickness, stemLengthStickout)
+      .rect(
+        handleX - (handleLength - stemThickness),
+        height / 2 + stemLengthStickout,
+        handleLength,
+        handleThickness
+      )
+      .fill(0x999999);
 
     this.sprite = graphics;
     this.sprite.position.set(...hinge);
-    this.sprite.rotation = restAngle;
+    this.sprite.rotation = this.restAngle;
   }
 
   onAdd(game: Game): void {
-    const restAngle = this.hinge.sub(this.end).angle;
-
     const constraint = new p2.RevoluteConstraint(this.body, game.ground, {
       worldPivot: this.hinge.clone(),
     });
     const swingLimit = degToRad(110);
-    constraint.upperLimit = restAngle + swingLimit;
-    constraint.lowerLimit = restAngle - swingLimit;
-    constraint.upperLimitEnabled = true;
-    constraint.lowerLimitEnabled = true;
+    // TODO: this breaks because of the angle normalization I think, see if we can fix it
+    // constraint.upperLimit = restAngle + swingLimit;
+    // constraint.lowerLimit = restAngle - swingLimit;
+    // constraint.upperLimitEnabled = true;
+    // constraint.lowerLimitEnabled = true;
     this.constraints = [constraint];
 
     this.springs = [
-      new DampedRotationalSpring(this.body, game.ground, {
+      new DampedRotationalSpring(game.ground, this.body, {
         worldAnchorA: this.body.position,
         worldAnchorB: this.body.position,
-        restAngle: restAngle,
-        damping: 30,
-        stiffness: 500,
-        maxTorque: 50,
+        restAngle: this.restAngle,
+        damping: 400,
+        stiffness: 800,
+        maxTorque: 40,
       }),
     ];
   }
