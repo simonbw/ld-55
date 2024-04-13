@@ -1,8 +1,8 @@
 import p2, { Body } from "p2";
+import { Graphics } from "pixi.js";
 import { V2d } from "../../core/Vector";
 import BaseEntity from "../../core/entity/BaseEntity";
 import Entity from "../../core/entity/Entity";
-import { Graphics } from "pixi.js";
 
 export class Wall extends BaseEntity implements Entity {
   constructor(position1: V2d, position2: V2d) {
@@ -17,8 +17,8 @@ export class Wall extends BaseEntity implements Entity {
     });
 
     const shape = new p2.Box({
-      height: 0.5,
-      width: position1.sub(position2).magnitude,
+      height: 0.2,
+      width: position1.sub(position2).magnitude + 0.2,
     });
     this.body.addShape(shape);
 

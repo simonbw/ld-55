@@ -22,7 +22,7 @@ export class Enemy extends BaseEntity implements Entity {
       fixedRotation: true,
     });
 
-    const radius = 1; // meters
+    const radius = 0.5; // meters
 
     const shape = new Circle({ radius: radius });
     this.body.addShape(shape);

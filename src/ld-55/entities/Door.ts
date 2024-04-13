@@ -1,20 +1,20 @@
-import p2, { Body, Shape } from "p2";
+import p2, { Body } from "p2";
+import { Graphics } from "pixi.js";
+import Game from "../../core/Game";
 import { V2d } from "../../core/Vector";
 import BaseEntity from "../../core/entity/BaseEntity";
-import Entity, { GameSprite } from "../../core/entity/Entity";
-import { Graphics, Sprite } from "pixi.js";
-import Game from "../../core/Game";
+import Entity from "../../core/entity/Entity";
 
 export class Door extends BaseEntity implements Entity {
   //sprite: GameSprite;
   body: Body;
   width: V2d;
   
-  constructor(position1: V2d, position2: V2d) {
+  constructor(hinge: V2d, end: V2d) {
     super();
 
-    const angle = position1.sub(position2).angle;
-    const position = position1.add(position2).mul(0.5);
+    const angle = hinge.sub(end).angle;
+    const position = hinge.add(end).mul(0.5);
 
     this.body = new Body({
       mass: 0.5,
@@ -22,7 +22,7 @@ export class Door extends BaseEntity implements Entity {
       angle,
     });    
 
-    this.width = position1.sub(position2);
+    this.width = hinge.sub(end);
 
     const shape = new p2.Box({
       height: 0.5,
