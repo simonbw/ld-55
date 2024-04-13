@@ -90,6 +90,7 @@ export class Player extends SerializableEntity implements Entity {
         dt * (sprinting ? RUNNING_STEPS_PER_SECOND : WALKING_STEPS_PER_SECOND),
         sprinting
       );
+      this.body.angle = walkDirection.angle;
     } else {
       this.walkSoundPlayer.stop();
       this.sprite.animationSpeed = 0;
@@ -121,7 +122,8 @@ export class Player extends SerializableEntity implements Entity {
 
   /** Called every frame, right before rendering */
   onRender(dt: number): void {
-    this.sprite?.position.set(...this.body.position);
+    this.sprite.position.set(...this.body.position);
+    this.sprite.rotation = this.body.angle + Math.PI / 2;
   }
 
   static deserialize(e: SerializedEntity): Player {
@@ -136,7 +138,7 @@ export class Player extends SerializableEntity implements Entity {
 }
 
 class WalkSoundPlayer extends BaseEntity {
-  stepProgress: number = 0.25;
+  stepProgress: number = 0.5;
 
   advance(walkAmount: number, sprinting: boolean) {
     this.stepProgress += walkAmount;
@@ -147,7 +149,7 @@ class WalkSoundPlayer extends BaseEntity {
   }
 
   stop() {
-    this.stepProgress = 0.25;
+    this.stepProgress = 0.5;
   }
 
   onTick(dt: number) {
