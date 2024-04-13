@@ -1,7 +1,9 @@
 import React from "react";
 import Game from "../../core/Game";
 import { ReactEntity } from "../../core/ReactEntity";
+import { V } from "../../core/Vector";
 import Entity from "../../core/entity/Entity";
+import { EditPositionController } from "./EditPositionController";
 import { serializeLevel } from "./serializeLevel";
 
 
@@ -9,6 +11,20 @@ export class EditorPanel extends ReactEntity<any> implements Entity {
 
   constructor(private myGame: Game) {
     super(() => <button onClick={() => this.onButtonClick(this.myGame) }>Save file</button>);
+
+    const stuff = serializeLevel(myGame);
+    for (const e of stuff.entities) {
+      console.log(e);
+      for (const [key, value] of Object.entries(e)) {
+        switch (key) {
+          case 'position':
+          case 'position1':
+          case 'position2':
+            this.addChild(new EditPositionController(V(value as any)));
+            break;
+        }
+      }
+    }
   }
 
   async onButtonClick(myGame: Game) {

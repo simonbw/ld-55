@@ -25,11 +25,10 @@ async function main() {
   HallwayLevel.addLevelEntities(game);
   const stuff = serializeLevel(game);
   game.clearScene();
-  
+
   deserializeLevel(game, stuff);
   game.addEntity(new CameraController(game.camera));
   game.addEntity(new EditorPanel(game));
-  
 
 }
 
