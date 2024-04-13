@@ -135,17 +135,29 @@ class Ball extends BaseEntity implements Entity
 
 ## Finding Entities
 
-There are a few...
+Entities have a `tags` property you can add to them to make them easy to find.
+You can use `game.entities.getTagged("yourTagName")` to get a list of all the entities that have `yourTagName` in their `tags` list.
+You can also use `game.entities.getTaggedAll` and `game.entities.getTaggedAny` to find entities that match all of a given list of tags, or any of them, respectively.
+
+If you know there is only ever going to be 1 instance of an entity, you can give it an `id`.
+This lets you use `game.entities.getById('entityId')` to easily retrieve your entity.
+If you try to add an entity to the game with the same `id` as one that is already in the game, it will throw an error, so be cautious with this.
 
 ## Graphics
 
-...
+See [pixi.js]
 
 ## IO
 
+## Physics
+
+See `p2.js`.
+
+### Constraints
+
 ...
 
-## Physics
+### Springs
 
 ...
 
@@ -155,13 +167,15 @@ Playing sounds in the game is done by creating instances of the `SoundInstance` 
 
 ### Audio Effects
 
-It is possible
-
-...
+It is possible to add audio effects to Sound Instances by overriding the `makeChain` method.
 
 ## Util
 
-...
+There are a lot of random utilities I've written over the years. In particular, make sure you check out:
+
+- [MathUtil.ts](./util/MathUtil.ts) — Various math stuff like polar/cartesian conversions, interpolations, clamping, etc.
+- [Random.ts](./util/Random.ts) — Useful for all sorts of random number stuff. I particularly like `choose(...options)`
+- [ColorUtils.ts](./util/ColorUtils.ts) — For dealing with converting colors between different formats, blending/lerping colors, etc.
 
 ## Vector
 

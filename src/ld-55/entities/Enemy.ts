@@ -14,6 +14,7 @@ import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
 import { angleDelta, degToRad, polarToVec } from "../../core/util/MathUtil";
 import { SerializedEntity } from "../editor/serializeTypes";
+import { CollisionGroups } from "../CollisionGroups";
 
 export class Enemy extends BaseEntity implements Entity {
   sprite: GameSprite & Sprite;
@@ -22,7 +23,10 @@ export class Enemy extends BaseEntity implements Entity {
 
   visionCone: VisionCone;
 
-  constructor(private position: V2d, private angle: number) {
+  constructor(
+    private position: V2d,
+    private angle: number
+  ) {
     super();
 
     this.body = new Body({
@@ -34,6 +38,8 @@ export class Enemy extends BaseEntity implements Entity {
     const radius = 0.5; // meters
 
     const shape = new Circle({ radius: radius });
+    shape.collisionGroup = CollisionGroups.Enemies;
+    shape.collisionMask = CollisionGroups.All;
     this.body.addShape(shape);
 
     this.sprite = Sprite.from(imageName("enemy"));
@@ -82,10 +88,10 @@ export class Enemy extends BaseEntity implements Entity {
     return new Enemy(V(e.position), e.angle);
   }
 
-  serialize() : SerializedEntity {
+  serialize(): SerializedEntity {
     return {
-      'position': [ ...this.position ],
-      'angle': this.angle,
+      position: [...this.position],
+      angle: this.angle,
     };
   }
 }

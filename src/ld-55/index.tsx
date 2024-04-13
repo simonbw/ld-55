@@ -26,9 +26,9 @@ async function main() {
   // game.entities.addFilter(isHuman);
 
   HallwayLevel.addLevelEntities(game);
-  const stuff = serializeLevel(game);
-  game.clearScene();
-  deserializeLevel(game, stuff);
+  // const stuff = serializeLevel(game);
+  // game.clearScene();
+  // deserializeLevel(game, stuff);
   game.addEntity(new CameraController(game.camera));
 
   // ExampleLevel.addLevelEntities(game);

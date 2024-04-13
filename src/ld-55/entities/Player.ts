@@ -5,6 +5,7 @@ import BaseEntity from "../../core/entity/BaseEntity";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
 import { SerializedEntity } from "../editor/serializeTypes";
+import { CollisionGroups } from "../CollisionGroups";
 
 /** An example Entity to show some features of the engine */
 export class Player extends BaseEntity implements Entity {
@@ -24,6 +25,8 @@ export class Player extends BaseEntity implements Entity {
     const radius = 0.5; // meters
 
     const shape = new Circle({ radius: radius });
+    shape.collisionGroup = CollisionGroups.Player;
+    shape.collisionMask = CollisionGroups.All;
     this.body.addShape(shape);
 
     this.sprite = Sprite.from(imageName("player"));
@@ -59,9 +62,9 @@ export class Player extends BaseEntity implements Entity {
     return new Player(V(e.position));
   }
 
-  serialize() : SerializedEntity {
+  serialize(): SerializedEntity {
     return {
-      'position': [ ...this.position ],
+      position: [...this.position],
     };
   }
 }
