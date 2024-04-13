@@ -7,6 +7,7 @@ import { imageName } from "../../core/resources/resourceUtils";
 import { CollisionGroups } from "../CollisionGroups";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 import { SoundInstance } from "../../core/sound/SoundInstance";
+import { rUniform } from "../../core/util/Random";
 
 const RUNNING_STEPS_PER_SECOND = 5;
 const WALKING_STEPS_PER_SECOND = 2;
@@ -144,15 +145,15 @@ class WalkSoundPlayer extends BaseEntity {
     this.stepProgress += walkAmount;
     if (this.stepProgress > 1) {
       this.stepProgress -= 1;
-      this.addChild(new SoundInstance(sprinting ? "step2" : "step1", {}));
+      this.addChild(
+        new SoundInstance(sprinting ? "step2" : "step1", {
+          speed: rUniform(0.9, 1.1),
+        })
+      );
     }
   }
 
   stop() {
     this.stepProgress = 0.5;
-  }
-
-  onTick(dt: number) {
-    console.log("stepProgress", this.stepProgress);
   }
 }
