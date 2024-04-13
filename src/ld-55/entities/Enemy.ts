@@ -5,6 +5,7 @@ import BaseEntity from "../../core/entity/BaseEntity";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
 import { degToRad, polarToVec } from "../../core/util/MathUtil";
+import { SerializedEntity } from "../editor/serializeTypes";
 
 export class Enemy extends BaseEntity implements Entity {
   sprite: GameSprite & Sprite;
@@ -13,7 +14,7 @@ export class Enemy extends BaseEntity implements Entity {
 
   visionCone: VisionCone;
 
-  constructor(position: V2d, angle: number) {
+  constructor(private position: V2d, private angle: number) {
     super();
 
     this.body = new Body({
@@ -67,6 +68,17 @@ export class Enemy extends BaseEntity implements Entity {
   onRender(dt: number): void {
     this.sprite?.position.set(...this.body.position);
     this.sprite.rotation = this.body.angle;
+  }
+
+  static deserialize(e: SerializedEntity): Enemy {
+    return new Enemy(V(e.position), e.angle);
+  }
+
+  serialize() : SerializedEntity {
+    return {
+      'position': [ ...this.position ],
+      'angle': this.angle,
+    };
   }
 }
 

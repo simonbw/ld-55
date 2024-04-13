@@ -1,9 +1,10 @@
 import { Body, Circle } from "p2";
 import { Sprite } from "pixi.js";
-import { V2d } from "../../core/Vector";
+import { V, V2d } from "../../core/Vector";
 import BaseEntity from "../../core/entity/BaseEntity";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
+import { SerializedEntity } from "../editor/serializeTypes";
 
 /** An example Entity to show some features of the engine */
 export class Player extends BaseEntity implements Entity {
@@ -11,7 +12,7 @@ export class Player extends BaseEntity implements Entity {
   body: Body;
   tags = ["player"];
 
-  constructor(position: V2d) {
+  constructor(private position: V2d) {
     super();
 
     this.body = new Body({
@@ -52,5 +53,15 @@ export class Player extends BaseEntity implements Entity {
   /** Called every frame, right before rendering */
   onRender(dt: number): void {
     this.sprite?.position.set(...this.body.position);
+  }
+
+  static deserialize(e: SerializedEntity): Player {
+    return new Player(V(e.position));
+  }
+
+  serialize() : SerializedEntity {
+    return {
+      'position': [ ...this.position ],
+    };
   }
 }

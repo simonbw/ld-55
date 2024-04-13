@@ -1,5 +1,6 @@
 import Game from "../core/Game.ts";
 import { GamePreloader } from "./GamePreloader.tsx";
+import { deserializeLevel, serializeLevel } from "./editor/serializeLevel.tsx";
 import CameraController from "./entities/CameraController.ts";
 import HallwayLevel from "./environment/HallwayLevel.ts";
 
@@ -25,7 +26,11 @@ async function main() {
   // game.entities.addFilter(isHuman);
 
   HallwayLevel.addLevelEntities(game);
+  const stuff = serializeLevel(game);
+  game.clearScene();
+  deserializeLevel(game, stuff);
   game.addEntity(new CameraController(game.camera));
+
   // ExampleLevel.addLevelEntities(game);
 }
 

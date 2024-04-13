@@ -1,11 +1,12 @@
 import p2, { Body } from "p2";
 import { Graphics } from "pixi.js";
-import { V2d } from "../../core/Vector";
+import { V, V2d } from "../../core/Vector";
 import BaseEntity from "../../core/entity/BaseEntity";
 import Entity from "../../core/entity/Entity";
+import { SerializedEntity } from "../editor/serializeTypes";
 
 export class Wall extends BaseEntity implements Entity {
-  constructor(position1: V2d, position2: V2d) {
+  constructor(private position1: V2d, private position2: V2d) {
     super();
 
     const angle = position1.sub(position2).angle;
@@ -30,5 +31,16 @@ export class Wall extends BaseEntity implements Entity {
     this.sprite = graphics;
     this.sprite.position.set(...position);
     this.sprite.rotation = angle;
+  }
+
+  static deserialize(e: SerializedEntity): Wall {
+    return new Wall(V(e.position1), V(e.position2));
+  }
+
+  serialize() : SerializedEntity {
+    return {
+      'position1': [ ...this.position1],
+      'position2': [ ...this.position2],
+    };
   }
 }
