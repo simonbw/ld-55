@@ -20,4 +20,9 @@ const fonts = {
 };
 export type FontName = keyof typeof fonts;
 
+const levels = {
+    hallway: require("./levels/hallway.json")
+};
+export type LevelName = keyof typeof levels;
+
 export const RESOURCES = { sounds, images, fonts };

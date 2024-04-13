@@ -171,7 +171,7 @@ async function main() {
       const extension = parts.length > 1 ? parts[parts.length - 1] : "";
       const prefix = getVariablePrefixFromExtension(extension);
 
-      const relativePath = `./${path.relative(assetsFolder, fileName)}`;
+      const relativePath = `./${path.relative(assetsFolder, fileName).replaceAll('\\', '/')}`;
 
       switch (prefix) {
         case "snd":
@@ -272,7 +272,7 @@ async function main() {
       "cleans and generates",
       () => {},
       (argv) => {
-        console.log(`Updating asset types in "${assetsFolder}" . . .`);
+        console.log(`Updating asset types in "\${assetsFolder}" . . .`);
         cleanAndGenerate(argv.directory);
       }
     )
