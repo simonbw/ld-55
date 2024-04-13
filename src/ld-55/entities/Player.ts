@@ -79,10 +79,10 @@ export class Player extends SerializableEntity implements Entity {
       const framesPerStep = 4;
       if (sprinting) {
         this.sprite.animationSpeed =
-          RUNNING_STEPS_PER_SECOND / framesPerStep / 4;
+          (RUNNING_STEPS_PER_SECOND / framesPerStep / 4) * this.game!.slowMo;
       } else {
         this.sprite.animationSpeed =
-          WALKING_STEPS_PER_SECOND / framesPerStep / 4;
+          (WALKING_STEPS_PER_SECOND / framesPerStep / 4) * this.game!.slowMo;
       }
 
       this.sprite.play();
