@@ -1,4 +1,4 @@
-# INSERT GAME TITLE HERE
+# Detention Prevention
 
 This repo houses the source code for [our submission to Ludum Dare 55](https://ldjam.com/events/ludum-dare/55/$384591).
 You can play the most recent version [here](https://ld-55.simonbw.com/).
