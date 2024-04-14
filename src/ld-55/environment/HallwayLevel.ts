@@ -4,6 +4,7 @@ import { V } from "../../core/Vector";
 import { clamp, degToRad } from "../../core/util/MathUtil.ts";
 import { Door } from "../entities/Door.ts";
 import { Floor } from "../entities/Floor.ts";
+import { PatrolController } from "../entities/PatrolController.ts";
 import { Player } from "../entities/Player.ts";
 import { Student } from "../entities/Student.ts";
 import { Teacher } from "../entities/Teacher.ts";
@@ -102,6 +103,15 @@ function addLevelEntities(game: Game) {
   game.addEntity(new Door(V(11, 36), V(12.5, 36)));
   game.addEntity(new Door(V(14, 36), V(12.5, 36)));
   game.addEntity(new Wall(V(14, 36), V(15, 36)));
+
+  const hallwayPatroller = new Teacher(V(14, 6), Math.PI/2);
+  game.addEntity(hallwayPatroller);
+
+  game.addEntity(new PatrolController(
+    hallwayPatroller,
+    V(14, 30),
+    V(14, 6),
+  ));
 }
 
 export default { addLevelEntities };
