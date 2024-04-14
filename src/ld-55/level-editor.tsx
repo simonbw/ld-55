@@ -4,7 +4,7 @@ import { initLayers } from "./config/layers.ts";
 import { EditorPanel } from "./editor/EditorPanel.tsx";
 import GodCameraController from "./editor/GodCameraController.tsx";
 import { serializeLevel } from "./editor/serializeLevel.tsx";
-import ElShapedLevel from "./environment/ElShapedLevel.ts";
+import ElShapedLevel from "./levels/ElShapedLevel.ts";
 
 // Do this so we can access the game from the console
 declare global {
@@ -30,7 +30,6 @@ async function main() {
 
   game.addEntity(new EditorPanel(game, stuff));
   game.addEntity(new GodCameraController(game.camera));
-
 }
 
 window.addEventListener("load", main);

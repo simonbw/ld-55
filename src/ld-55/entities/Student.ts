@@ -39,6 +39,8 @@ export class Student extends SerializableEntity implements Entity {
       mass: 0.5,
       position: position.clone(),
       angle,
+      damping: 0.99,
+      angularDamping: 0.99,
     });
 
     const radius = 0.5; // meters
@@ -48,18 +50,17 @@ export class Student extends SerializableEntity implements Entity {
     shape.collisionMask = CollisionGroups.All;
     this.body.addShape(shape);
 
-
     const baseTexture = choose(...studentBaseTextures);
 
     this.sprite = AnimatedSprite.fromImages([
-      baseTexture + '1',
-      baseTexture + '2',
-      baseTexture + '3',
-      baseTexture + '4',
-      baseTexture + '5',
-      baseTexture + '6',
-      baseTexture + '7',
-      baseTexture + '8',
+      baseTexture + "1",
+      baseTexture + "2",
+      baseTexture + "3",
+      baseTexture + "4",
+      baseTexture + "5",
+      baseTexture + "6",
+      baseTexture + "7",
+      baseTexture + "8",
     ]);
     this.sprite.anchor.set(0.5);
     this.sprite.scale = (2 * radius) / this.sprite.texture.width;
@@ -95,10 +96,7 @@ export class Student extends SerializableEntity implements Entity {
       this.sprite.animationSpeed =
         (WALKING_STEPS_PER_SECOND / framesPerStep / 4) * this.game!.slowMo;
 
-      this.walkSoundPlayer.advance(
-        dt * WALKING_STEPS_PER_SECOND,
-        false
-      );
+      this.walkSoundPlayer.advance(dt * WALKING_STEPS_PER_SECOND, false);
     }
   }
 
