@@ -1,5 +1,5 @@
 import { Body, Circle } from "p2";
-import { AnimatedSprite } from "pixi.js";
+import { AnimatedSprite, Texture } from "pixi.js";
 import { V, V2d } from "../../core/Vector";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
@@ -8,12 +8,37 @@ import { CollisionGroups } from "../CollisionGroups";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 import { PersonShadow } from "./PersonShadow";
 import { WalkSoundPlayer } from "./WalkSoundPlayer";
+import { ImageName } from "../../../resources/resources";
+import { CustomHandlersMap } from "../../core/entity/GameEventHandler";
+import PlayerProgressController from "./PlayerProgressController";
 
 const RUNNING_STEPS_PER_SECOND = 5;
 const WALKING_STEPS_PER_SECOND = 3;
 
 const WALK_SPEED = 2; // meters per second
 const RUN_SPEED = 5; // meters per second
+
+const imagesWithoutBag: ImageName[] = [
+  "player1",
+  "player2",
+  "player3",
+  "player4",
+  "player5",
+  "player6",
+  "player7",
+  "player8",
+];
+
+const imagesWithbag: ImageName[] = [
+  "playerBag1",
+  "playerBag2",
+  "playerBag3",
+  "playerBag4",
+  "playerBag5",
+  "playerBag6",
+  "playerBag7",
+  "playerBag8",
+];
 
 /** An example Entity to show some features of the engine */
 export class Player extends SerializableEntity implements Entity {
@@ -40,16 +65,8 @@ export class Player extends SerializableEntity implements Entity {
     shape.collisionMask = CollisionGroups.All;
     this.body.addShape(shape);
 
-    this.sprite = AnimatedSprite.fromImages([
-      imageName("player1"),
-      imageName("player2"),
-      imageName("player3"),
-      imageName("player4"),
-      imageName("player5"),
-      imageName("player6"),
-      imageName("player7"),
-      imageName("player8"),
-    ]);
+    this.sprite = AnimatedSprite.fromImages(imagesWithoutBag);
+
     this.sprite.anchor.set(0.5);
     this.sprite.setSize(2 * radius);
     this.sprite.play();
@@ -150,4 +167,14 @@ export class Player extends SerializableEntity implements Entity {
       position: [...p],
     };
   }
+
+  handlers: CustomHandlersMap = {
+    addItem: ({ name }: { name: string }) => {
+      if (name === "key") {
+        this.sprite.textures = imagesWithbag.map((image) =>
+          Texture.from(image)
+        );
+      }
+    },
+  };
 }

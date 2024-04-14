@@ -25,10 +25,14 @@ interface Objective {
   requiredMilestones: string[];
 }
 
-export default class PlayerProgressController extends BaseEntity implements Entity {
+export default class PlayerProgressController
+  extends BaseEntity
+  implements Entity
+{
   persistenceLevel: Persistence = Persistence.Permanent;
-  
-  tags = ["playerProgressController"]
+  id = "playerProgressController";
+
+  tags = ["playerProgressController"];
 
   titleText: Text;
   objectiveText: Text;
@@ -39,21 +43,24 @@ export default class PlayerProgressController extends BaseEntity implements Enti
   completeObjectives: Objective[];
 
   handlers = {
-    addItem: (event: { name: string, description: string }) => {
-      this.items.push({name: event.name, description: event.description});
+    addItem: (event: { name: string; description: string }) => {
+      this.items.push({ name: event.name, description: event.description });
       this.checkObjectives();
     },
 
-    addMilestone: (event: { name: string, description: string }) => {
-      this.milestones.push({name: event.name, description: event.description});
+    addMilestone: (event: { name: string; description: string }) => {
+      this.milestones.push({
+        name: event.name,
+        description: event.description,
+      });
     },
 
-    clearLevel: () => { 
-      this.clearLevel()
+    clearLevel: () => {
+      this.clearLevel();
     },
 
     finishLevel: (event: { level: number }) => {
-      console.log("Finished level", event.level)
+      console.log("Finished level", event.level);
     },
 
     addObjective: (event: { objectives: Objective[] }) => {
@@ -63,12 +70,11 @@ export default class PlayerProgressController extends BaseEntity implements Enti
     clearObjectives: () => {
       this.incompleteObjectives = [];
       this.completeObjectives = [];
-    }
+    },
   };
 
-  constructor(
-  ) {
-    super();    
+  constructor() {
+    super();
 
     this.incompleteObjectives = [];
     this.completeObjectives = [];
@@ -112,16 +118,21 @@ export default class PlayerProgressController extends BaseEntity implements Enti
   }
 
   onRender(dt: number): void {
-    if (this.incompleteObjectives.length > 0 || this.completeObjectives.length > 0) {
+    if (
+      this.incompleteObjectives.length > 0 ||
+      this.completeObjectives.length > 0
+    ) {
       this.titleText.alpha = 1;
       this.objectiveText.alpha = 1;
 
       let objectiveDescriptions = "";
       for (const objective of this.completeObjectives) {
-        objectiveDescriptions += objective.name + "\n" + objective.completeDescription + "\n";
+        objectiveDescriptions +=
+          objective.name + "\n" + objective.completeDescription + "\n";
       }
       for (const objective of this.incompleteObjectives) {
-        objectiveDescriptions += objective.name + "\n" + objective.incompleteDescription + "\n";
+        objectiveDescriptions +=
+          objective.name + "\n" + objective.incompleteDescription + "\n";
       }
       this.objectiveText.text = objectiveDescriptions;
     } else {
@@ -149,9 +160,13 @@ export default class PlayerProgressController extends BaseEntity implements Enti
     for (const objective of this.incompleteObjectives) {
       if (
         objective.requiredItems.every((item) => this.hasItem(item)) &&
-        objective.requiredMilestones.every((milestone) => this.hasMilestone(milestone))
+        objective.requiredMilestones.every((milestone) =>
+          this.hasMilestone(milestone)
+        )
       ) {
-        const completedObjective = this.incompleteObjectives.find((o) => o.name == objective.name);
+        const completedObjective = this.incompleteObjectives.find(
+          (o) => o.name == objective.name
+        );
         if (completedObjective) {
           this.completeObjective(completedObjective);
         }
@@ -160,7 +175,9 @@ export default class PlayerProgressController extends BaseEntity implements Enti
   }
 
   completeObjective(objective: Objective) {
-    this.incompleteObjectives = this.incompleteObjectives.filter((o) => o !== objective);
+    this.incompleteObjectives = this.incompleteObjectives.filter(
+      (o) => o !== objective
+    );
     if (objective.showOnComplete) {
       this.completeObjectives.push(objective);
     }

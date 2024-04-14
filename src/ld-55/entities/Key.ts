@@ -29,8 +29,8 @@ export class Key extends BaseEntity implements Entity {
     });
     this.body.addShape(shape);
 
-    this.sprite = Sprite.from(imageName("backpack1"));
-    this.sprite.setSize(0.5);
+    this.sprite = Sprite.from(imageName("classroomBagBlue"));
+    this.sprite.setSize(0.4);
     this.sprite.layerName = Layer.ITEMS;
     this.sprite.position.set(...position);
   }
