@@ -6,6 +6,7 @@ import { ControllerButton } from "../../../core/io/Gamepad";
 import { KeyCode } from "../../../core/io/Keys";
 import { clamp, smoothStep } from "../../../core/util/MathUtil";
 import { Layer } from "../../config/layers";
+import { fontName } from "../../../core/resources/resourceUtils";
 
 const FADE_OUT_TIME = process.env.NODE_ENV === "development" ? 0.1 : 2.2;
 
@@ -24,18 +25,26 @@ export default class MainMenu extends BaseEntity implements Entity {
     this.sprite = new Sprite();
     this.sprite.layerName = Layer.MENU;
 
-    this.titleText = new Text("Not HIGHRISE", {
-      align: "center",
-      fill: "red",
-      fontSize: 128,
+    this.titleText = new Text({
+      text: "Not HIGHRISE",
+      style: {
+        align: "center",
+        fill: "white",
+        fontSize: 128,
+        fontFamily: fontName("kgBrokenVesselsSketch"),
+      },
     });
     this.titleText.anchor.set(0.5, 1.0);
     this.sprite.addChild(this.titleText);
 
-    this.startText = new Text("Press Enter To Start", {
-      align: "center",
-      fill: "white",
-      fontSize: 64,
+    this.startText = new Text({
+      text: "Press Enter To Start",
+      style: {
+        align: "center",
+        fill: "white",
+        fontSize: 64,
+        fontFamily: fontName("rudiment"),
+      },
     });
     this.startText.anchor.set(0.5, 0.0);
     this.sprite.addChild(this.startText);
@@ -83,12 +92,12 @@ export default class MainMenu extends BaseEntity implements Entity {
   onKeyDown(key: KeyCode) {
     if (key === "Enter") {
       this.startGame();
-    } 
+    }
   }
 
   onButtonDown(button: ControllerButton) {
     if (button === ControllerButton.START) {
       this.startGame();
-    } 
+    }
   }
 }

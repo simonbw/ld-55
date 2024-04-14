@@ -115,7 +115,9 @@ const images = {
 export type ImageName = keyof typeof images;
 
 const fonts = {
-    rubikIsoRegular: require("./fonts/RubikIso-Regular.ttf")
+    rudiment: require("./fonts/rudiment.ttf"),
+  kgBrokenVesselsSketch: require("./fonts/kg-broken-vessels-sketch.ttf"),
+  rubikIsoRegular: require("./fonts/RubikIso-Regular.ttf")
 };
 export type FontName = keyof typeof fonts;
 
