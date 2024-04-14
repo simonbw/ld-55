@@ -38,7 +38,7 @@ async function main() {
 
   game.addEntity(new GameController());
   game.addEntity(new PlayerProgressController());
-  game.addEntity(new FPSMeter(Layer.HUD));
+  game.addEntity(new FPSMeter(Layer.DEBUG_HUD));
 
   game.dispatch({ type: "goToMainMenu" });
 }

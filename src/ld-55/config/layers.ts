@@ -32,10 +32,12 @@ export enum Layer {
   HUD = "hud",
   // Stuff above even the HUD
   MENU = "menu",
+  // Stuff that's on top of everything for debugging purposes
+  DEBUG_HUD = "debug_hud",
 }
 
 // Special layers that don't move with the camera
-const PARALAX_FREE_LAYERS = [Layer.HUD, Layer.MENU];
+const PARALAX_FREE_LAYERS = [Layer.HUD, Layer.MENU, Layer.DEBUG_HUD];
 
 // Set up the game to use our layers
 export function initLayers(game: Game) {

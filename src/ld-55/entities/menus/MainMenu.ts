@@ -1,29 +1,33 @@
-import { Sprite, Text } from "pixi.js";
+import { Container, Graphics, Text } from "pixi.js";
+import Game from "../../../core/Game";
 import BaseEntity from "../../../core/entity/BaseEntity";
 import Entity, { GameSprite } from "../../../core/entity/Entity";
-import Game from "../../../core/Game";
 import { ControllerButton } from "../../../core/io/Gamepad";
 import { KeyCode } from "../../../core/io/Keys";
+import { fontName } from "../../../core/resources/resourceUtils";
 import { clamp, smoothStep } from "../../../core/util/MathUtil";
 import { Layer } from "../../config/layers";
-import { fontName } from "../../../core/resources/resourceUtils";
 
 const FADE_OUT_TIME = process.env.NODE_ENV === "development" ? 0.1 : 2.2;
 
 let firstTime = true;
 export default class MainMenu extends BaseEntity implements Entity {
   pausable = false;
-  sprite: Sprite & GameSprite;
+  sprite: GameSprite;
 
   titleText: Text;
   startText: Text;
   inTransition: boolean = false;
+  background: Graphics;
 
   constructor() {
     super();
 
-    this.sprite = new Sprite();
+    this.sprite = new Container();
     this.sprite.layerName = Layer.MENU;
+
+    this.background = new Graphics().rect(0, 0, 10000, 10000).fill(0x001800);
+    this.sprite.addChild(this.background);
 
     this.titleText = new Text({
       text: "Not HIGHRISE",
@@ -59,6 +63,7 @@ export default class MainMenu extends BaseEntity implements Entity {
     this.startText.alpha = 0;
 
     await this.wait(firstTime ? 5 : 3.0, (dt, t) => {
+      this.background.alpha = smoothStep(clamp(t * 2.5));
       this.titleText.alpha = smoothStep(clamp(t * 1.5));
       this.startText.alpha = smoothStep(clamp(2.8 * t - 1.8));
     });
