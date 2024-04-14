@@ -47,12 +47,22 @@ function addLevelEntities(game: Game, levelN: number) {
   makeRoom(game, 15, 24, 10, 8, "carpet2");
   makeRoom(game, 15, 32, 10, 8, "carpet1");
 
+  
+  makeRoom(game, 15, -10, 10, 10, "carpet2");
+  makeRoom(game, 3, -15, 12, 10, "carpet1");
+  makeRoom(game, -7, -15, 10, 10, "herringboneFloor");
+  makeRoom(game, -17, -15, 10, 10, "carpet2");
+  makeRoom(game, -27, -15, 10, 10, "bathroomFloor");
+  makeRoom(game, -27, 0, 14, 12, "herringboneFloor");
+  makeRoom(game, -13, 0, 13, 12, "carpet1");
+
+
   game.addEntity(new Floor(V(10, 0), V(15, 36), "hallwayFloor"));
+  game.addEntity(new Floor(V(-27, -5), V(15, 0), "hallwayFloor"));
 
   game.addEntity(new Floor(V(10, 36), V(15, 40), "bathroomFloor"));
 
   game.addEntity(new Wall(V(0, 0), V(10, 0)));
-  game.addEntity(new Wall(V(10, 0), V(15, 0)));
   game.addEntity(new Wall(V(15, 0), V(25, 0)));
   game.addEntity(new Wall(V(25, 0), V(25, 12)));
   game.addEntity(new Wall(V(25, 12), V(25, 24)));
@@ -131,6 +141,47 @@ function addLevelEntities(game: Game, levelN: number) {
   game.addEntity(
     new ExitZone(V(12.5, 38), new ExitConstraints(["key"], []), levelN)
   );
+
+  game.addEntity(new Wall(V(15, -5), V(15, -3)));
+  game.addEntity(new Wall(V(15, -1), V(15, 0)));
+
+  game.addEntity(new Wall(V(-27, -5), V(-24, -5)));
+  game.addEntity(new Wall(V(-22, -5), V(-17, -5)));
+  game.addEntity(new Wall(V(-17, -5), V(-13, -5)));
+  game.addEntity(new Wall(V(-11, -5), V(-7, -5)));
+  game.addEntity(new Wall(V(-7, -5), V(-4, -5)));
+  game.addEntity(new Wall(V(-2, -5), V(3, -5)));
+  game.addEntity(new Wall(V(3, -5), V(6, -5)));
+  game.addEntity(new Wall(V(8, -5), V(15, -5)));
+  
+  game.addEntity(new Wall(V(0, 0), V(-6, 0)));
+  game.addEntity(new Wall(V(-8, 0), V(-13, 0)));
+  game.addEntity(new Wall(V(-13, 0), V(-20, 0)));
+  game.addEntity(new Wall(V(-22, 0), V(-27, 0)));
+
+  game.addEntity(new Wall(V(25, -10), V(25, 0)));
+  game.addEntity(new Wall(V(15, -10), V(15, -5)));
+  game.addEntity(new Wall(V(15, -10), V(25, -10)));
+  game.addEntity(new Wall(V(15, -15), V(15, -10)));
+  game.addEntity(new Wall(V(25, -15), V(25, -10)));
+  game.addEntity(new Wall(V(15, -15), V(25, -15)));
+  game.addEntity(new Wall(V(-13, -15), V(15, -15)));
+  game.addEntity(new Wall(V(-27, 0), V(-27, -15)));
+  game.addEntity(new Wall(V(-27, -15), V(-13, -15)));
+  game.addEntity(new Wall(V(-27, 0), V(-27, 12)));
+  game.addEntity(new Wall(V(-27, 12), V(0, 12)));
+  game.addEntity(new Wall(V(-13, 0), V(-13, 12)));
+  game.addEntity(new Wall(V(3, -15), V(3, -5)));
+  game.addEntity(new Wall(V(-7, -15), V(-7, -5)));
+  game.addEntity(new Wall(V(-17, -15), V(-17, -5)));
+
+  game.addEntity(new Door(V(-13, -5), V(-11, -5)));
+  game.addEntity(new Door(V(-4, -5), V(-2, -5)));
+  game.addEntity(new Door(V(6, -5), V(8, -5)));
+  game.addEntity(new Door(V(-8, 0), V(-6, 0)));
+  game.addEntity(new Door(V(-24, -5), V(-22, -5)));
+  game.addEntity(new Door(V(-22, 0), V(-20, 0)));
+  game.addEntity(new Door(V(15, -3), V(15, -1)));
 }
 
 export default { addLevelEntities };
