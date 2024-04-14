@@ -8,6 +8,7 @@ import Game from "../../core/Game";
 import { ExitConstraints } from "./ExitConstraints";
 import PlayerProgressController from "./PlayerProgressController";
 import { Persistence } from "../constants/constants";
+import { Layer } from "../config/layers";
 
 export class ExitZone extends BaseEntity implements Entity {
   persistenceLevel: Persistence = Persistence.Game;
@@ -36,9 +37,10 @@ export class ExitZone extends BaseEntity implements Entity {
     const graphics = new Graphics();
     graphics
       .rect(-shape.width / 2, -shape.height / 2, shape.width, shape.height)
-      .fill(0x00ff00);
+      .fill({ color: 0x00ff00, alpha: 0.1 });
 
     this.sprite = graphics;
+    this.sprite.layerName = Layer.FLOOR_DECALS;
     this.sprite.position.set(...position);
   }
 

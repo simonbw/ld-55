@@ -12,6 +12,7 @@ import { WalkSoundPlayer } from "./WalkSoundPlayer";
 
 const RUNNING_STEPS_PER_SECOND = 5;
 const WALKING_STEPS_PER_SECOND = 2;
+const SUSPICION_THRESHOLD_SECONDS = 1;
 
 export class Teacher extends SerializableEntity implements Entity {
   persistenceLevel: Persistence = Persistence.Game;
@@ -23,6 +24,7 @@ export class Teacher extends SerializableEntity implements Entity {
 
   walkSoundPlayer: WalkSoundPlayer;
   foundPlayer: boolean = false;
+  suspicion = 0;
 
   targetLocation: V2d;
 
@@ -75,6 +77,10 @@ export class Teacher extends SerializableEntity implements Entity {
     let moving;
     const player = this.game?.entities.getTagged("player")[0];
     if (player && this.visionCone.canSee(player)) {
+      this.suspicion += dt;
+    }
+
+    if (player && this.visionCone.canSee(player) && this.suspicion > SUSPICION_THRESHOLD_SECONDS) {
       const walkStrength = 180;
       const playerPosition = V(player.body!.position);
       const diff = playerPosition.sub(this.body.position);

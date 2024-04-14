@@ -15,7 +15,7 @@ export class Grass extends BaseEntity implements Entity {
     this.sprite = TilingSprite.from(imageName("grass1"));
     this.sprite.layerName = Layer.SUBFLOOR;
 
-    this.sprite.position.set(-10, -10);
+    this.sprite.position.set(-50, -50);
     this.sprite.width = 100;
     this.sprite.height = 100;
     this.sprite.tileScale.set(0.03);
