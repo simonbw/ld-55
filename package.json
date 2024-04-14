@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Our Ludum Dare 55 entry",
   "scripts": {
-    "start": "concurrently -n assets,server \"npm run watch-manifest\" \"npm run dev-server\"",
+    "start": "rm -rf .parcel-cache && concurrently -n assets,server \"npm run watch-manifest\" \"npm run dev-server\"",
     "dev-server": "parcel src/index.html src/level-editor.html",
     "watch-manifest": "./bin/generate-asset-types.js -d ./resources watch",
     "build": "parcel build src/index.html src/level-editor.html",

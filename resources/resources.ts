@@ -26,12 +26,14 @@ export type SoundName = keyof typeof sounds;
 
 const images = {
     playerShadow: require("./images/player-shadow.png"),
+  herringboneFloor: require("./images/herringbone-floor.png"),
   hallwayFloor: require("./images/hallway-floor.png"),
   grass1: require("./images/grass-1.png"),
   favicon: require("./images/favicon.png"),
   carpet2: require("./images/carpet-2.png"),
   carpet1: require("./images/carpet-1.png"),
   bathroomFloor: require("./images/bathroom-floor.png"),
+  backpack1: require("./images/backpack-1.png"),
   player8: require("./images/player/player8.png"),
   player7: require("./images/player/player7.png"),
   player6: require("./images/player/player6.png"),
