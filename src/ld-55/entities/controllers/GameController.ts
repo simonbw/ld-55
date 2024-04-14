@@ -4,6 +4,7 @@ import Entity from "../../../core/entity/Entity";
 import HallwayLevel from "../../environment/HallwayLevel";
 import { ExitConstraints } from "../ExitConstraints";
 import { ExitZone } from "../ExitZone";
+import { Grass } from "../Grass";
 import { Key } from "../Key";
 import PlayerCameraController from "../PlayerCameraController";
 import PlayerProgressController from "../PlayerProgressController";
@@ -29,7 +30,6 @@ export default class GameController extends BaseEntity implements Entity {
   handlers = {
     goToMainMenu: () => {
       const game = this.game!;
-      // game.clearScene();
       game.addEntity(new MainMenu());
     },
 
@@ -37,6 +37,7 @@ export default class GameController extends BaseEntity implements Entity {
       const game = this.game!;
       
       HallwayLevel.addLevelEntities(game);
+      game.addEntity(new Grass());
       game.addEntity(new Key(V(12.5, 5)));
       game.addEntity(new ExitZone(V(12.5, 38), new ExitConstraints(["key"], [])));
 

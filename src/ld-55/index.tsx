@@ -1,10 +1,12 @@
 import { TextureStyle } from "pixi.js";
 import Game from "../core/Game.ts";
 import { V } from "../core/Vector";
+import FPSMeter from "../core/util/FPSMeter.ts";
 import { GamePreloader } from "./GamePreloader.tsx";
-import { initLayers } from "./config/layers.ts";
+import { Layer, initLayers } from "./config/layers.ts";
 import { ExitConstraints } from "./entities/ExitConstraints.ts";
 import { ExitZone } from "./entities/ExitZone.ts";
+import { Grass } from "./entities/Grass.ts";
 import { Key } from "./entities/Key.ts";
 import PlayerCameraController from "./entities/PlayerCameraController.ts";
 import PlayerProgressController from "./entities/PlayerProgressController.ts";
@@ -36,6 +38,7 @@ async function main() {
 
   game.addEntity(new GameController());
   game.addEntity(new PlayerProgressController());
+  game.addEntity(new FPSMeter(Layer.HUD));
 
   game.dispatch({ type: "goToMainMenu" });
 }
