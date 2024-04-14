@@ -4,11 +4,11 @@ import { V, V2d } from "../../core/Vector";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
 import { CollisionGroups } from "../CollisionGroups";
+import { Persistence } from "../constants/constants";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
+import { PersonShadow } from "./PersonShadow";
 import { VisionCone } from "./VisionCone";
 import { WalkSoundPlayer } from "./WalkSoundPlayer";
-import { PersonShadow } from "./PersonShadow";
-import { Persistence } from "../constants/constants";
 
 const RUNNING_STEPS_PER_SECOND = 5;
 const WALKING_STEPS_PER_SECOND = 2;
@@ -23,6 +23,8 @@ export class Teacher extends SerializableEntity implements Entity {
 
   walkSoundPlayer: WalkSoundPlayer;
   foundPlayer: boolean = false;
+
+  targetLocation: V2d;
 
   constructor(
     private position: V2d,
@@ -63,14 +65,17 @@ export class Teacher extends SerializableEntity implements Entity {
 
     this.walkSoundPlayer = this.addChild(new WalkSoundPlayer(this.body));
     this.addChild(new PersonShadow(this.body));
+    this.targetLocation = position;
   }
 
   onTick(dt: number): void {
     this.body.applyDamping(200 * dt);
 
+    let sprinting;
+    let moving;
     const player = this.game?.entities.getTagged("player")[0];
-    const walkStrength = 180;
     if (player && this.visionCone.canSee(player)) {
+      const walkStrength = 180;
       const playerPosition = V(player.body!.position);
       const diff = playerPosition.sub(this.body.position);
       const direction = diff.normalize();
@@ -83,30 +88,57 @@ export class Teacher extends SerializableEntity implements Entity {
         this.game?.dispatch({ type: "gameOver" });
       }
 
-      // Always running for now, later we can change
-      const sprinting = true;
+      sprinting = true;
+      moving = true;
+    } else if (this.isAtTargetLocation()) {
+      this.walkSoundPlayer.stop();
+      this.sprite.animationSpeed = 0;
+      this.sprite.currentFrame = 0;
 
+      sprinting = false;
+      moving = false;
+    } else {
+      const walkStrength = 40;
+      const diff = this.targetLocation.sub(this.body.position);
+      const direction = diff.normalize();
+      this.body.applyForce(direction.mul(walkStrength));
+      this.body.angle = direction.angle;
+
+      sprinting = false;
+      moving = true;
+    }
+
+    if (moving) {
       const framesPerStep = 4;
       if (sprinting) {
         this.sprite.animationSpeed =
           (RUNNING_STEPS_PER_SECOND / framesPerStep / 4) * this.game!.slowMo;
       } else {
         this.sprite.animationSpeed =
-          (RUNNING_STEPS_PER_SECOND / framesPerStep / 4) * this.game!.slowMo;
+          (WALKING_STEPS_PER_SECOND / framesPerStep / 4) * this.game!.slowMo;
       }
 
       this.walkSoundPlayer.advance(
         dt * (sprinting ? RUNNING_STEPS_PER_SECOND : WALKING_STEPS_PER_SECOND),
         sprinting
       );
-    } else {
-      this.walkSoundPlayer.stop();
-      this.sprite.animationSpeed = 0;
-      this.sprite.currentFrame = 0;
     }
 
     this.visionCone.body.position = this.body.position;
     this.visionCone.body.angle = this.body.angle;
+  }
+
+  isAtTargetLocation() : boolean {
+    return this.targetLocation.sub(this.body.position).magnitude < 0.2;
+  }
+
+  setTargetLocation(p: V2d) {
+    this.targetLocation = p;
+  }
+
+  isTargettingPlayer() : boolean {
+    const player = this.game?.entities.getTagged("player")[0];
+    return !!(player && this.visionCone.canSee(player));
   }
 
   onBeginContact(
@@ -134,6 +166,13 @@ export class Teacher extends SerializableEntity implements Entity {
     return {
       position: [...this.position],
       angle: this.angle,
+    };
+  }
+
+  static defaultSerializedEntity(p: V2d): SerializedEntity {
+    return {
+      position: [...p],
+      angle: 0,
     };
   }
 }

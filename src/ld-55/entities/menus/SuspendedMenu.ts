@@ -7,6 +7,7 @@ import { KeyCode } from "../../../core/io/Keys";
 import { clamp, lerp, smoothStep } from "../../../core/util/MathUtil";
 import { Layer } from "../../config/layers";
 import SlowMoController from "../SlowMoController";
+import { fontName } from "../../../core/resources/resourceUtils";
 
 const FADE_OUT_TIME = process.env.NODE_ENV === "development" ? 0.1 : 2.2;
 
@@ -25,18 +26,26 @@ export default class SuspendedMenu extends BaseEntity implements Entity {
     this.sprite = new Sprite();
     this.sprite.layerName = Layer.MENU;
 
-    this.suspendedText = new Text("SUSPENDED", {
-      align: "center",
-      fill: "red",
-      fontSize: 128,
+    this.suspendedText = new Text({
+      text: "SUSPENDED",
+      style: {
+        align: "center",
+        fill: "red",
+        fontSize: 128,
+        fontFamily: fontName("kgBrokenVesselsSketch"),
+      },
     });
     this.suspendedText.anchor.set(0.5, 1.0);
     this.sprite.addChild(this.suspendedText);
 
-    this.restartText = new Text("Press Enter To Restart", {
-      align: "center",
-      fill: "white",
-      fontSize: 64,
+    this.restartText = new Text({
+      text: "Press Enter To Restart",
+      style: {
+        align: "center",
+        fill: "white",
+        fontSize: 64,
+        fontFamily: fontName("rudiment"),
+      },
     });
     this.restartText.anchor.set(0.5, 0.0);
     this.sprite.addChild(this.restartText);
@@ -47,12 +56,14 @@ export default class SuspendedMenu extends BaseEntity implements Entity {
   }
 
   async onAdd(game: Game) {
-    const slowMoController = game.entities.getById("slowMoController") as SlowMoController;
+    const slowMoController = game.entities.getById(
+      "slowMoController"
+    ) as SlowMoController;
     game.removeEntity(slowMoController);
-    
+
     await this.wait(3, (dt, t) => {
-      game.slowMo = smoothStep(clamp(1 - t))
-    })
+      game.slowMo = smoothStep(clamp(1 - t));
+    });
 
     this.restartText.alpha = 0;
     this.restartText.alpha = 0;
@@ -90,12 +101,12 @@ export default class SuspendedMenu extends BaseEntity implements Entity {
   onKeyDown(key: KeyCode) {
     if (key === "Enter") {
       this.restartGame();
-    } 
+    }
   }
 
   onButtonDown(button: ControllerButton) {
     if (button === ControllerButton.START) {
       this.restartGame();
-    } 
+    }
   }
 }

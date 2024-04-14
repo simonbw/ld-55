@@ -6,7 +6,7 @@ import { EditPositionController } from "./EditPositionController";
 import Level from "./Level";
 import RootController from "./RootController";
 import { deserializeLevel } from "./serializeLevel";
-import { LevelData } from "./serializeTypes";
+import { LevelData, SerializableEntity } from "./serializeTypes";
 
 const MAXIMUM_SELECTABLE_DISTANCE = 0.5;
 
@@ -24,6 +24,7 @@ export class EditorController extends BaseEntity implements Entity {
 
     const graphics = new Graphics();
     this.sprite = graphics;
+    this.createEntityType = 'Wall';
   }
 
   refreshEntities() {
@@ -54,7 +55,6 @@ export class EditorController extends BaseEntity implements Entity {
 
     this.addChild(new Level(deserializeLevel(this.levelData)));
     this.addChild(new RootController(controllers));
-    this.createEntityType = 'Wall';
   }
 
   onCreateEntityTypeChange(type: string) {
@@ -65,7 +65,11 @@ export class EditorController extends BaseEntity implements Entity {
     const clickPosition = this.game!.camera.toWorld(this.game!.io.mousePosition);
     const snapToGrid = this.game!.io.keyIsDown('ControlLeft');
     const position = snapToGrid ? V(Math.round(clickPosition.x), Math.round(clickPosition.y)) : clickPosition;
-    this.levelData.entities.push({ type: 'Wall', version: 1, position1: position, position2: V(position.x, position.y + 2.2) });
+    this.levelData.entities.push({
+      type: this.createEntityType,
+      version: 1,
+      ...(SerializableEntity.typeNameToType(this.createEntityType)! as any).defaultSerializedEntity(position)
+    });
     
     this.refreshEntities();
     this.selectedEntityIndices = [];

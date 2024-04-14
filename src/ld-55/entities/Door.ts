@@ -8,8 +8,8 @@ import { PositionalSound } from "../../core/sound/PositionalSound";
 import { degToRad, normalizeAngle } from "../../core/util/MathUtil";
 import { rUniform } from "../../core/util/Random";
 import { CollisionGroups } from "../CollisionGroups";
-import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 import { Persistence } from "../constants/constants";
+import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 
 export class Door extends SerializableEntity implements Entity {
   persistenceLevel: Persistence = Persistence.Game;
@@ -155,6 +155,13 @@ export class Door extends SerializableEntity implements Entity {
 
   static deserialize(e: SerializedEntity): Entity {
     return new Door(V(e.hinge), V(e.end));
+  }
+
+  static defaultSerializedEntity(p: V2d): SerializedEntity {
+    return {
+      hinge: [...p],
+      end: [...p.add([1.4, 1.4])],
+    };
   }
 
   serialize(): SerializedEntity {
