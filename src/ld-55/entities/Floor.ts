@@ -6,6 +6,14 @@ import { Layer } from "../config/layers";
 import { Persistence } from "../constants/constants";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 
+const floorScales: Partial<Record<ImageName, number>> = {
+  hallwayFloor: 0.003,
+  bathroomFloor: 0.001,
+  herringboneFloor: 0.04,
+  carpet1: 0.005,
+  carpet2: 0.03,
+};
+
 export class Floor extends SerializableEntity implements Entity {
   persistenceLevel: Persistence = Persistence.Game;
   sprite: TilingSprite & GameSprite;
@@ -24,7 +32,8 @@ export class Floor extends SerializableEntity implements Entity {
     this.sprite.width = bottomRight.x - topLeft.x;
     this.sprite.height = bottomRight.y - topLeft.y;
 
-    this.sprite.tileScale.set(0.003);
+    const scale = floorScales[texture] || 0.003;
+    this.sprite.tileScale.set(scale);
   }
 
   serialize(): SerializedEntity {

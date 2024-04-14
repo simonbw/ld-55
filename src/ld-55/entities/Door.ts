@@ -35,7 +35,7 @@ export class Door extends SerializableEntity implements Entity {
     this.body.angle = this.restAngle;
 
     const width = hinge.sub(end).magnitude;
-    const height = 0.3;
+    const height = 0.2;
 
     const shape = new p2.Box({ height, width });
     shape.collisionGroup = CollisionGroups.Walls;

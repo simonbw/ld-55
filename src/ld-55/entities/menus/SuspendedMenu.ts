@@ -1,30 +1,33 @@
-import { Sprite, Text } from "pixi.js";
+import { Container, Graphics, Text } from "pixi.js";
+import Game from "../../../core/Game";
 import BaseEntity from "../../../core/entity/BaseEntity";
 import Entity, { GameSprite } from "../../../core/entity/Entity";
-import Game from "../../../core/Game";
 import { ControllerButton } from "../../../core/io/Gamepad";
 import { KeyCode } from "../../../core/io/Keys";
+import { fontName } from "../../../core/resources/resourceUtils";
 import { clamp, lerp, smoothStep } from "../../../core/util/MathUtil";
 import { Layer } from "../../config/layers";
-import SlowMoController from "../SlowMoController";
-import { fontName } from "../../../core/resources/resourceUtils";
 
 const FADE_OUT_TIME = process.env.NODE_ENV === "development" ? 0.1 : 2.2;
 
 export default class SuspendedMenu extends BaseEntity implements Entity {
   id: string = "suspendedMenu";
   pausable = false;
-  sprite: Sprite & GameSprite;
+  sprite: GameSprite;
 
   suspendedText: Text;
   restartText: Text;
   inTransition: boolean = false;
+  background: Graphics;
 
   constructor() {
     super();
 
-    this.sprite = new Sprite();
+    this.sprite = new Container();
     this.sprite.layerName = Layer.MENU;
+
+    this.background = new Graphics().rect(0, 0, 10000, 10000).fill(0xff0000);
+    this.sprite.addChild(this.background);
 
     this.suspendedText = new Text({
       text: "SUSPENDED",
@@ -56,19 +59,18 @@ export default class SuspendedMenu extends BaseEntity implements Entity {
   }
 
   async onAdd(game: Game) {
-    const slowMoController = game.entities.getById(
-      "slowMoController"
-    ) as SlowMoController;
+    const slowMoController = game.entities.getById("slowMoController")!;
     game.removeEntity(slowMoController);
 
     await this.wait(3, (dt, t) => {
-      game.slowMo = smoothStep(clamp(1 - t));
+      game.slowMo = smoothStep(1 - t);
     });
 
     this.restartText.alpha = 0;
     this.restartText.alpha = 0;
 
     await this.wait(5, (dt, t) => {
+      this.background.alpha = lerp(0, 0.3, t);
       // this.suspendedText.alpha = smoothStep(clamp(t * 1.5));
       this.suspendedText.alpha = clamp(lerp(0, 1, t / 5.0));
       // this.restartText.alpha = smoothStep(clamp(2.8 * t - 1.8));

@@ -11,12 +11,14 @@ import { Persistence } from "../constants/constants";
 
 export class ExitZone extends BaseEntity implements Entity {
   persistenceLevel: Persistence = Persistence.Game;
-  player: Player | undefined; 
+  player: Player | undefined;
   playerProgress: PlayerProgressController | undefined;
 
   constructor(
     private position: V2d,
-    private exitConstraints: ExitConstraints) {
+    private exitConstraints: ExitConstraints,
+    private level: number
+  ) {
     super();
 
     this.body = new Body({
@@ -41,14 +43,21 @@ export class ExitZone extends BaseEntity implements Entity {
   }
 
   onAdd(game: Game): void {
-    this.player = game.entities.getTagged('player')[0] as Player;
-    this.playerProgress = game.entities.getTagged('playerProgressController')[0] as PlayerProgressController;
+    this.player = game.entities.getTagged("player")[0] as Player;
+    this.playerProgress = game.entities.getTagged(
+      "playerProgressController"
+    )[0] as PlayerProgressController;
   }
 
   onRender(dt: number): void {
-    if (this.player && V(this.player.body.position).sub(V(this.body!.position)).magnitude < 0.5) {
-      if (this.exitConstraints.checkExitConstraints(this.playerProgress!) === true) {
-        this.game!.dispatch({ type: 'finishLevel', level: 1});
+    if (
+      this.player &&
+      V(this.player.body.position).sub(V(this.body!.position)).magnitude < 0.5
+    ) {
+      if (
+        this.exitConstraints.checkExitConstraints(this.playerProgress!) === true
+      ) {
+        this.game!.dispatch({ type: "finishLevel", level: this.level });
         this.destroy();
       } else {
         console.log("You can't leave yet!");
@@ -56,4 +65,3 @@ export class ExitZone extends BaseEntity implements Entity {
     }
   }
 }
-
