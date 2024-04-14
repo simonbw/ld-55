@@ -3,6 +3,7 @@ import Entity from "../../../core/entity/Entity";
 import { SoundInstance } from "../../../core/sound/SoundInstance";
 import { Persistence } from "../../constants/constants";
 import ElShapedLevel from "../../environment/ElShapedLevel";
+import HallwayLevel from "../../environment/HallwayLevel";
 import PlayerCameraController from "../PlayerCameraController";
 import SlowMoController from "../SlowMoController";
 import MainMenu from "../menus/MainMenu";
@@ -43,7 +44,11 @@ export default class GameController extends BaseEntity implements Entity {
       const { level } = event;
       game.clearScene(Persistence.Level);
 
-      ElShapedLevel.addLevelEntities(game, level);
+      if (level == 1) {
+        ElShapedLevel.addLevelEntities(game, level);
+      } else {
+        HallwayLevel.addLevelEntities(game, level);
+      }
 
       game.addEntity(new PlayerCameraController(game.camera));
       game.addEntity(new SlowMoController());

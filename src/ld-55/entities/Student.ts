@@ -1,6 +1,5 @@
 import { Body, Circle } from "p2";
-import { Sprite } from "pixi.js";
-import { ImageName } from "../../../resources/resources";
+import { AnimatedSprite } from "pixi.js";
 import { V, V2d } from "../../core/Vector";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { choose } from "../../core/util/Random";
@@ -8,23 +7,27 @@ import { CollisionGroups } from "../CollisionGroups";
 import { Persistence } from "../constants/constants";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 import { PersonShadow } from "./PersonShadow";
+import { WalkSoundPlayer } from "./WalkSoundPlayer";
 
-const studentTextures: ImageName[] = [
-  "boy11",
-  "boy21",
-  "boy31",
-  "girl11",
-  "girl21",
-  "girl31",
-  "girlemo1",
+const studentBaseTextures: string[] = [
+  "boy1",
+  "boy2",
+  "boy3",
+  "girl1",
+  "girl2",
+  "girl3",
+  "girlemo",
 ];
+const WALKING_STEPS_PER_SECOND = 2;
 
 /** An example Entity to show some features of the engine */
 export class Student extends SerializableEntity implements Entity {
   persistenceLevel: Persistence = Persistence.Game;
-  sprite: GameSprite & Sprite;
+  sprite: GameSprite & AnimatedSprite;
   body: Body;
   tags = ["student"];
+  targetLocation: V2d;
+  walkSoundPlayer: WalkSoundPlayer;
 
   constructor(
     private position: V2d,
@@ -33,11 +36,9 @@ export class Student extends SerializableEntity implements Entity {
     super();
 
     this.body = new Body({
-      mass: 2,
+      mass: 0.5,
       position: position.clone(),
       angle,
-      damping: 0.99,
-      angularDamping: 0.99,
     });
 
     const radius = 0.5; // meters
@@ -47,21 +48,70 @@ export class Student extends SerializableEntity implements Entity {
     shape.collisionMask = CollisionGroups.All;
     this.body.addShape(shape);
 
-    this.sprite = Sprite.from(choose(...studentTextures));
+
+    const baseTexture = choose(...studentBaseTextures);
+
+    this.sprite = AnimatedSprite.fromImages([
+      baseTexture + '1',
+      baseTexture + '2',
+      baseTexture + '3',
+      baseTexture + '4',
+      baseTexture + '5',
+      baseTexture + '6',
+      baseTexture + '7',
+      baseTexture + '8',
+    ]);
     this.sprite.anchor.set(0.5);
-    this.sprite.setSize(2 * radius);
+    this.sprite.scale = (2 * radius) / this.sprite.texture.width;
+    this.sprite.play();
 
     this.addChild(new PersonShadow(this.body));
+    this.walkSoundPlayer = this.addChild(new WalkSoundPlayer(this.body));
+    this.targetLocation = position;
   }
 
-  // onBeginContact(other?: Entity | undefined, thisShape?: Shape | undefined, otherShape?: Shape | undefined, contactEquations?: ContactEquation[] | undefined): void {
-  //   if (other!.tags!.includes("enemy")) {
-  //     this.game?.dispatch({ type: "gameOver" });
-  //   }
-  // }
-
   onTick(dt: number): void {
-    this.body.applyDamping(dt);
+    this.body.applyDamping(200 * dt);
+
+    let moving;
+    if (this.isAtTargetLocation()) {
+      this.walkSoundPlayer.stop();
+      this.sprite.animationSpeed = 0;
+      this.sprite.currentFrame = 0;
+
+      moving = false;
+    } else {
+      const walkStrength = 40;
+      const diff = this.targetLocation.sub(this.body.position);
+      const direction = diff.normalize();
+      this.body.applyForce(direction.mul(walkStrength));
+      this.body.angle = direction.angle;
+
+      moving = true;
+    }
+
+    if (moving) {
+      const framesPerStep = 4;
+      this.sprite.animationSpeed =
+        (WALKING_STEPS_PER_SECOND / framesPerStep / 4) * this.game!.slowMo;
+
+      this.walkSoundPlayer.advance(
+        dt * WALKING_STEPS_PER_SECOND,
+        false
+      );
+    }
+  }
+
+  isAtTargetLocation(): boolean {
+    return this.targetLocation.sub(this.body.position).magnitude < 0.2;
+  }
+
+  isTargettingPlayer(): boolean {
+    return false;
+  }
+
+  setTargetLocation(p: V2d) {
+    this.targetLocation = p;
   }
 
   /** Called every frame, right before rendering */
