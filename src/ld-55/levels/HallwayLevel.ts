@@ -1,8 +1,5 @@
-import { ImageName } from "../../../resources/resources.ts";
 import Game from "../../core/Game.ts";
 import { V } from "../../core/Vector";
-import { clamp, degToRad } from "../../core/util/MathUtil.ts";
-import { StudentDesk } from "../entities/StudentDesk.ts";
 import { Door } from "../entities/Door.ts";
 import { ExitConstraints } from "../entities/ExitConstraints.ts";
 import { ExitZone } from "../entities/ExitZone.ts";
@@ -14,30 +11,7 @@ import { Player } from "../entities/Player.ts";
 import { Student } from "../entities/Student.ts";
 import { Teacher } from "../entities/Teacher.ts";
 import { Wall } from "../entities/Wall.ts";
-import { TeacherDesk } from "../entities/TeacherDesk.ts";
-
-function makeRoom(
-  game: Game,
-  x: number,
-  y: number,
-  width: number,
-  height: number,
-  carpetType: ImageName = "carpet1"
-) {
-  game.addEntity(new Floor(V(x, y), V(x + width, y + height), carpetType));
-  game.addEntity(new Teacher(V(x + width / 2, y + 1), degToRad(90)));
-  game.addEntity(new TeacherDesk(V(x + width / 2, y + 2)));
-
-  const rows = clamp(Math.floor((height - 4) / 2), 0, 3);
-  for (let i = 0; i < 5; i++) {
-    for (let j = 0; j < rows; j++) {
-      game.addEntity(
-        new Student(V(x + 1 + i * 2, y + 5 + j * 2), degToRad(-90))
-      );
-      game.addEntity(new StudentDesk(V(x + 1 + i * 2, y + 4.2 + j * 2)));
-    }
-  }
-}
+import { makeRoom } from "./level-utilities.ts";
 
 function addLevelEntities(game: Game, levelN: number) {
   // Left side classrooms
