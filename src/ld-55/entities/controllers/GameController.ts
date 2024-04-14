@@ -2,18 +2,13 @@ import { V } from "../../../core/Vector";
 import BaseEntity from "../../../core/entity/BaseEntity";
 import Entity from "../../../core/entity/Entity";
 import { SoundInstance } from "../../../core/sound/SoundInstance";
-<<<<<<< HEAD
 import { Persistence } from "../../constants/constants";
-=======
-import { SoundInstance } from "../../../core/sound/SoundInstance";
->>>>>>> 48f2e47f00c30c24ca0fc8232ee34ffef6ad938b
 import HallwayLevel from "../../environment/HallwayLevel";
 import { ExitConstraints } from "../ExitConstraints";
 import { ExitZone } from "../ExitZone";
 import { Grass } from "../Grass";
 import { Key } from "../Key";
 import PlayerCameraController from "../PlayerCameraController";
-import PlayerProgressController from "../PlayerProgressController";
 import SlowMoController from "../SlowMoController";
 import MainMenu from "../menus/MainMenu";
 import SuspendedMenu from "../menus/SuspendedMenu";

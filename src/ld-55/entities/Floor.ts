@@ -3,8 +3,8 @@ import { ImageName } from "../../../resources/resources";
 import { V, V2d } from "../../core/Vector";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { Layer } from "../config/layers";
-import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 import { Persistence } from "../constants/constants";
+import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 
 export class Floor extends SerializableEntity implements Entity {
   persistenceLevel: Persistence = Persistence.Game;
@@ -37,5 +37,13 @@ export class Floor extends SerializableEntity implements Entity {
 
   static deserialize(e: SerializedEntity): Floor {
     return new Floor(V(e.topLeft), V(e.bottomRight), e.texture);
+  }
+
+  static defaultSerializedEntity(p: V2d): SerializedEntity {
+    return {
+      topLeft: [...p],
+      bottomRight: [...p.add([1.4, 1.4])],
+      texture: "hallwayFloor",
+    };
   }
 }

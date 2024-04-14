@@ -4,7 +4,7 @@ import { ReactEntity } from "../../core/ReactEntity";
 import Entity from "../../core/entity/Entity";
 import { EditorController } from "./EditorController";
 import { serializeLevel } from "./serializeLevel";
-import { LevelData } from "./serializeTypes";
+import { LevelData, SerializableEntity } from "./serializeTypes";
 
 
 export class EditorPanel extends ReactEntity<any> implements Entity {
@@ -13,8 +13,8 @@ export class EditorPanel extends ReactEntity<any> implements Entity {
 
   constructor(myGame: Game, private levelData: LevelData) {
     super(() => <>
-      <select onChange={(e) => this.onCreateEntityTypeChange(e)}>
-        <option value='Wall'>Wall</option>
+      <select value='Wall' onChange={(e) => this.onCreateEntityTypeChange(e)}>
+        {SerializableEntity.listTypeNames().map((name: string) => <option value={name}>{name}</option>)}
       </select>
       {/* <button onClick={() => this.onSave(myGame) }>Add Entity</button> */}
       <button onClick={() => this.onSave(myGame) }>Save file</button>

@@ -1,13 +1,13 @@
-import { Body, Circle, ContactEquation, Shape } from "p2";
+import { Body, Circle } from "p2";
 import { Sprite } from "pixi.js";
 import { ImageName } from "../../../resources/resources";
 import { V, V2d } from "../../core/Vector";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { choose } from "../../core/util/Random";
 import { CollisionGroups } from "../CollisionGroups";
+import { Persistence } from "../constants/constants";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 import { PersonShadow } from "./PersonShadow";
-import { Persistence } from "../constants/constants";
 
 const studentTextures: ImageName[] = [
   "boy11",
@@ -77,6 +77,12 @@ export class Student extends SerializableEntity implements Entity {
   serialize(): SerializedEntity {
     return {
       position: [...this.position],
+    };
+  }
+
+  static defaultSerializedEntity(p: V2d): SerializedEntity {
+    return {
+      position: [...p],
     };
   }
 }

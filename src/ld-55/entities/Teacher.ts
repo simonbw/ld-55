@@ -4,11 +4,11 @@ import { V, V2d } from "../../core/Vector";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
 import { CollisionGroups } from "../CollisionGroups";
+import { Persistence } from "../constants/constants";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
+import { PersonShadow } from "./PersonShadow";
 import { VisionCone } from "./VisionCone";
 import { WalkSoundPlayer } from "./WalkSoundPlayer";
-import { PersonShadow } from "./PersonShadow";
-import { Persistence } from "../constants/constants";
 
 const RUNNING_STEPS_PER_SECOND = 5;
 const WALKING_STEPS_PER_SECOND = 2;
@@ -134,6 +134,13 @@ export class Teacher extends SerializableEntity implements Entity {
     return {
       position: [...this.position],
       angle: this.angle,
+    };
+  }
+
+  static defaultSerializedEntity(p: V2d): SerializedEntity {
+    return {
+      position: [...p],
+      angle: 0,
     };
   }
 }

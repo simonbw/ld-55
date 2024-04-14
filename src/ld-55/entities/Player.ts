@@ -144,4 +144,10 @@ export class Player extends SerializableEntity implements Entity {
       position: [...this.position],
     };
   }
+
+  static defaultSerializedEntity(p: V2d): SerializedEntity {
+    return {
+      position: [...p],
+    };
+  }
 }

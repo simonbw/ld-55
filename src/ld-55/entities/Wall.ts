@@ -3,8 +3,8 @@ import { Graphics } from "pixi.js";
 import { V, V2d } from "../../core/Vector";
 import Entity from "../../core/entity/Entity";
 import { CollisionGroups } from "../CollisionGroups";
-import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 import { Persistence } from "../constants/constants";
+import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 
 export class Wall extends SerializableEntity implements Entity {
   persistenceLevel: Persistence = Persistence.Game;
@@ -47,6 +47,13 @@ export class Wall extends SerializableEntity implements Entity {
     return {
       position1: [...this.position1],
       position2: [...this.position2],
+    };
+  }
+
+  static defaultSerializedEntity(p: V2d): SerializedEntity {
+    return {
+      position1: [...p],
+      position2: [...p.add([1.4, 1.4]) ],
     };
   }
 }
