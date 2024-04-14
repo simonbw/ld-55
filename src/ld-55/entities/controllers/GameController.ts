@@ -8,6 +8,7 @@ import PlayerCameraController from "../PlayerCameraController";
 import SlowMoController from "../SlowMoController";
 import MainMenu from "../menus/MainMenu";
 import SuspendedMenu from "../menus/SuspendedMenu";
+import WinMenu from "../menus/WinMenu";
 import ObjectiveController from "./ObjectiveController";
 
 export default class GameController extends BaseEntity implements Entity {
@@ -22,6 +23,12 @@ export default class GameController extends BaseEntity implements Entity {
       const game = this.game!;
       game.clearScene(Persistence.Game);
       game.addEntity(new MainMenu());
+    },
+
+    goToWinScreen: () => {
+      const game = this.game!;
+      game.clearScene(Persistence.Game);
+      game.addEntity(new WinMenu());
     },
 
     newGame: () => {
@@ -47,7 +54,7 @@ export default class GameController extends BaseEntity implements Entity {
           requiredMilestones: [],
         }
       ]});
-      
+
       if (level == 1) {
         ElShapedLevel.addLevelEntities(game, level);
       } else {
@@ -81,8 +88,8 @@ export default class GameController extends BaseEntity implements Entity {
 
     gameWon: () => {
       const game = this.game!;
-      console.log("Game Won!");
-      game.dispatch({ type: "goToMainMenu" });
+      game.dispatch({ type: 'clearLevel' });
+      game.dispatch({ type: "goToWinScreen" });
     },
 
     gameOver: () => {
