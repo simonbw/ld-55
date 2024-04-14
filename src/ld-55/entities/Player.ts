@@ -31,7 +31,7 @@ export class Player extends SerializableEntity implements Entity {
 
     const radius = 0.5; // meters
 
-    const shape = new Circle({ radius: radius });
+    const shape = new Circle({ radius: radius * 0.6 });
     shape.collisionGroup = CollisionGroups.Player;
     shape.collisionMask = CollisionGroups.All;
     this.body.addShape(shape);

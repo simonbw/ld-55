@@ -1,14 +1,15 @@
+import { TextureStyle } from "pixi.js";
 import Game from "../core/Game.ts";
+import { V } from "../core/Vector";
 import { GamePreloader } from "./GamePreloader.tsx";
 import { initLayers } from "./config/layers.ts";
-import SlowMoController from "./entities/SlowMoController.ts";
-import PlayerCameraController from "./entities/PlayerCameraController.ts";
-import HallwayLevel from "./environment/HallwayLevel.ts";
-import { Key } from "./entities/Key.ts";
-import { V } from "../core/Vector";
-import PlayerProgressController from "./entities/PlayerProgressController.ts";
-import { ExitZone } from "./entities/ExitZone.ts";
 import { ExitConstraints } from "./entities/ExitConstraints.ts";
+import { ExitZone } from "./entities/ExitZone.ts";
+import { Key } from "./entities/Key.ts";
+import PlayerCameraController from "./entities/PlayerCameraController.ts";
+import PlayerProgressController from "./entities/PlayerProgressController.ts";
+import SlowMoController from "./entities/SlowMoController.ts";
+import HallwayLevel from "./environment/HallwayLevel.ts";
 
 // Do this so we can access the game from the console
 declare global {
@@ -18,6 +19,9 @@ declare global {
 }
 
 async function main() {
+  // Make the pixel art crisp
+  TextureStyle.defaultOptions.scaleMode = "nearest";
+
   const game = new Game();
   await game.init();
   // Make the game accessible from the console
@@ -27,7 +31,7 @@ async function main() {
   await preloader.waitTillLoaded();
   preloader.destroy();
 
-  initLayers(game);  
+  initLayers(game);
 
   HallwayLevel.addLevelEntities(game);
   game.addEntity(new PlayerCameraController(game.camera));

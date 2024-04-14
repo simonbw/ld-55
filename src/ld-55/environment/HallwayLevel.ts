@@ -1,11 +1,25 @@
 import Game from "../../core/Game.ts";
 import { V } from "../../core/Vector";
 import { Door } from "../entities/Door.ts";
-import { Teacher } from "../entities/Teacher.ts";
+import { Floor } from "../entities/Floor.ts";
 import { Player } from "../entities/Player.ts";
+import { Teacher } from "../entities/Teacher.ts";
 import { Wall } from "../entities/Wall.ts";
 
 function addLevelEntities(game: Game) {
+  game.addEntity(new Floor(V(0, 0), V(10, 12), "carpet2"));
+  game.addEntity(new Floor(V(0, 12), V(10, 24), "carpet2"));
+  game.addEntity(new Floor(V(0, 24), V(10, 36), "carpet2"));
+
+  game.addEntity(new Floor(V(15, 0), V(25, 12), "carpet1"));
+  game.addEntity(new Floor(V(15, 12), V(25, 24), "carpet2"));
+  game.addEntity(new Floor(V(15, 24), V(25, 32), "carpet1"));
+  game.addEntity(new Floor(V(15, 32), V(25, 40), "carpet2"));
+
+  game.addEntity(new Floor(V(10, 0), V(15, 36), "hallwayFloor"));
+
+  game.addEntity(new Floor(V(10, 36), V(15, 40), "bathroomFloor"));
+
   game.addEntity(new Wall(V(0, 0), V(10, 0)));
   game.addEntity(new Wall(V(10, 0), V(15, 0)));
   game.addEntity(new Wall(V(15, 0), V(25, 0)));
