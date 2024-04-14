@@ -9,8 +9,10 @@ import { degToRad, normalizeAngle } from "../../core/util/MathUtil";
 import { rUniform } from "../../core/util/Random";
 import { CollisionGroups } from "../CollisionGroups";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
+import { Persistence } from "../constants/constants";
 
 export class Door extends SerializableEntity implements Entity {
+  persistenceLevel: Persistence = Persistence.Game;
   //sprite: GameSprite;
   body: Body;
   restAngle: number;

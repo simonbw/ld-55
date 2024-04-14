@@ -2,14 +2,18 @@ import { Sprite, Text } from "pixi.js";
 import BaseEntity from "../../core/entity/BaseEntity";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { Layer } from "../config/layers";
+import Game from "../../core/Game";
 
 export default class SlowMoController extends BaseEntity implements Entity {
+  id: string = "slowMoController";
+  
   sprite: Sprite & GameSprite;
   slowMoText: Text;
 
   slowMoLimit: number = 2; // seconds of slow motion
   slowMoCurrent: number = 0;
   slowMoExhausted: boolean = false;
+  slowMoActive: boolean = false;
 
   constructor() {
     super();
@@ -30,11 +34,23 @@ export default class SlowMoController extends BaseEntity implements Entity {
     this.sprite.addChild(this.slowMoText);
   }
 
+  setSlowMoActive(active: boolean) {
+    this.slowMoActive = active;
+  }
+
+  onAdd(game: Game): void {
+    this.setSlowMoActive(true);
+  }
+
   onTick(dt: number): void {
     const SLOW_MO_MULTIPLIER = 0.5;
     const SLOW_MO_RECHARGE_RATE = 1.0;
 
     if (!this.game) {
+      return;
+    }
+
+    if (!this.slowMoActive) {
       return;
     }
 

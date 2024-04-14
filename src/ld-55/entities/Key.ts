@@ -6,8 +6,10 @@ import { KeyCode } from "../../core/io/Keys";
 import BaseEntity from "../../core/entity/BaseEntity";
 import { Player } from "./Player";
 import Game from "../../core/Game";
+import { Persistence } from "../constants/constants";
 
 export class Key extends BaseEntity implements Entity {
+  persistenceLevel: Persistence = Persistence.Game;
   player: Player | undefined;
 
   constructor(private position: V2d) {

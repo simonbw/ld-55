@@ -4,8 +4,11 @@ import { V, V2d } from "../../core/Vector";
 import Entity from "../../core/entity/Entity";
 import { CollisionGroups } from "../CollisionGroups";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
+import { Persistence } from "../constants/constants";
 
 export class Wall extends SerializableEntity implements Entity {
+  persistenceLevel: Persistence = Persistence.Game;
+  
   constructor(private position1: V2d, private position2: V2d) {
   
     super();

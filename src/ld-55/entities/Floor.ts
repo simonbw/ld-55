@@ -4,8 +4,10 @@ import { V, V2d } from "../../core/Vector";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { Layer } from "../config/layers";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
+import { Persistence } from "../constants/constants";
 
 export class Floor extends SerializableEntity implements Entity {
+  persistenceLevel: Persistence = Persistence.Game;
   sprite: TilingSprite & GameSprite;
 
   constructor(

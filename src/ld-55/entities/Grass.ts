@@ -3,8 +3,10 @@ import BaseEntity from "../../core/entity/BaseEntity";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
 import { Layer } from "../config/layers";
+import { Persistence } from "../constants/constants";
 
 export class Grass extends BaseEntity implements Entity {
+  persistenceLevel: Persistence = Persistence.Game;
   sprite: TilingSprite & GameSprite;
 
   constructor() {

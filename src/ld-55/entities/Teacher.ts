@@ -8,11 +8,13 @@ import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 import { VisionCone } from "./VisionCone";
 import { WalkSoundPlayer } from "./WalkSoundPlayer";
 import { PersonShadow } from "./PersonShadow";
+import { Persistence } from "../constants/constants";
 
 const RUNNING_STEPS_PER_SECOND = 5;
 const WALKING_STEPS_PER_SECOND = 2;
 
 export class Teacher extends SerializableEntity implements Entity {
+  persistenceLevel: Persistence = Persistence.Game;
   sprite: GameSprite & AnimatedSprite;
   body: Body;
   tags = ["enemy"];
@@ -20,6 +22,7 @@ export class Teacher extends SerializableEntity implements Entity {
   visionCone: VisionCone;
 
   walkSoundPlayer: WalkSoundPlayer;
+  foundPlayer: boolean = false;
 
   constructor(
     private position: V2d,
@@ -69,9 +72,16 @@ export class Teacher extends SerializableEntity implements Entity {
     const walkStrength = 180;
     if (player && this.visionCone.canSee(player)) {
       const playerPosition = V(player.body!.position);
-      const direction = playerPosition.sub(this.body.position).normalize();
+      const diff = playerPosition.sub(this.body.position);
+      const direction = diff.normalize();
       this.body.applyForce(direction.mul(walkStrength));
       this.body.angle = direction.angle;
+
+      if (diff.magnitude < 1 && !this.foundPlayer) {
+        console.log('found player')
+        this.foundPlayer = true;
+        this.game?.dispatch({ type: "gameOver" });
+      }
 
       // Always running for now, later we can change
       const sprinting = true;
