@@ -22,7 +22,6 @@ export default class SlowMoController extends BaseEntity implements Entity {
       style: {
         align: "right",
         fill: "white",
-        // fontFamily: "Comfortaa",
         fontSize: 16,
       },
     });

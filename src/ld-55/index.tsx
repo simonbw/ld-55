@@ -10,6 +10,7 @@ import PlayerCameraController from "./entities/PlayerCameraController.ts";
 import PlayerProgressController from "./entities/PlayerProgressController.ts";
 import SlowMoController from "./entities/SlowMoController.ts";
 import HallwayLevel from "./environment/HallwayLevel.ts";
+import GameController from "./entities/controllers/GameController.ts";
 
 // Do this so we can access the game from the console
 declare global {
@@ -33,13 +34,10 @@ async function main() {
 
   initLayers(game);
 
-  HallwayLevel.addLevelEntities(game);
-  game.addEntity(new PlayerCameraController(game.camera));
-  game.addEntity(new SlowMoController());
+  game.addEntity(new GameController());
   game.addEntity(new PlayerProgressController());
 
-  game.addEntity(new Key(V(12.5, 5)));
-  game.addEntity(new ExitZone(V(12.5, 38), new ExitConstraints(["key"], [])));
+  game.dispatch({ type: "goToMainMenu" });
 }
 
 window.addEventListener("load", main);
