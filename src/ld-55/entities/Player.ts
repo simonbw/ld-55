@@ -6,10 +6,14 @@ import { imageName } from "../../core/resources/resourceUtils";
 import PositionalSoundListener from "../../core/sound/PositionalSoundListener";
 import { CollisionGroups } from "../CollisionGroups";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
+import { PersonShadow } from "./PersonShadow";
 import { WalkSoundPlayer } from "./WalkSoundPlayer";
 
 const RUNNING_STEPS_PER_SECOND = 5;
 const WALKING_STEPS_PER_SECOND = 2;
+
+const WALK_SPEED = 2; // meters per second
+const RUN_SPEED = 5; // meters per second
 
 /** An example Entity to show some features of the engine */
 export class Player extends SerializableEntity implements Entity {
@@ -52,6 +56,7 @@ export class Player extends SerializableEntity implements Entity {
 
     this.walkSoundPlayer = this.addChild(new WalkSoundPlayer(this.body));
     this.soundListener = this.addChild(new PositionalSoundListener());
+    this.addChild(new PersonShadow(this.body));
   }
 
   /** Called every update cycle */

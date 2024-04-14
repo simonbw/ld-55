@@ -7,6 +7,7 @@ import { CollisionGroups } from "../CollisionGroups";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 import { VisionCone } from "./VisionCone";
 import { WalkSoundPlayer } from "./WalkSoundPlayer";
+import { PersonShadow } from "./PersonShadow";
 
 const RUNNING_STEPS_PER_SECOND = 5;
 const WALKING_STEPS_PER_SECOND = 2;
@@ -58,6 +59,7 @@ export class Teacher extends SerializableEntity implements Entity {
     this.body.angle = angle;
 
     this.walkSoundPlayer = this.addChild(new WalkSoundPlayer(this.body));
+    this.addChild(new PersonShadow(this.body));
   }
 
   onTick(dt: number): void {

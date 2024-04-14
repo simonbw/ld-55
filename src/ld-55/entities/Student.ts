@@ -6,6 +6,7 @@ import Entity, { GameSprite } from "../../core/entity/Entity";
 import { choose } from "../../core/util/Random";
 import { CollisionGroups } from "../CollisionGroups";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
+import { PersonShadow } from "./PersonShadow";
 
 const studentTextures: ImageName[] = [
   "boy11",
@@ -47,6 +48,8 @@ export class Student extends SerializableEntity implements Entity {
     this.sprite = Sprite.from(choose(...studentTextures));
     this.sprite.anchor.set(0.5);
     this.sprite.setSize(2 * radius);
+
+    this.addChild(new PersonShadow(this.body));
   }
 
   onTick(dt: number): void {

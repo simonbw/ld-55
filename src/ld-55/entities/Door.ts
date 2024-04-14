@@ -50,7 +50,7 @@ export class Door extends SerializableEntity implements Entity {
 
     graphics
       .rect(0, -height / 2, width, height)
-      .fill(0x00bb00)
+      .fill(0x775533)
       // door handle
       // stem
       .rect(

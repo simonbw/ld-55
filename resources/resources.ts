@@ -24,7 +24,8 @@ const sounds = {
 export type SoundName = keyof typeof sounds;
 
 const images = {
-    hallwayFloor: require("./images/hallway-floor.png"),
+    playerShadow: require("./images/player-shadow.png"),
+  hallwayFloor: require("./images/hallway-floor.png"),
   grass1: require("./images/grass-1.png"),
   favicon: require("./images/favicon.png"),
   carpet2: require("./images/carpet-2.png"),
