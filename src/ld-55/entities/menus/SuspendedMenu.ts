@@ -27,6 +27,7 @@ export default class SuspendedMenu extends BaseEntity implements Entity {
     this.sprite.layerName = Layer.MENU;
 
     this.background = new Graphics().rect(0, 0, 10000, 10000).fill(0xff0000);
+    this.background.alpha = 0;
     this.sprite.addChild(this.background);
 
     this.suspendedText = new Text({
@@ -52,6 +53,7 @@ export default class SuspendedMenu extends BaseEntity implements Entity {
     });
     this.restartText.anchor.set(0.5, 0.0);
     this.sprite.addChild(this.restartText);
+
     this.restartText.interactive = true;
     this.restartText.addListener("click", () => {
       this.restartGame();
@@ -62,19 +64,18 @@ export default class SuspendedMenu extends BaseEntity implements Entity {
     const slowMoController = game.entities.getById("slowMoController")!;
     game.removeEntity(slowMoController);
 
-    await this.wait(3, (dt, t) => {
-      game.slowMo = smoothStep(1 - t);
+    this.restartText.alpha = 0;
+    this.restartText.alpha = 0;
+
+    this.wait(1.0, (dt, t) => {
+      this.background.alpha = lerp(0, 0.5, t);
+      this.suspendedText.alpha = clamp(t * 5);
+      this.restartText.alpha = t;
     });
 
-    this.restartText.alpha = 0;
-    this.restartText.alpha = 0;
-
-    await this.wait(5, (dt, t) => {
-      this.background.alpha = lerp(0, 0.3, t);
-      // this.suspendedText.alpha = smoothStep(clamp(t * 1.5));
-      this.suspendedText.alpha = clamp(lerp(0, 1, t / 5.0));
-      // this.restartText.alpha = smoothStep(clamp(2.8 * t - 1.8));
-      this.restartText.alpha = clamp(lerp(0, 1, t / 5.0) - 1.8);
+    // Don't await this
+    this.wait(3, (dt, t) => {
+      game.slowMo = smoothStep(1 - t);
     });
   }
 
