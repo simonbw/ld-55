@@ -2,7 +2,6 @@ import p2, { Body } from "p2";
 import { Graphics } from "pixi.js";
 import { V, V2d } from "../../core/Vector";
 import Entity from "../../core/entity/Entity";
-import { CollisionGroups } from "../CollisionGroups";
 import { KeyCode } from "../../core/io/Keys";
 import BaseEntity from "../../core/entity/BaseEntity";
 import { Player } from "./Player";

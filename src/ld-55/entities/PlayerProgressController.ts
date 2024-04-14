@@ -12,12 +12,16 @@ interface Milestone {
 }
 
 export default class PlayerProgressController extends BaseEntity implements Entity {
+  tags = ["playerProgressController"]
+
   items: Item[] = [];
   milestones: Milestone[] = [];
 
   handlers = {
     addItem: (event: any) => this.addItem(event.name, event.description),
-    addMilestone: (event: any) => this.addMilestone(event.name)
+    addMilestone: (event: any) => this.addMilestone(event.name),
+    clearProgress: () => this.clearProgress(),
+    finishLevel: (event: any) => console.log("Finished level", event.level)
   };
 
   constructor(
@@ -36,6 +40,11 @@ export default class PlayerProgressController extends BaseEntity implements Enti
 
   addMilestone(name: string) {
     this.milestones.push({name, description: ""});
+  }
+
+  clearProgress() {
+    this.items = [];
+    this.milestones = [];
   }
 
   hasMilestone(name: string): boolean {

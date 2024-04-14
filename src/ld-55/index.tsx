@@ -7,6 +7,8 @@ import HallwayLevel from "./environment/HallwayLevel.ts";
 import { Key } from "./entities/Key.ts";
 import { V } from "../core/Vector";
 import PlayerProgressController from "./entities/PlayerProgressController.ts";
+import { ExitZone } from "./entities/ExitZone.ts";
+import { ExitConstraints } from "./entities/ExitConstraints.ts";
 
 // Do this so we can access the game from the console
 declare global {
@@ -33,8 +35,7 @@ async function main() {
   game.addEntity(new PlayerProgressController());
 
   game.addEntity(new Key(V(12.5, 5)));
-
-  // ExampleLevel.addLevelEntities(game);
+  game.addEntity(new ExitZone(V(12.5, 38), new ExitConstraints(["key"], [])));
 }
 
 window.addEventListener("load", main);
