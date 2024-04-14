@@ -12,16 +12,7 @@ import PlayerCameraController from "../PlayerCameraController";
 import SlowMoController from "../SlowMoController";
 import MainMenu from "../menus/MainMenu";
 import SuspendedMenu from "../menus/SuspendedMenu";
-
-interface Item {
-  name: string;
-  description: string;
-}
-
-interface Milestone {
-  name: string;
-  description: string;
-}
+import ObjectiveController from "./ObjectiveController";
 
 export default class GameController extends BaseEntity implements Entity {
   persistenceLevel: Persistence = Persistence.Permanent;
@@ -48,6 +39,22 @@ export default class GameController extends BaseEntity implements Entity {
       const { level } = event;
       game.clearScene(Persistence.Level);
 
+      game.dispatch({ type: 'clearLevel' });
+
+      game.addEntity(new PlayerCameraController(game.camera));
+      game.addEntity(new SlowMoController());
+
+      game.dispatch({ type: 'addObjective', objectives: [
+        {
+          name: "Find the key",
+          incompleteDescription: "Check the hallway.",
+          completeDescription: "Use the key to leave the building!",
+          showOnComplete: true,
+          requiredItems: ["key"],
+          requiredMilestones: [],
+        }
+      ]});
+
       HallwayLevel.addLevelEntities(game);
       game.addEntity(new Grass());
       game.addEntity(new Key(V(12.5, 5)));
@@ -55,8 +62,7 @@ export default class GameController extends BaseEntity implements Entity {
         new ExitZone(V(12.5, 38), new ExitConstraints(["key"], []), level)
       );
 
-      game.addEntity(new PlayerCameraController(game.camera));
-      game.addEntity(new SlowMoController());
+      
 
       game.addEntity(
         new SoundInstance("music1", {

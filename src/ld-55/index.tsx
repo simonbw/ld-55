@@ -5,6 +5,7 @@ import { GamePreloader } from "./GamePreloader.tsx";
 import { Layer, initLayers } from "./config/layers.ts";
 import PlayerProgressController from "./entities/PlayerProgressController.ts";
 import GameController from "./entities/controllers/GameController.ts";
+import ObjectiveController from "./entities/controllers/ObjectiveController.ts";
 
 // Do this so we can access the game from the console
 declare global {

@@ -42,7 +42,9 @@ export class Key extends BaseEntity implements Entity {
 
   onKeyDown(key: KeyCode, event: KeyboardEvent): void {    
     if (key == "KeyE" && V(this.player!.body.position).sub(V(this.body!.position)).magnitude < 0.5) {
+
       this.game!.dispatch({ type: 'addItem', name: 'key', description: 'A key'});
+
       this.destroy();
     }
   }
