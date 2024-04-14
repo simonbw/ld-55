@@ -26,13 +26,8 @@ export type SoundName = keyof typeof sounds;
 
 const images = {
     playerShadow: require("./images/player-shadow.png"),
-  herringboneFloor: require("./images/herringbone-floor.png"),
-  hallwayFloor: require("./images/hallway-floor.png"),
   grass1: require("./images/grass-1.png"),
   favicon: require("./images/favicon.png"),
-  carpet2: require("./images/carpet-2.png"),
-  carpet1: require("./images/carpet-1.png"),
-  bathroomFloor: require("./images/bathroom-floor.png"),
   backpack1: require("./images/backpack-1.png"),
   hallwayLocker: require("./images/setting/hallway/hallway-locker.png"),
   hallwayLockerDoor: require("./images/setting/hallway/hallway-locker door.png"),
@@ -128,14 +123,11 @@ const images = {
   boy13: require("./images/npcs/boy1/boy1-3.png"),
   boy12: require("./images/npcs/boy1/boy1-2.png"),
   boy11: require("./images/npcs/boy1/boy1-1.png"),
-  teacherGym8: require("./images/enemies/teacher-gym8.png"),
-  teacherGym7: require("./images/enemies/teacher-gym7.png"),
-  teacherGym6: require("./images/enemies/teacher-gym6.png"),
-  teacherGym5: require("./images/enemies/teacher-gym5.png"),
-  teacherGym4: require("./images/enemies/teacher-gym4.png"),
-  teacherGym3: require("./images/enemies/teacher-gym3.png"),
-  teacherGym2: require("./images/enemies/teacher-gym2.png"),
-  teacherGym1: require("./images/enemies/teacher-gym1.png"),
+  herringboneFloor: require("./images/floors/herringbone-floor.png"),
+  hallwayFloor: require("./images/floors/hallway-floor.png"),
+  carpet2: require("./images/floors/carpet-2.png"),
+  carpet1: require("./images/floors/carpet-1.png"),
+  bathroomFloor: require("./images/floors/bathroom-floor.png"),
   teacherScience8: require("./images/enemies/teacher-science/teacher-science8.png"),
   teacherScience7: require("./images/enemies/teacher-science/teacher-science7.png"),
   teacherScience6: require("./images/enemies/teacher-science/teacher-science6.png"),
@@ -143,7 +135,15 @@ const images = {
   teacherScience4: require("./images/enemies/teacher-science/teacher-science4.png"),
   teacherScience3: require("./images/enemies/teacher-science/teacher-science3.png"),
   teacherScience2: require("./images/enemies/teacher-science/teacher-science2.png"),
-  teacherScience1: require("./images/enemies/teacher-science/teacher-science1.png")
+  teacherScience1: require("./images/enemies/teacher-science/teacher-science1.png"),
+  teacherGym8: require("./images/enemies/teacher-gym/teacher-gym8.png"),
+  teacherGym7: require("./images/enemies/teacher-gym/teacher-gym7.png"),
+  teacherGym6: require("./images/enemies/teacher-gym/teacher-gym6.png"),
+  teacherGym5: require("./images/enemies/teacher-gym/teacher-gym5.png"),
+  teacherGym4: require("./images/enemies/teacher-gym/teacher-gym4.png"),
+  teacherGym3: require("./images/enemies/teacher-gym/teacher-gym3.png"),
+  teacherGym2: require("./images/enemies/teacher-gym/teacher-gym2.png"),
+  teacherGym1: require("./images/enemies/teacher-gym/teacher-gym1.png")
 };
 export type ImageName = keyof typeof images;
 
