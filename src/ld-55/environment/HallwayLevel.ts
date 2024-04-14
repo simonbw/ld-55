@@ -108,22 +108,44 @@ function addLevelEntities(game: Game, levelN: number) {
   game.addEntity(new Door(V(14, 36), V(12.5, 36)));
   game.addEntity(new Wall(V(14, 36), V(15, 36)));
 
-  const hallwayPatroller = new Teacher(V(14, 6), Math.PI / 2);
+  const hallwayPatroller = new Teacher(V(14.2, 6), Math.PI / 2);
   game.addEntity(hallwayPatroller);
-
-  const hallwayPatroller2 = new Teacher(V(11, 20), Math.PI/2);
-  game.addEntity(hallwayPatroller2);
-
   game.addEntity(new PatrolController(
     hallwayPatroller,
-    V(14, 30),
-    V(14, 6),
+    V(14.2, 30),
+    V(14.2, 6),
   ));
 
+  const hallwayPatroller2 = new Teacher(V(10.8, 20), Math.PI/2);
+  game.addEntity(hallwayPatroller2);
   game.addEntity(new PatrolController(
     hallwayPatroller2,
-    V(11, 30),
-    V(11, 6),
+    V(10.8, 30),
+    V(10.8, 6),
+  )); 
+
+  const hallwayPatroller3 = new Student(V(12.5, 20), Math.PI / 2);
+  game.addEntity(hallwayPatroller3);
+  game.addEntity(new PatrolController(
+    hallwayPatroller3,
+    V(12.5, 30),
+    V(12.5, 6),
+  ));
+
+  const hallwayPatroller4 = new Student(V(11.5, 13), Math.PI / 2);
+  game.addEntity(hallwayPatroller4);
+  game.addEntity(new PatrolController(
+    hallwayPatroller4,
+    V(11.5, 6),
+    V(11.5, 30),
+  ));
+
+  const hallwayPatroller5 = new Student(V(13.5, 23), Math.PI / 2);
+  game.addEntity(hallwayPatroller5);
+  game.addEntity(new PatrolController(
+    hallwayPatroller5,
+    V(13.5, 30),
+    V(13.5, 6),
   ));
   
   game.addEntity(new Grass());
