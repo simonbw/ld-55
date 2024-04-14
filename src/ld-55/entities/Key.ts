@@ -1,5 +1,5 @@
 import p2, { Body } from "p2";
-import { Graphics } from "pixi.js";
+import { Graphics, Sprite } from "pixi.js";
 import { V, V2d } from "../../core/Vector";
 import Entity from "../../core/entity/Entity";
 import { KeyCode } from "../../core/io/Keys";
@@ -7,6 +7,8 @@ import BaseEntity from "../../core/entity/BaseEntity";
 import { Player } from "./Player";
 import Game from "../../core/Game";
 import { Persistence } from "../constants/constants";
+import { Layer } from "../config/layers";
+import { imageName } from "../../core/resources/resourceUtils";
 
 export class Key extends BaseEntity implements Entity {
   persistenceLevel: Persistence = Persistence.Game;
@@ -27,24 +29,27 @@ export class Key extends BaseEntity implements Entity {
     });
     this.body.addShape(shape);
 
-    const graphics = new Graphics();
-    graphics
-      .rect(-shape.width / 2, -shape.height / 2, shape.width, shape.height)
-      .fill(0xffffff);
-
-    this.sprite = graphics;
+    this.sprite = Sprite.from(imageName("backpack1"));
+    this.sprite.setSize(0.5);
+    this.sprite.layerName = Layer.ITEMS;
     this.sprite.position.set(...position);
   }
 
   onAdd(game: Game): void {
-    this.player = game.entities.getTagged('player')[0] as Player;
+    this.player = game.entities.getTagged("player")[0] as Player;
   }
 
-  onKeyDown(key: KeyCode, event: KeyboardEvent): void {    
-    if (key == "KeyE" && V(this.player!.body.position).sub(V(this.body!.position)).magnitude < 0.5) {
-      this.game!.dispatch({ type: 'addItem', name: 'key', description: 'A key'});
+  onKeyDown(key: KeyCode, event: KeyboardEvent): void {
+    if (
+      key == "KeyE" &&
+      V(this.player!.body.position).sub(V(this.body!.position)).magnitude < 0.5
+    ) {
+      this.game!.dispatch({
+        type: "addItem",
+        name: "key",
+        description: "A key",
+      });
       this.destroy();
     }
   }
 }
-
