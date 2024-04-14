@@ -30,7 +30,7 @@ export default class MainMenu extends BaseEntity implements Entity {
     this.sprite.addChild(this.background);
 
     this.titleText = new Text({
-      text: "Not HIGHRISE",
+      text: "Detention\nPrevention",
       style: {
         align: "center",
         fill: "white",
