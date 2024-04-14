@@ -10,7 +10,7 @@ import { PersonShadow } from "./PersonShadow";
 import { WalkSoundPlayer } from "./WalkSoundPlayer";
 
 const RUNNING_STEPS_PER_SECOND = 5;
-const WALKING_STEPS_PER_SECOND = 2;
+const WALKING_STEPS_PER_SECOND = 3;
 
 const WALK_SPEED = 2; // meters per second
 const RUN_SPEED = 5; // meters per second
