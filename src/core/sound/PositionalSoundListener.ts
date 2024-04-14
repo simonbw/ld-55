@@ -1,8 +1,8 @@
+import Game from "../Game";
+import { V2d } from "../Vector";
 import BaseEntity from "../entity/BaseEntity";
 import Entity from "../entity/Entity";
 import { PositionalSound } from "./PositionalSound";
-import { V2d } from "../Vector";
-import Game from "../Game";
 
 function isPositionalSound(e: Entity): e is PositionalSound {
   return e instanceof PositionalSound;
@@ -15,7 +15,6 @@ export default class PositionalSoundListener
 {
   id = "positional_sound_listener";
   persistenceLevel = 100;
-  onTick() {}
 
   onAdd(game: Game) {
     // So we can get these all quickly
@@ -30,9 +29,9 @@ export default class PositionalSoundListener
 }
 
 export function getPositionalSoundListener(
-  game?: Game,
+  game?: Game
 ): PositionalSoundListener | undefined {
   return game?.entities.getById(
-    "positional_sound_listener",
+    "positional_sound_listener"
   ) as PositionalSoundListener;
 }

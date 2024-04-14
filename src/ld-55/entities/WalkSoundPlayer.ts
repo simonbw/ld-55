@@ -1,10 +1,15 @@
 import { SoundName } from "../../../resources/resources";
+import { V } from "../../core/Vector";
 import BaseEntity from "../../core/entity/BaseEntity";
-import { SoundInstance } from "../../core/sound/SoundInstance";
+import { PositionalSound } from "../../core/sound/PositionalSound";
 import { choose, rUniform } from "../../core/util/Random";
 
 export class WalkSoundPlayer extends BaseEntity {
   stepProgress: number = 0.5;
+
+  constructor(private emittingBody: p2.Body) {
+    super();
+  }
 
   advance(walkAmount: number, sprinting: boolean) {
     this.stepProgress += walkAmount;
@@ -12,7 +17,7 @@ export class WalkSoundPlayer extends BaseEntity {
       this.stepProgress -= 1;
       const name = sprinting ? choose(...runSounds) : choose(...walkSounds);
       this.addChild(
-        new SoundInstance(name, {
+        new PositionalSound(name, V(this.emittingBody.position), {
           speed: rUniform(0.9, 1.1),
         })
       );

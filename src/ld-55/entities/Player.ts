@@ -3,7 +3,7 @@ import { AnimatedSprite } from "pixi.js";
 import { V, V2d } from "../../core/Vector";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
-import { SoundInstance } from "../../core/sound/SoundInstance";
+import PositionalSoundListener from "../../core/sound/PositionalSoundListener";
 import { CollisionGroups } from "../CollisionGroups";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 import { WalkSoundPlayer } from "./WalkSoundPlayer";
@@ -17,8 +17,8 @@ export class Player extends SerializableEntity implements Entity {
   body: Body;
   tags = ["player"];
 
-  stepSound?: SoundInstance;
   walkSoundPlayer: WalkSoundPlayer;
+  soundListener: PositionalSoundListener;
 
   constructor(private position: V2d) {
     super();
@@ -50,7 +50,8 @@ export class Player extends SerializableEntity implements Entity {
     this.sprite.setSize(2 * radius);
     this.sprite.play();
 
-    this.walkSoundPlayer = this.addChild(new WalkSoundPlayer());
+    this.walkSoundPlayer = this.addChild(new WalkSoundPlayer(this.body));
+    this.soundListener = this.addChild(new PositionalSoundListener());
   }
 
   /** Called every update cycle */
@@ -97,6 +98,8 @@ export class Player extends SerializableEntity implements Entity {
       this.sprite.animationSpeed = 0;
       this.sprite.currentFrame = 0;
     }
+
+    this.soundListener.setPosition(V(this.body.position));
   }
 
   private getWalkDirection(): V2d {
