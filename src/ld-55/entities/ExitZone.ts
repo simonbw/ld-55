@@ -7,8 +7,10 @@ import { Player } from "./Player";
 import Game from "../../core/Game";
 import { ExitConstraints } from "./ExitConstraints";
 import PlayerProgressController from "./PlayerProgressController";
+import { Persistence } from "../constants/constants";
 
 export class ExitZone extends BaseEntity implements Entity {
+  persistenceLevel: Persistence = Persistence.Game;
   player: Player | undefined; 
   playerProgress: PlayerProgressController | undefined;
 

@@ -1,6 +1,7 @@
 import { V } from "../../../core/Vector";
 import BaseEntity from "../../../core/entity/BaseEntity";
 import Entity from "../../../core/entity/Entity";
+import { Persistence } from "../../constants/constants";
 import HallwayLevel from "../../environment/HallwayLevel";
 import { ExitConstraints } from "../ExitConstraints";
 import { ExitZone } from "../ExitZone";
@@ -10,6 +11,7 @@ import PlayerCameraController from "../PlayerCameraController";
 import PlayerProgressController from "../PlayerProgressController";
 import SlowMoController from "../SlowMoController";
 import MainMenu from "../menus/MainMenu";
+import SuspendedMenu from "../menus/SuspendedMenu";
 
 interface Item {
   name: string;
@@ -22,6 +24,8 @@ interface Milestone {
 }
 
 export default class GameController extends BaseEntity implements Entity {
+  persistenceLevel: Persistence = Persistence.Permanent;
+
   constructor(
   ) {
     super();    
@@ -35,6 +39,7 @@ export default class GameController extends BaseEntity implements Entity {
 
     newGame: () => {
       const game = this.game!;
+      game.clearScene(Persistence.Game);
       
       HallwayLevel.addLevelEntities(game);
       game.addEntity(new Grass());
@@ -43,6 +48,13 @@ export default class GameController extends BaseEntity implements Entity {
 
       game.addEntity(new PlayerCameraController(game.camera));
       game.addEntity(new SlowMoController());
+    },
+
+    gameOver: () => {
+      const game = this.game!;
+      if (game.entities.getById("suspendedMenu") === undefined) {
+        game.addEntity(new SuspendedMenu());
+      }
     }
   };
 }

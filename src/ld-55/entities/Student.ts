@@ -1,4 +1,4 @@
-import { Body, Circle } from "p2";
+import { Body, Circle, ContactEquation, Shape } from "p2";
 import { Sprite } from "pixi.js";
 import { ImageName } from "../../../resources/resources";
 import { V, V2d } from "../../core/Vector";
@@ -7,6 +7,7 @@ import { choose } from "../../core/util/Random";
 import { CollisionGroups } from "../CollisionGroups";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 import { PersonShadow } from "./PersonShadow";
+import { Persistence } from "../constants/constants";
 
 const studentTextures: ImageName[] = [
   "boy11",
@@ -20,6 +21,7 @@ const studentTextures: ImageName[] = [
 
 /** An example Entity to show some features of the engine */
 export class Student extends SerializableEntity implements Entity {
+  persistenceLevel: Persistence = Persistence.Game;
   sprite: GameSprite & Sprite;
   body: Body;
   tags = ["student"];
@@ -51,6 +53,12 @@ export class Student extends SerializableEntity implements Entity {
 
     this.addChild(new PersonShadow(this.body));
   }
+
+  // onBeginContact(other?: Entity | undefined, thisShape?: Shape | undefined, otherShape?: Shape | undefined, contactEquations?: ContactEquation[] | undefined): void {
+  //   if (other!.tags!.includes("enemy")) {
+  //     this.game?.dispatch({ type: "gameOver" });
+  //   }
+  // }
 
   onTick(dt: number): void {
     this.body.applyDamping(dt);

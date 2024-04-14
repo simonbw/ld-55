@@ -1,5 +1,6 @@
 import BaseEntity from "../../core/entity/BaseEntity";
 import Entity from "../../core/entity/Entity";
+import { Persistence } from "../constants/constants";
 
 interface Item {
   name: string;
@@ -12,6 +13,8 @@ interface Milestone {
 }
 
 export default class PlayerProgressController extends BaseEntity implements Entity {
+  persistenceLevel: Persistence = Persistence.Permanent;
+  
   tags = ["playerProgressController"]
 
   items: Item[] = [];
