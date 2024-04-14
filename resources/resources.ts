@@ -37,6 +37,7 @@ const images = {
   classroomPlant: require("./images/setting/classroom/classroom-plant.png"),
   classroomPaper: require("./images/setting/classroom/classroom-paper.png"),
   classroomOpenBookWithPen: require("./images/setting/classroom/classroom-open book with pen.png"),
+  classroomFloorHerringbone: require("./images/setting/classroom/classroom-floor herringbone.png"),
   classroomDesk: require("./images/setting/classroom/classroom-desk.png"),
   classroomCoffee: require("./images/setting/classroom/classroom-coffee.png"),
   classroomChair: require("./images/setting/classroom/classroom-chair.png"),
