@@ -2,7 +2,7 @@ import { Body, Circle, ContactEquation, Shape } from "p2";
 import { AnimatedSprite } from "pixi.js";
 import { V, V2d } from "../../core/Vector";
 import Entity, { GameSprite } from "../../core/entity/Entity";
-import { imageName } from "../../core/resources/resourceUtils";
+import { choose } from "../../core/util/Random";
 import { CollisionGroups } from "../CollisionGroups";
 import { Persistence } from "../constants/constants";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
@@ -13,6 +13,29 @@ import { WalkSoundPlayer } from "./WalkSoundPlayer";
 const RUNNING_STEPS_PER_SECOND = 5;
 const WALKING_STEPS_PER_SECOND = 2;
 const SUSPICION_THRESHOLD_SECONDS = 1;
+
+const teacherSprites: ImageName[][] = [
+  [
+    "teacherGym1",
+    "teacherGym2",
+    "teacherGym3",
+    "teacherGym4",
+    "teacherGym5",
+    "teacherGym6",
+    "teacherGym7",
+    "teacherGym8",
+  ],
+  [
+    "teacherScience1",
+    "teacherScience2",
+    "teacherScience3",
+    "teacherScience4",
+    "teacherScience5",
+    "teacherScience6",
+    "teacherScience7",
+    "teacherScience8",
+  ],
+];
 
 export class Teacher extends SerializableEntity implements Entity {
   persistenceLevel: Persistence = Persistence.Game;
@@ -47,16 +70,7 @@ export class Teacher extends SerializableEntity implements Entity {
     shape.collisionMask = CollisionGroups.All;
     this.body.addShape(shape);
 
-    this.sprite = AnimatedSprite.fromImages([
-      imageName("teacherGym1"),
-      imageName("teacherGym2"),
-      imageName("teacherGym3"),
-      imageName("teacherGym4"),
-      imageName("teacherGym5"),
-      imageName("teacherGym6"),
-      imageName("teacherGym7"),
-      imageName("teacherGym8"),
-    ]);
+    this.sprite = AnimatedSprite.fromImages(choose(...teacherSprites));
     this.sprite.anchor.set(0.5);
     this.sprite.scale = (2 * radius) / this.sprite.texture.width;
     this.sprite.play();
@@ -80,7 +94,11 @@ export class Teacher extends SerializableEntity implements Entity {
       this.suspicion += dt;
     }
 
-    if (player && this.visionCone.canSee(player) && this.suspicion > SUSPICION_THRESHOLD_SECONDS) {
+    if (
+      player &&
+      this.visionCone.canSee(player) &&
+      this.suspicion > SUSPICION_THRESHOLD_SECONDS
+    ) {
       const walkStrength = 180;
       const playerPosition = V(player.body!.position);
       const diff = playerPosition.sub(this.body.position);
