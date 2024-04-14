@@ -1,13 +1,8 @@
-import { V } from "../../../core/Vector";
 import BaseEntity from "../../../core/entity/BaseEntity";
 import Entity from "../../../core/entity/Entity";
 import { SoundInstance } from "../../../core/sound/SoundInstance";
 import { Persistence } from "../../constants/constants";
-import HallwayLevel from "../../environment/HallwayLevel";
-import { ExitConstraints } from "../ExitConstraints";
-import { ExitZone } from "../ExitZone";
-import { Grass } from "../Grass";
-import { Key } from "../Key";
+import ElShapedLevel from "../../environment/ElShapedLevel";
 import PlayerCameraController from "../PlayerCameraController";
 import SlowMoController from "../SlowMoController";
 import MainMenu from "../menus/MainMenu";
@@ -48,12 +43,7 @@ export default class GameController extends BaseEntity implements Entity {
       const { level } = event;
       game.clearScene(Persistence.Level);
 
-      HallwayLevel.addLevelEntities(game);
-      game.addEntity(new Grass());
-      game.addEntity(new Key(V(12.5, 5)));
-      game.addEntity(
-        new ExitZone(V(12.5, 38), new ExitConstraints(["key"], []), level)
-      );
+      ElShapedLevel.addLevelEntities(game, level);
 
       game.addEntity(new PlayerCameraController(game.camera));
       game.addEntity(new SlowMoController());
