@@ -107,10 +107,19 @@ function addLevelEntities(game: Game) {
   const hallwayPatroller = new Teacher(V(14, 6), Math.PI/2);
   game.addEntity(hallwayPatroller);
 
+  const hallwayPatroller2 = new Teacher(V(11, 20), Math.PI/2);
+  game.addEntity(hallwayPatroller2);
+
   game.addEntity(new PatrolController(
     hallwayPatroller,
     V(14, 30),
     V(14, 6),
+  ));
+
+  game.addEntity(new PatrolController(
+    hallwayPatroller2,
+    V(11, 30),
+    V(11, 6),
   ));
 }
 
