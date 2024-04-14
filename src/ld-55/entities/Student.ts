@@ -39,8 +39,6 @@ export class Student extends SerializableEntity implements Entity {
       mass: 0.5,
       position: position.clone(),
       angle,
-      damping: 0.99,
-      angularDamping: 0.99,
     });
 
     const radius = 0.5; // meters
