@@ -1,6 +1,7 @@
 import Game from "../core/Game.ts";
 import { GamePreloader } from "./GamePreloader.tsx";
-import { EditorController } from "./editor/EditorController.tsx";
+import { initLayers } from "./config/layers.ts";
+import { EditorPanel } from "./editor/EditorPanel.tsx";
 import GodCameraController from "./editor/GodCameraController.tsx";
 import { serializeLevel } from "./editor/serializeLevel.tsx";
 import HallwayLevel from "./environment/HallwayLevel.ts";
@@ -21,12 +22,13 @@ async function main() {
   const preloader = game.addEntity(GamePreloader);
   await preloader.waitTillLoaded();
   preloader.destroy();
+  initLayers(game);
 
   HallwayLevel.addLevelEntities(game);
   const stuff = serializeLevel(game);
   game.clearScene();
 
-  game.addEntity(new EditorController(game, stuff));
+  game.addEntity(new EditorPanel(game, stuff));
   game.addEntity(new GodCameraController(game.camera));
 
 }

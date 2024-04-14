@@ -2,18 +2,33 @@ import React from "react";
 import Game from "../../core/Game";
 import { ReactEntity } from "../../core/ReactEntity";
 import Entity from "../../core/entity/Entity";
+import { EditorController } from "./EditorController";
 import { serializeLevel } from "./serializeLevel";
 import { LevelData } from "./serializeTypes";
 
 
 export class EditorPanel extends ReactEntity<any> implements Entity {
 
-  constructor(private myGame: Game, private levelData: LevelData) {
-    super(() => <button onClick={() => this.onButtonClick(this.myGame) }>Save file</button>);
-    
+  controller : EditorController;
+
+  constructor(myGame: Game, private levelData: LevelData) {
+    super(() => <>
+      <select onChange={(e) => this.onCreateEntityTypeChange(e)}>
+        <option value='Wall'>Wall</option>
+      </select>
+      {/* <button onClick={() => this.onSave(myGame) }>Add Entity</button> */}
+      <button onClick={() => this.onSave(myGame) }>Save file</button>
+    </>);
+    this.controller = new EditorController(levelData)
+    this.controller.onCreateEntityTypeChange('Wall');
+    this.addChild(this.controller); 
   }
 
-  async onButtonClick(myGame: Game) {
+  onCreateEntityTypeChange(e: Event) {
+    this.controller.onCreateEntityTypeChange(e.target!.value);
+  }
+
+  async onSave(myGame: Game) {
     const stuff = serializeLevel(myGame);
     var file = new Blob([JSON.stringify(stuff, null, 2)], {type: 'json'});
     if ((window as any).showSaveFilePicker) {

@@ -1,5 +1,4 @@
 import { Graphics } from "pixi.js";
-import Game from "../../core/Game";
 import { V } from "../../core/Vector";
 import BaseEntity from "../../core/entity/BaseEntity";
 import Entity from "../../core/entity/Entity";
@@ -14,8 +13,9 @@ const MAXIMUM_SELECTABLE_DISTANCE = 0.5;
 export class EditorController extends BaseEntity implements Entity {
 
   selectedEntityIndices: number[];
+  createEntityType: string;
 
-  constructor(private myGame: Game, private levelData: LevelData) {
+  constructor(private levelData: LevelData) {
     super();
 
     this.selectedEntityIndices = [];
@@ -52,11 +52,26 @@ export class EditorController extends BaseEntity implements Entity {
 
     this.addChild(new Level(deserializeLevel(this.levelData)));
     this.addChild(new RootController(controllers));
+    this.createEntityType = 'Wall';
+  }
+
+  onCreateEntityTypeChange(type: string) {
+    this.createEntityType = type;
+  }
+
+  onRightClick() {
+    const clickPosition = this.game!.camera.toWorld(this.game!.io.mousePosition);
+    const snapToGrid = this.game!.io.keyIsDown('ControlLeft');
+    const position = snapToGrid ? V(Math.round(clickPosition.x), Math.round(clickPosition.y)) : clickPosition;
+    this.levelData.entities.push({ type: 'Wall', version: 1, position1: position, position2: V(position.x, position.y + 2.2) });
+    
+    this.refreshEntities();
+    this.selectedEntityIndices = [];
   }
 
   onTick() {
     const rootController = this.children[1];
-    const clickPosition = this.myGame.camera.toWorld(this.game!.io.mousePosition);
+    const clickPosition = this.game!.camera.toWorld(this.game!.io.mousePosition);
     const snapToGrid = this.game!.io.keyIsDown('ControlLeft');
     const snapToEntity = !snapToGrid && this.game!.io.keyIsDown('ShiftLeft');
     const position = snapToGrid ? V(Math.round(clickPosition.x), Math.round(clickPosition.y)) : clickPosition;
