@@ -111,7 +111,15 @@ const images = {
   teacherGym4: require("./images/enemies/teacher-gym4.png"),
   teacherGym3: require("./images/enemies/teacher-gym3.png"),
   teacherGym2: require("./images/enemies/teacher-gym2.png"),
-  teacherGym1: require("./images/enemies/teacher-gym1.png")
+  teacherGym1: require("./images/enemies/teacher-gym1.png"),
+  teacherScience8: require("./images/enemies/teacher-science/teacher-science8.png"),
+  teacherScience7: require("./images/enemies/teacher-science/teacher-science7.png"),
+  teacherScience6: require("./images/enemies/teacher-science/teacher-science6.png"),
+  teacherScience5: require("./images/enemies/teacher-science/teacher-science5.png"),
+  teacherScience4: require("./images/enemies/teacher-science/teacher-science4.png"),
+  teacherScience3: require("./images/enemies/teacher-science/teacher-science3.png"),
+  teacherScience2: require("./images/enemies/teacher-science/teacher-science2.png"),
+  teacherScience1: require("./images/enemies/teacher-science/teacher-science1.png")
 };
 export type ImageName = keyof typeof images;
 
