@@ -41,6 +41,8 @@ export class EditorController extends BaseEntity implements Entity {
           case 'position2':
           case 'hinge':
           case 'end':
+          case 'topLeft':
+          case 'bottomRight':
             controllers.push(new EditPositionController(V(value as any), entityInd, key));
             break;
           // case 'angle':

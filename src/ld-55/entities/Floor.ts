@@ -1,17 +1,17 @@
 import { TilingSprite } from "pixi.js";
 import { ImageName } from "../../../resources/resources";
-import { V2d } from "../../core/Vector";
-import BaseEntity from "../../core/entity/BaseEntity";
+import { V, V2d } from "../../core/Vector";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { Layer } from "../config/layers";
+import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 
-export class Floor extends BaseEntity implements Entity {
+export class Floor extends SerializableEntity implements Entity {
   sprite: TilingSprite & GameSprite;
 
   constructor(
-    topLeft: V2d,
-    bottomRight: V2d,
-    texture: ImageName = "hallwayFloor"
+    private topLeft: V2d,
+    private bottomRight: V2d,
+    private texture: ImageName = "hallwayFloor"
   ) {
     super();
 
@@ -23,5 +23,17 @@ export class Floor extends BaseEntity implements Entity {
     this.sprite.height = bottomRight.y - topLeft.y;
 
     this.sprite.tileScale.set(0.003);
+  }
+
+  serialize(): SerializedEntity {
+    return {
+      topLeft: [...this.topLeft],
+      bottomRight: [...this.bottomRight],
+      texture: this.texture,
+    };
+  }
+
+  static deserialize(e: SerializedEntity): Floor {
+    return new Floor(V(e.topLeft), V(e.bottomRight), e.texture);
   }
 }
