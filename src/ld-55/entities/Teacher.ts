@@ -83,7 +83,7 @@ export class Teacher extends SerializableEntity implements Entity {
       this.body.angle = direction.angle;
 
       if (diff.magnitude < 1 && !this.foundPlayer) {
-        console.log('found player')
+        console.log("found player");
         this.foundPlayer = true;
         this.game?.dispatch({ type: "gameOver" });
       }
@@ -128,7 +128,7 @@ export class Teacher extends SerializableEntity implements Entity {
     this.visionCone.body.angle = this.body.angle;
   }
 
-  isAtTargetLocation() : boolean {
+  isAtTargetLocation(): boolean {
     return this.targetLocation.sub(this.body.position).magnitude < 0.2;
   }
 
@@ -136,7 +136,7 @@ export class Teacher extends SerializableEntity implements Entity {
     this.targetLocation = p;
   }
 
-  isTargettingPlayer() : boolean {
+  isTargettingPlayer(): boolean {
     const player = this.game?.entities.getTagged("player")[0];
     return !!(player && this.visionCone.canSee(player));
   }

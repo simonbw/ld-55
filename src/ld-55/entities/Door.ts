@@ -8,15 +8,15 @@ import { PositionalSound } from "../../core/sound/PositionalSound";
 import { degToRad, normalizeAngle } from "../../core/util/MathUtil";
 import { rUniform } from "../../core/util/Random";
 import { CollisionGroups } from "../CollisionGroups";
+import { Layer } from "../config/layers";
 import { Persistence } from "../constants/constants";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 
 export class Door extends SerializableEntity implements Entity {
   persistenceLevel: Persistence = Persistence.Game;
-  //sprite: GameSprite;
   body: Body;
-  restAngle: number;
 
+  restAngle: number;
   lastDistanceFromClosed: number = 0;
 
   constructor(
@@ -35,7 +35,7 @@ export class Door extends SerializableEntity implements Entity {
     this.body.angle = this.restAngle;
 
     const width = hinge.sub(end).magnitude;
-    const height = 0.3;
+    const height = 0.2;
 
     const shape = new p2.Box({ height, width });
     shape.collisionGroup = CollisionGroups.Walls;
@@ -78,22 +78,22 @@ export class Door extends SerializableEntity implements Entity {
       )
       .fill(0x999999);
 
-    this.sprite = graphics;
-    this.sprite.position.set(...hinge);
-    this.sprite.rotation = this.restAngle;
+    const shadowGraphics = new Graphics();
+    shadowGraphics
+      .rect(0, -height, width, height * 2)
+      .fill({ color: 0x333333, alpha: 0.1 });
+
+    this.sprites = [graphics, shadowGraphics];
+    this.sprites[0].layerName = Layer.WALLS;
+    this.sprites[1].layerName = Layer.FLOOR_DECALS;
   }
 
   onAdd(game: Game): void {
-    const constraint = new p2.RevoluteConstraint(this.body, game.ground, {
-      worldPivot: this.hinge.clone(),
-    });
-    const swingLimit = degToRad(110);
-    // TODO: this breaks because of the angle normalization I think, see if we can fix it
-    // constraint.upperLimit = restAngle + swingLimit;
-    // constraint.lowerLimit = restAngle - swingLimit;
-    // constraint.upperLimitEnabled = true;
-    // constraint.lowerLimitEnabled = true;
-    this.constraints = [constraint];
+    this.constraints = [
+      new p2.RevoluteConstraint(this.body, game.ground, {
+        worldPivot: this.hinge.clone(),
+      }),
+    ];
 
     this.springs = [
       new DampedRotationalSpring(game.ground, this.body, {
@@ -147,9 +147,9 @@ export class Door extends SerializableEntity implements Entity {
 
   /** Called every frame, right before rendering */
   onRender(dt: number): void {
-    if (this.sprite) {
-      this.sprite.position.set(...this.body.position);
-      this.sprite.rotation = this.body.angle;
+    for (const sprite of this.sprites!) {
+      sprite.position.set(...this.body.position);
+      sprite.rotation = this.body.angle;
     }
   }
 

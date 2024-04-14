@@ -35,13 +35,13 @@ function addLevelEntities(game: Game) {
   // Left side classrooms
   makeRoom(game, 0, 0, 10, 12, "carpet2");
   makeRoom(game, 0, 12, 10, 12, "carpet1");
-  makeRoom(game, 0, 24, 10, 12, "carpet2");
+  makeRoom(game, 0, 24, 10, 12, "herringboneFloor");
 
   // Right side classrooms
   makeRoom(game, 15, 0, 10, 12, "carpet1");
-  makeRoom(game, 15, 12, 10, 12, "carpet2");
-  makeRoom(game, 15, 24, 10, 8, "carpet1");
-  makeRoom(game, 15, 32, 10, 8, "carpet2");
+  makeRoom(game, 15, 12, 10, 12, "herringboneFloor");
+  makeRoom(game, 15, 24, 10, 8, "carpet2");
+  makeRoom(game, 15, 32, 10, 8, "carpet1");
 
   game.addEntity(new Floor(V(10, 0), V(15, 36), "hallwayFloor"));
 
@@ -104,7 +104,7 @@ function addLevelEntities(game: Game) {
   game.addEntity(new Door(V(14, 36), V(12.5, 36)));
   game.addEntity(new Wall(V(14, 36), V(15, 36)));
 
-  const hallwayPatroller = new Teacher(V(14, 6), Math.PI/2);
+  const hallwayPatroller = new Teacher(V(14, 6), Math.PI / 2);
   game.addEntity(hallwayPatroller);
 
   const hallwayPatroller2 = new Teacher(V(11, 20), Math.PI/2);
