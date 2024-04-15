@@ -1,23 +1,13 @@
 import BaseEntity from "../../../core/entity/BaseEntity";
 import Entity from "../../../core/entity/Entity";
 import { Persistence } from "../../constants/constants";
-import ElShapedLevel from "../../levels/ElShapedLevel";
-import HallwayLevel from "../../levels/HallwayLevel";
-import SquareLevel from "../../levels/SquareLevel";
-import TutorialLevel from "../../levels/TutorialLevel";
-import { MusicController } from "../MusicController";
-import PlayerCameraController from "../PlayerCameraController";
-import SlowMoController from "../SlowMoController";
+import LevelController from "../LevelController";
+import ContinueScreen from "../menus/ContinueScreen";
 import MainMenu from "../menus/MainMenu";
-import SuspendedMenu from "../menus/SuspendedMenu";
-import WinMenu from "../menus/WinMenu";
 
 export default class GameController extends BaseEntity implements Entity {
+  id = "gameController";
   persistenceLevel: Persistence = Persistence.Permanent;
-
-  constructor() {
-    super();
-  }
 
   handlers = {
     goToMainMenu: () => {
@@ -26,78 +16,50 @@ export default class GameController extends BaseEntity implements Entity {
       game.addEntity(new MainMenu());
     },
 
-    goToWinScreen: () => {
-      const game = this.game!;
-      game.clearScene(Persistence.Game);
-      game.addEntity(new WinMenu());
-    },
-
     newGame: () => {
       const game = this.game!;
       game.clearScene(Persistence.Game);
-      game.dispatch({ type: "levelStart", level: 1 });
+      game.dispatch({ type: "levelSelected", level: 1 });
     },
 
-    levelStart: (event: { level: 1 | 2 | 3 }) => {
+    levelSelected: async ({ level }: { level: number }) => {
       const game = this.game!;
-      let { level } = event;
+
+      const levelScreen = game.addEntity(
+        new ContinueScreen("Level " + level, "Press ENTER to start")
+      );
+      await levelScreen.waitForContinue();
       game.clearScene(Persistence.Level);
 
-      game.dispatch({ type: "clearLevel" });
-
-      game.dispatch({
-        type: "addObjective",
-        objectives: [
-          {
-            name: "Find the key",
-            incompleteDescription: "Check the hallway.",
-            completeDescription: "Use the key to leave the building!",
-            showOnComplete: true,
-            requiredItems: ["key"],
-            requiredMilestones: [],
-          },
-        ],
-      });
-
-      if (level == 1) {
-        TutorialLevel.addLevelEntities(game, level);
-      } else if (level == 2) {
-        ElShapedLevel.addLevelEntities(game, level);
-      } else if (level == 3) {
-        SquareLevel.addLevelEntities(game, level);
-      } else {
-        HallwayLevel.addLevelEntities(game, level);
-      }
-
-      game.addEntity(new PlayerCameraController(game.camera));
-      game.addEntity(new SlowMoController());
-      game.addEntity(new MusicController());
+      game.addEntity(
+        new LevelController(level, [
+          { label: "Grab your backpack", requirements: ["backpack"] },
+        ])
+      );
     },
 
-    finishLevel: (event: { level: 1 | 2 | 3 }) => {
+    levelComplete: ({ level }: { level: number }) => {
       const game = this.game!;
       game.clearScene(Persistence.Game);
-
-      if (event.level === 1) {
-        game.dispatch({ type: "levelStart", level: 2 });
-      } else if (event.level === 2) {
-        game.dispatch({ type: "levelStart", level: 3 });
+      if (level < 3) {
+        // go to next level
+        game.dispatch({ type: "levelSelected", level: level + 1 });
       } else {
         game.dispatch({ type: "gameWon" });
       }
     },
 
-    gameWon: () => {
+    gameWon: async () => {
       const game = this.game!;
-      game.dispatch({ type: "clearLevel" });
-      game.dispatch({ type: "goToWinScreen" });
-    },
-
-    gameOver: () => {
-      const game = this.game!;
-      if (game.entities.getById("suspendedMenu") === undefined) {
-        game.addEntity(new SuspendedMenu());
-      }
+      game.clearScene(Persistence.Game);
+      const winScreen = game.addEntity(
+        new ContinueScreen(
+          "You've Escaped!",
+          "Press ENTER to return to main menu"
+        )
+      );
+      await winScreen.waitForContinue();
+      game.dispatch({ type: "goToMainMenu" });
     },
   };
 }

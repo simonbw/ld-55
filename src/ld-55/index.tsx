@@ -1,10 +1,10 @@
 import { TextureStyle } from "pixi.js";
-import Game from "../core/Game.ts";
-import FPSMeter from "../core/util/FPSMeter.ts";
-import { GamePreloader } from "./GamePreloader.tsx";
-import { Layer, initLayers } from "./config/layers.ts";
-import PlayerProgressController from "./entities/PlayerProgressController.ts";
-import GameController from "./entities/controllers/GameController.ts";
+import Game from "../core/Game";
+import FPSMeter from "../core/util/FPSMeter";
+import { GamePreloader } from "./GamePreloader";
+import { Layer, initLayers } from "./config/layers";
+import LevelController from "./entities/LevelController";
+import GameController from "./entities/controllers/GameController";
 
 // Do this so we can access the game from the console
 declare global {
@@ -29,7 +29,6 @@ async function main() {
   initLayers(game);
 
   game.addEntity(new GameController());
-  game.addEntity(new PlayerProgressController());
 
   if (process.env.NODE_ENV === "development") {
     game.addEntity(new FPSMeter(Layer.DEBUG_HUD));

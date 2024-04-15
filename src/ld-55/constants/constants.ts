@@ -1,6 +1,7 @@
 export enum Persistence {
-  Level = 0, // cleared at the end of each level
-  Game = 1, // cleared at the end of each game
-  Menu = 2, // cleared between menus
-  Permanent = 3, // never cleared
+  Default = 0, // cleared at the end of each level attemp
+  Level = 1, // cleared at the end of each level
+  Game = 2, // cleared at the end of each game
+  Menu = 3, // cleared between menus
+  Permanent = 4, // never cleared
 }

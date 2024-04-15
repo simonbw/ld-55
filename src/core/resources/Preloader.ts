@@ -118,9 +118,7 @@ export default class ReactPreloader extends BaseEntity implements Entity {
 
     try {
       await Pixi.Assets.loadBundle("images", (progressPercent) => {
-        // Called on progress
         this.progress.images.loaded += 1;
-        console.log("image progress", progressPercent);
       });
     } catch (e) {
       console.error("Images failed to load", e);

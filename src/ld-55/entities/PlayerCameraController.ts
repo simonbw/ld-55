@@ -13,6 +13,10 @@ export default class PlayerCameraController
   }
 
   onAdd() {
+    const player = this.game?.entities.getTagged("player")[0];
+    if (player instanceof Player) {
+      this.camera.position.set(player.getPosition());
+    }
     this.camera.z = 65;
   }
 

@@ -10,8 +10,8 @@ import { PersonShadow } from "./PersonShadow";
 import { WalkSoundPlayer } from "./WalkSoundPlayer";
 import { WalkSpring } from "./WalkSpring";
 
-const STEPS_PER_METER = 1;
-const RUNNING_STEPS_PER_METER = 0.8;
+const WALKING_STEPS_PER_METER = 0.4;
+const RUNNING_STEPS_PER_METER = 0.4;
 
 /** Base class for teachers and player and maybe even students */
 export abstract class Human extends SerializableEntity implements Entity {
@@ -87,7 +87,10 @@ export abstract class Human extends SerializableEntity implements Entity {
       // walking
 
       const lastPercentThroughStep = this.percentThroughStride;
-      this.percentThroughStride += distanceMoved * STEPS_PER_METER;
+      const stepsPerMeter = this.running
+        ? RUNNING_STEPS_PER_METER
+        : WALKING_STEPS_PER_METER;
+      this.percentThroughStride += distanceMoved * stepsPerMeter;
       const maxFrame = this.sprite.totalFrames - 1;
       this.sprite.currentFrame = Math.round(
         clamp(lerp(0, maxFrame, this.percentThroughStride / 2), 0, maxFrame)

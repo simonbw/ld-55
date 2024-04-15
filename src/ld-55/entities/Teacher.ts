@@ -143,7 +143,7 @@ export class Teacher extends Human implements Entity {
   ): void {
     if (other?.tags?.includes("player")) {
       if (this.suspicion > SUSPICION_THRESHOLD_SECONDS) {
-        this.game!.dispatch({ type: "gameOver" });
+        this.game!.dispatch({ type: "playerCaught" });
       }
     }
   }

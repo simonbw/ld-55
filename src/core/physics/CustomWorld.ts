@@ -347,9 +347,6 @@ export default class CustomWorld extends World {
   }
 
   stepIntegrate(dt: number) {
-    const bodies = this.bodies;
-    const Nbodies = this.bodies.length;
-
     // Step forward
     for (const body of this.kinematicBodies) {
       body.integrate(dt);

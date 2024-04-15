@@ -8,21 +8,31 @@ import { fontName } from "../../../core/resources/resourceUtils";
 import { clamp, smoothStep } from "../../../core/util/MathUtil";
 import { Layer } from "../../config/layers";
 
-const FADE_IN_TIME = process.env.NODE_ENV === "development" ? 2.0 : 2.0;
+const FADE_IN_TIME = process.env.NODE_ENV === "development" ? 1.5 : 1.5;
 const FADE_OUT_TIME = process.env.NODE_ENV === "development" ? 1.0 : 1.0;
 
-let firstTime = true;
-export default class MainMenu extends BaseEntity implements Entity {
+export default class ContinueScreen extends BaseEntity implements Entity {
   pausable = false;
   sprite: GameSprite;
 
-  titleText: Text;
-  startText: Text;
+  private _promise!: Promise<void>;
+  private _resolve!: (value: void | PromiseLike<void>) => void;
+
+  bigText: Text;
+  smallText: Text;
   inTransition: boolean = false;
   background: Graphics;
 
-  constructor() {
+  constructor(
+    bigText: string,
+    smallText: string,
+    public onContinue?: () => void
+  ) {
     super();
+
+    this._promise = new Promise((resolve) => {
+      this._resolve = resolve;
+    });
 
     this.sprite = new Container();
     this.sprite.layerName = Layer.MENU;
@@ -30,81 +40,79 @@ export default class MainMenu extends BaseEntity implements Entity {
     this.background = new Graphics().rect(0, 0, 10000, 10000).fill(0x001800);
     this.sprite.addChild(this.background);
 
-    this.titleText = new Text({
-      text: "Detention\nPrevention",
+    this.bigText = new Text({
+      text: bigText,
       style: {
         align: "center",
         fill: "white",
-        fontSize: 128,
+        fontSize: 96,
         fontFamily: fontName("kgBrokenVesselsSketch"),
       },
     });
-    this.titleText.anchor.set(0.5, 1.0);
-    this.sprite.addChild(this.titleText);
+    this.bigText.anchor.set(0.5, 1.0);
+    this.sprite.addChild(this.bigText);
 
-    this.startText = new Text({
-      text: "Press Enter To Start",
+    this.smallText = new Text({
+      text: smallText,
       style: {
         align: "center",
         fill: "white",
-        fontSize: 64,
+        fontSize: 48,
         fontFamily: fontName("rudiment"),
       },
     });
-    this.startText.anchor.set(0.5, 0.0);
-    this.sprite.addChild(this.startText);
-    this.startText.interactive = true;
-    this.startText.addListener("click", () => {
-      this.startGame();
+    this.smallText.anchor.set(0.5, 0.0);
+    this.sprite.addChild(this.smallText);
+    this.smallText.interactive = true;
+    this.smallText.addListener("click", () => {
+      this.continue();
     });
   }
 
   async onAdd(game: Game) {
-    this.titleText.alpha = 0;
-    this.startText.alpha = 0;
+    this.bigText.alpha = 0;
+    this.smallText.alpha = 0;
 
-    await this.wait(firstTime ? FADE_IN_TIME + 1 : FADE_IN_TIME, (dt, t) => {
-      this.background.alpha = smoothStep(t * 2.5);
-      this.titleText.alpha = smoothStep(t * 1.5);
-      this.startText.alpha = smoothStep(1.5 * t - 0.5);
+    await this.wait(FADE_IN_TIME, (dt, t) => {
+      this.background.alpha = smoothStep(t * 2);
+      this.bigText.alpha = smoothStep(t);
+      this.smallText.alpha = smoothStep(1.5 * t - 0.5);
     });
-    firstTime = false;
   }
 
   onResize([width, height]: [number, number]) {
-    this.titleText.position.set(width / 2, height / 2);
-    this.startText.position.set(width / 2, height / 2);
+    this.bigText.position.set(width / 2, height / 2);
+    this.smallText.position.set(width / 2, height / 2);
   }
 
-  onInputDeviceChange(usingGamepad: boolean) {
-    this.startText.text = usingGamepad
-      ? "Press START to start"
-      : "Press Enter to start";
-  }
-
-  async startGame() {
+  async continue() {
     if (!this.inTransition) {
       this.clearTimers(); // Cancel the fade in
       this.inTransition = true;
-      this.startText.interactive = false;
+      this.smallText.interactive = false;
       await this.wait(FADE_OUT_TIME, (dt, t) => {
-        this.titleText.alpha = smoothStep(1 - t);
-        this.startText.alpha = smoothStep(1 - t);
+        this.bigText.alpha = smoothStep(1.5 - 1.5 * t);
+        this.smallText.alpha = smoothStep(1.0 - 4 * t);
       });
-      this.game?.dispatch({ type: "newGame" });
+      this._resolve();
+      this.onContinue?.();
       this.destroy();
     }
   }
 
+  async waitForContinue() {
+    return this._promise;
+  }
+
   onKeyDown(key: KeyCode) {
     if (key === "Enter") {
-      this.startGame();
+      this.continue();
     }
   }
 
   onButtonDown(button: ControllerButton) {
     if (button === ControllerButton.START) {
-      this.startGame();
+      this.continue();
     }
   }
 }

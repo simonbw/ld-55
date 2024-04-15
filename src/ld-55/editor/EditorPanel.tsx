@@ -6,7 +6,7 @@ import { EditorController } from "./EditorController";
 import { serializeLevel } from "./serializeLevel";
 import { LevelData, SerializableEntity } from "./serializeTypes";
 
-export class EditorPanel extends ReactEntity<any> implements Entity {
+export class EditorPanel extends ReactEntity implements Entity {
   controller: EditorController;
 
   constructor(

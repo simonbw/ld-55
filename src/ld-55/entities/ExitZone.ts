@@ -1,42 +1,39 @@
-import p2, { Body } from "p2";
+import { Body, Box } from "p2";
 import { Graphics } from "pixi.js";
-import { V, V2d } from "../../core/Vector";
-import Entity from "../../core/entity/Entity";
+import { V2d } from "../../core/Vector";
 import BaseEntity from "../../core/entity/BaseEntity";
-import { Player } from "./Player";
-import Game from "../../core/Game";
-import { ExitConstraints } from "./ExitConstraints";
-import PlayerProgressController from "./PlayerProgressController";
-import { Persistence } from "../constants/constants";
+import Entity, { GameSprite } from "../../core/entity/Entity";
+import { CollisionGroups } from "../CollisionGroups";
 import { Layer } from "../config/layers";
+import { Persistence } from "../constants/constants";
 
 export class ExitZone extends BaseEntity implements Entity {
   persistenceLevel: Persistence = Persistence.Game;
-  player: Player | undefined;
-  playerProgress: PlayerProgressController | undefined;
+  body: Body;
+  sprite: Graphics & GameSprite;
 
-  constructor(
-    private position: V2d,
-    private exitConstraints: ExitConstraints,
-    private level: number
-  ) {
+  constructor(position: V2d) {
     super();
 
     this.body = new Body({
       type: Body.STATIC,
       position,
-      fixedRotation: true,
     });
 
-    const shape = new p2.Box({
-      height: 2,
-      width: 2,
+    const width = 2;
+    const height = 2;
+    const shape = new Box({
+      height,
+      width,
+      sensor: true,
     });
     this.body.addShape(shape);
+    shape.collisionGroup = CollisionGroups.Furniture;
+    shape.collisionMask = CollisionGroups.Player;
 
     const graphics = new Graphics();
     graphics
-      .rect(-shape.width / 2, -shape.height / 2, shape.width, shape.height)
+      .rect(-width / 2, -height / 2, width, height)
       .fill({ color: 0x00ff00, alpha: 0.1 });
 
     this.sprite = graphics;
@@ -44,26 +41,10 @@ export class ExitZone extends BaseEntity implements Entity {
     this.sprite.position.set(...position);
   }
 
-  onAdd(game: Game): void {
-    this.player = game.entities.getTagged("player")[0] as Player;
-    this.playerProgress = game.entities.getTagged(
-      "playerProgressController"
-    )[0] as PlayerProgressController;
-  }
-
-  onRender(dt: number): void {
-    if (
-      this.player &&
-      V(this.player.body.position).sub(V(this.body!.position)).magnitude < 0.5
-    ) {
-      if (
-        this.exitConstraints.checkExitConstraints(this.playerProgress!) === true
-      ) {
-        this.game!.dispatch({ type: "finishLevel", level: this.level });
-        this.destroy();
-      } else {
-        console.log("You can't leave yet!");
-      }
+  onBeginContact(other?: Entity | undefined): void {
+    if (true) {
+      this.game!.dispatch({ type: "exitReached" });
+      this.sprite.alpha = 0.5;
     }
   }
 }

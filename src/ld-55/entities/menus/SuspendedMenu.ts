@@ -59,8 +59,10 @@ export default class SuspendedMenu extends BaseEntity implements Entity {
   }
 
   async onAdd(game: Game) {
-    const slowMoController = game.entities.getById("slowMoController")!;
-    game.removeEntity(slowMoController);
+    const slowMoController = game.entities.getById("slowMoController");
+    if (slowMoController) {
+      game.removeEntity(slowMoController);
+    }
 
     this.restartText.alpha = 0;
     this.restartText.alpha = 0;
@@ -93,7 +95,7 @@ export default class SuspendedMenu extends BaseEntity implements Entity {
       this.inTransition = true;
       this.restartText.interactive = false;
 
-      this.game?.dispatch({ type: "newGame" });
+      this.game?.dispatch({ type: "restartLevel" });
 
       this.destroy();
     }

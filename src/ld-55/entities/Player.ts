@@ -1,5 +1,6 @@
 import { Texture } from "pixi.js";
 import { ImageName } from "../../../resources/resources";
+import Game from "../../core/Game";
 import { V, V2d } from "../../core/Vector";
 import Entity from "../../core/entity/Entity";
 import { CustomHandlersMap } from "../../core/entity/GameEventHandler";
@@ -33,6 +34,7 @@ const imagesWithbag: ImageName[] = [
 
 /** An example Entity to show some features of the engine */
 export class Player extends Human implements Entity {
+  id = "player";
   soundListener: PositionalSoundListener;
 
   constructor(private position: V2d) {
@@ -58,7 +60,6 @@ export class Player extends Human implements Entity {
     super.onTick(dt);
     this.soundListener.setPosition(V(this.body.position));
   }
-  wd;
 
   handlers: CustomHandlersMap = {
     addItem: ({ name }: { name: string }) => {
@@ -73,4 +74,8 @@ export class Player extends Human implements Entity {
   serialize(): SerializedEntity {
     throw new Error("Method not implemented.");
   }
+}
+
+export function getPlayer(game: Game): Player {
+  return game.entities.getById("player") as Player;
 }

@@ -1,12 +1,11 @@
 import Game from "../../core/Game.ts";
 import { V } from "../../core/Vector";
+import { Key } from "../entities/Backpack.ts";
 import { Door } from "../entities/Door.ts";
-import { ExitConstraints } from "../entities/ExitConstraints.ts";
 import { ExitZone } from "../entities/ExitZone.ts";
 import { Floor } from "../entities/Floor.ts";
 import { Grass } from "../entities/Grass.ts";
 import HelpText from "../entities/HelpText.ts";
-import { Key } from "../entities/Key.ts";
 import { Player } from "../entities/Player.ts";
 import { Teacher } from "../entities/Teacher.ts";
 import { Wall } from "../entities/Wall.ts";
@@ -87,19 +86,15 @@ function addLevelEntities(game: Game, levelN: number) {
   game.addEntity(new Wall(V(15, 36), V(15, 40)));
 
   game.addEntity(new Wall(V(10, 36), V(11, 36)));
-  game.addEntity(new Door(V(11, 36), V(12.5, 36), "key"));
-  game.addEntity(new Door(V(14, 36), V(12.5, 36), "key"));
+  game.addEntity(new Door(V(11, 36), V(12.5, 36), "backpack"));
+  game.addEntity(new Door(V(14, 36), V(12.5, 36), "backpack"));
   game.addEntity(new Wall(V(14, 36), V(15, 36)));
 
-  const hallwayPatroller1 = new Teacher(V(10.5, 25), 0);
-  const hallwayPatroller2 = new Teacher(V(14.5, 25), Math.PI);
-  game.addEntity(hallwayPatroller1);
-  game.addEntity(hallwayPatroller2);
+  game.addEntity(new Teacher(V(10.5, 25), 0));
+  game.addEntity(new Teacher(V(14.5, 25), Math.PI));
   game.addEntity(new Grass());
   game.addEntity(new Key(V(12.5, 11)));
-  game.addEntity(
-    new ExitZone(V(12.5, 38), new ExitConstraints(["key"], []), levelN)
-  );
+  game.addEntity(new ExitZone(V(12.5, 38)));
 }
 
 export default { addLevelEntities };

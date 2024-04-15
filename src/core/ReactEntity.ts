@@ -4,18 +4,20 @@ import BaseEntity from "./entity/BaseEntity";
 import Entity from "./entity/Entity";
 
 /** Useful for rendering react to the screen when you want it */
-export class ReactEntity<Props> extends BaseEntity implements Entity {
+export class ReactEntity extends BaseEntity implements Entity {
   el!: HTMLDivElement;
-  autoRender = true;
 
   reactRoot!: Root;
 
-  constructor(private getContent: () => React.ReactElement) {
+  constructor(
+    public getReactContent: () => React.ReactElement,
+    public autoRender = true
+  ) {
     super();
   }
 
   reactRender() {
-    this.reactRoot.render(this.getContent());
+    this.reactRoot.render(this.getReactContent());
   }
 
   onRender() {

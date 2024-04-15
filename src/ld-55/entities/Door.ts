@@ -11,7 +11,7 @@ import { CollisionGroups } from "../CollisionGroups";
 import { Layer } from "../config/layers";
 import { Persistence } from "../constants/constants";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
-import PlayerProgressController from "./PlayerProgressController";
+import { getLevelController } from "./LevelController";
 
 export class Door extends SerializableEntity implements Entity {
   persistenceLevel: Persistence = Persistence.Game;
@@ -20,12 +20,10 @@ export class Door extends SerializableEntity implements Entity {
   restAngle: number;
   lastDistanceFromClosed: number = 0;
 
-  playerProgressController: PlayerProgressController | undefined;
-
   constructor(
     public hinge: V2d,
     public end: V2d,
-    public key?: string
+    public requirement?: string
   ) {
     super();
 
@@ -35,6 +33,7 @@ export class Door extends SerializableEntity implements Entity {
       mass: 0.2,
       position: hinge.clone(),
       angle: this.restAngle,
+      type: p2.Body.DYNAMIC,
     });
     this.body.angle = this.restAngle;
 
@@ -90,13 +89,9 @@ export class Door extends SerializableEntity implements Entity {
     this.sprites = [graphics, shadowGraphics];
     this.sprites[0].layerName = Layer.WALLS;
     this.sprites[1].layerName = Layer.FLOOR_DECALS;
-
-    if (key) {
-      this.body.type = Body.STATIC;
-    }
   }
 
-  setConstraints(game: Game): void {
+  onAdd(game: Game): void {
     this.constraints = [
       new p2.RevoluteConstraint(this.body, game.ground, {
         worldPivot: this.hinge.clone(),
@@ -124,24 +119,23 @@ export class Door extends SerializableEntity implements Entity {
     ];
   }
 
-  onAdd(game: Game): void {
-    this.playerProgressController = game.entities.getById(
-      "playerProgressController"
-    ) as PlayerProgressController;
-
-    if (!this.key) {
-      this.setConstraints(game);
-    }
+  isLocked() {
+    if (!this.requirement) return false;
+    const levelController = getLevelController(this.game!);
+    return !levelController?.hasRequirement(this.requirement);
   }
 
   onTick(dt: number): void {
-    if (
-      this.body.type == Body.STATIC &&
-      this.playerProgressController?.hasItem(this.key!)
-    ) {
-      this.game!.addEntity(new Door(this.hinge, this.end));
-      this.destroy();
+    if (this.isLocked()) {
+      this.body.angle = this.restAngle;
+      this.body.angularVelocity = 0;
+      this.body.type = p2.Body.STATIC;
+      this.body.mass = Infinity;
+      return;
     }
+
+    this.body.type = p2.Body.DYNAMIC;
+    this.body.mass = 0.2;
 
     const distanceFromClosed = Math.abs(this.body.angle - this.restAngle);
 
@@ -172,7 +166,7 @@ export class Door extends SerializableEntity implements Entity {
   }
 
   /** Called every frame, right before rendering */
-  onRender(dt: number): void {
+  onRender(): void {
     for (const sprite of this.sprites!) {
       sprite.position.set(...this.body.position);
       sprite.rotation = this.body.angle;
