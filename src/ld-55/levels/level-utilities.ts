@@ -14,6 +14,11 @@ const classroomFloors: ImageName[] = [
   "floorCarpet2",
   "floorCarpet3",
   "floorCarpet4",
+  "carpetFloor5",
+  "carpetFloor6",
+  "carpetFloor7",
+  "herringboneFloor",
+  "herringboneFloor",
   "herringboneFloor",
 ];
 
