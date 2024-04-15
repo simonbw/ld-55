@@ -4,7 +4,7 @@ import { initLayers } from "./config/layers.ts";
 import { EditorPanel } from "./editor/EditorPanel.tsx";
 import GodCameraController from "./editor/GodCameraController.tsx";
 import { serializeLevel } from "./editor/serializeLevel.tsx";
-import ElShapedLevel from "./levels/ElShapedLevel.ts";
+import SquareLevel from "./levels/SquareLevel.ts";
 
 // Do this so we can access the game from the console
 declare global {
@@ -24,7 +24,7 @@ async function main() {
   preloader.destroy();
   initLayers(game);
 
-  ElShapedLevel.addLevelEntities(game);
+  SquareLevel.addLevelEntities(game, 1);
   const stuff = serializeLevel(game);
   game.clearScene();
 

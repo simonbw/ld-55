@@ -17,14 +17,13 @@ function addLevelEntities(game: Game, levelN: number) {
   // Left side classrooms
   makeRoom(game, 0, 0, 10, 12);
   makeRoom(game, 0, 12, 10, 12);
-  makeRoom(game, 0, 24, 10, 12);
+  makeRoom(game, 0, 24, 10, 7);
 
   // Right side classrooms
   makeRoom(game, 15, 0, 10, 12);
   makeRoom(game, 15, 12, 10, 12);
   makeRoom(game, 15, 24, 10, 8);
   makeRoom(game, 15, 32, 10, 8);
-
   
   makeRoom(game, 15, -10, 10, 10);
   makeRoom(game, 3, -15, 12, 10);
@@ -33,10 +32,18 @@ function addLevelEntities(game: Game, levelN: number) {
   makeRoom(game, -27, -15, 10, 10);
   makeRoom(game, -27, 0, 14, 12);
   makeRoom(game, -13, 0, 13, 12);
-
+  makeRoom(game, -13, 0, 13, 12);
+  
+  makeRoom(game, -39, -15, 12, 10);
+  makeRoom(game, -39, -5, 7, 17);
+  makeRoom(game, -39, 12, 7, 12);
+  makeRoom(game, -39, 24, 7, 12);
+  makeRoom(game, -27, 12, 27, 19);
 
   game.addEntity(new Floor(V(10, 0), V(15, 36), "hallwayFloor"));
   game.addEntity(new Floor(V(-27, -5), V(15, 0), "hallwayFloor"));
+  game.addEntity(new Floor(V(-32, -5), V(-27, 36), "hallwayFloor"));
+  game.addEntity(new Floor(V(-32, 31), V(10, 36), "hallwayFloor"));
 
   game.addEntity(new Floor(V(10, 36), V(15, 40), "bathroomFloor"));
 
@@ -53,8 +60,8 @@ function addLevelEntities(game: Game, levelN: number) {
   game.addEntity(new Door(V(8, 38), V(9, 39)));
 
   game.addEntity(new Wall(V(8, 38), V(8, 36)));
-  game.addEntity(new Wall(V(8, 36), V(0, 36)));
-  game.addEntity(new Wall(V(0, 36), V(0, 24)));
+  // game.addEntity(new Wall(V(8, 36), V(0, 36)));
+  game.addEntity(new Wall(V(0, 31), V(0, 24)));
   game.addEntity(new Wall(V(0, 24), V(0, 12)));
   game.addEntity(new Wall(V(0, 12), V(0, 0)));
 
@@ -74,7 +81,7 @@ function addLevelEntities(game: Game, levelN: number) {
   game.addEntity(new Wall(V(10, 15), V(10, 24)));
   game.addEntity(new Wall(V(10, 24), V(10, 25)));
   game.addEntity(new Door(V(10, 25), V(10, 27)));
-  game.addEntity(new Wall(V(10, 27), V(10, 36)));
+  game.addEntity(new Wall(V(10, 27), V(10, 31)));
   game.addEntity(new Wall(V(10, 36), V(8, 36)));
 
   game.addEntity(new Wall(V(15, 0), V(15, 1)));
@@ -166,7 +173,7 @@ function addLevelEntities(game: Game, levelN: number) {
   game.addEntity(new Wall(V(25, -15), V(25, -10)));
   game.addEntity(new Wall(V(15, -15), V(25, -15)));
   game.addEntity(new Wall(V(-13, -15), V(15, -15)));
-  game.addEntity(new Wall(V(-27, 0), V(-27, -15)));
+  game.addEntity(new Wall(V(-27, -5), V(-27, -15)));
   game.addEntity(new Wall(V(-27, -15), V(-13, -15)));
   game.addEntity(new Wall(V(-27, 0), V(-27, 12)));
   game.addEntity(new Wall(V(-27, 12), V(0, 12)));
@@ -182,6 +189,23 @@ function addLevelEntities(game: Game, levelN: number) {
   game.addEntity(new Door(V(-24, -5), V(-22, -5)));
   game.addEntity(new Door(V(-22, 0), V(-20, 0)));
   game.addEntity(new Door(V(15, -3), V(15, -1)));
+
+  game.addEntity(new Wall(V(-39, -15), V(-27, -15)));
+  game.addEntity(new Wall(V(-39, -5), V(-32, -5)));
+  game.addEntity(new Wall(V(-39, -15), V(-39, -5)));
+  game.addEntity(new Wall(V(-32, -5), V(-27, -5)));
+  game.addEntity(new Wall(V(-32, -5), V(-32, 36)));
+  game.addEntity(new Wall(V(-32, 36), V(-27, 36)));
+  game.addEntity(new Wall(V(-27, 31), V(10, 31)));
+  game.addEntity(new Wall(V(-27, 31), V(-27, 12)));
+  game.addEntity(new Wall(V(-27, 36), V(8, 36)));
+  game.addEntity(new Wall(V(-39, 36), V(-32, 36)));
+  game.addEntity(new Wall(V(-39, -5), V(-39, 12)));
+  game.addEntity(new Wall(V(-39, 12), V(-39, 24)));
+  game.addEntity(new Wall(V(-39, 24), V(-39, 36)));
+  
+  game.addEntity(new Wall(V(-39, 12), V(-32, 12)));
+  game.addEntity(new Wall(V(-39, 24), V(-32, 24)));
 }
 
 export default { addLevelEntities };
