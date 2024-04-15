@@ -1,16 +1,14 @@
 import { Body, Circle } from "p2";
 import { AnimatedSprite, Texture } from "pixi.js";
+import { ImageName } from "../../../resources/resources";
 import { V, V2d } from "../../core/Vector";
 import Entity, { GameSprite } from "../../core/entity/Entity";
-import { imageName } from "../../core/resources/resourceUtils";
+import { CustomHandlersMap } from "../../core/entity/GameEventHandler";
 import PositionalSoundListener from "../../core/sound/PositionalSoundListener";
 import { CollisionGroups } from "../CollisionGroups";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 import { PersonShadow } from "./PersonShadow";
 import { WalkSoundPlayer } from "./WalkSoundPlayer";
-import { ImageName } from "../../../resources/resources";
-import { CustomHandlersMap } from "../../core/entity/GameEventHandler";
-import PlayerProgressController from "./PlayerProgressController";
 
 const RUNNING_STEPS_PER_SECOND = 5;
 const WALKING_STEPS_PER_SECOND = 3;

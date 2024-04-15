@@ -1,12 +1,12 @@
 import { Body, Box } from "p2";
 import { Container, Sprite } from "pixi.js";
+import { ImageName } from "../../../resources/resources";
 import { V2d } from "../../core/Vector";
+import BaseEntity from "../../core/entity/BaseEntity";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
-import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
+import { choose, rBool } from "../../core/util/Random";
 import { CollisionGroups } from "../CollisionGroups";
-import { choose, rBool, rUniform } from "../../core/util/Random";
-import { ImageName } from "../../../resources/resources";
 
 const decorationImages: ImageName[] = [
   "classroomBookBlue",
@@ -17,7 +17,7 @@ const decorationImages: ImageName[] = [
   "classroomPaper",
 ];
 
-export class StudentDesk extends SerializableEntity implements Entity {
+export class StudentDesk extends BaseEntity implements Entity {
   sprite?: GameSprite;
 
   constructor(position: V2d, angle: number = 0) {
@@ -55,12 +55,5 @@ export class StudentDesk extends SerializableEntity implements Entity {
     shape.collisionGroup = CollisionGroups.Furniture;
     shape.collisionMask = CollisionGroups.All;
     this.body.addShape(shape);
-  }
-
-  static deserialize(e: SerializedEntity): Entity {
-    throw new Error("Method not implemented.");
-  }
-  serialize(): SerializedEntity {
-    throw new Error("Method not implemented.");
   }
 }

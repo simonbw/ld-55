@@ -1,15 +1,14 @@
 import BaseEntity from "../../../core/entity/BaseEntity";
 import Entity from "../../../core/entity/Entity";
-import { SoundInstance } from "../../../core/sound/SoundInstance";
 import { Persistence } from "../../constants/constants";
 import ElShapedLevel from "../../levels/ElShapedLevel";
 import HallwayLevel from "../../levels/HallwayLevel";
+import { MusicController } from "../MusicController";
 import PlayerCameraController from "../PlayerCameraController";
 import SlowMoController from "../SlowMoController";
 import MainMenu from "../menus/MainMenu";
 import SuspendedMenu from "../menus/SuspendedMenu";
 import WinMenu from "../menus/WinMenu";
-import ObjectiveController from "./ObjectiveController";
 
 export default class GameController extends BaseEntity implements Entity {
   persistenceLevel: Persistence = Persistence.Permanent;
@@ -42,18 +41,21 @@ export default class GameController extends BaseEntity implements Entity {
       const { level } = event;
       game.clearScene(Persistence.Level);
 
-      game.dispatch({ type: 'clearLevel' });
+      game.dispatch({ type: "clearLevel" });
 
-      game.dispatch({ type: 'addObjective', objectives: [
-        {
-          name: "Find the key",
-          incompleteDescription: "Check the hallway.",
-          completeDescription: "Use the key to leave the building!",
-          showOnComplete: true,
-          requiredItems: ["key"],
-          requiredMilestones: [],
-        }
-      ]});
+      game.dispatch({
+        type: "addObjective",
+        objectives: [
+          {
+            name: "Find the key",
+            incompleteDescription: "Check the hallway.",
+            completeDescription: "Use the key to leave the building!",
+            showOnComplete: true,
+            requiredItems: ["key"],
+            requiredMilestones: [],
+          },
+        ],
+      });
 
       if (level == 1) {
         ElShapedLevel.addLevelEntities(game, level);
@@ -63,14 +65,7 @@ export default class GameController extends BaseEntity implements Entity {
 
       game.addEntity(new PlayerCameraController(game.camera));
       game.addEntity(new SlowMoController());
-
-      game.addEntity(
-        new SoundInstance("music1", {
-          continuous: true,
-          reactToSlowMo: true,
-          gain: 0.5,
-        })
-      );
+      game.addEntity(new MusicController());
     },
 
     finishLevel: (event: { level: 1 | 2 | 3 }) => {
@@ -88,7 +83,7 @@ export default class GameController extends BaseEntity implements Entity {
 
     gameWon: () => {
       const game = this.game!;
-      game.dispatch({ type: 'clearLevel' });
+      game.dispatch({ type: "clearLevel" });
       game.dispatch({ type: "goToWinScreen" });
     },
 
