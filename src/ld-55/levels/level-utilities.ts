@@ -2,12 +2,20 @@ import { ImageName } from "../../../resources/resources";
 import Game from "../../core/Game";
 import { V } from "../../core/Vector";
 import { clamp, degToRad } from "../../core/util/MathUtil";
+import { choose } from "../../core/util/Random";
 import { Floor } from "../entities/Floor";
 import { Student } from "../entities/Student";
 import { StudentDesk } from "../entities/StudentDesk";
 import { Teacher } from "../entities/Teacher";
 import { TeacherDesk } from "../entities/TeacherDesk";
 
+const classroomFloors: ImageName[] = [
+  "floorCarpet1",
+  "floorCarpet2",
+  "floorCarpet3",
+  "floorCarpet4",
+  "herringboneFloor",
+];
 
 export function makeRoom(
   game: Game,
@@ -15,9 +23,9 @@ export function makeRoom(
   y: number,
   width: number,
   height: number,
-  carpetType: ImageName = "carpet1"
+  floorType: ImageName = choose(...classroomFloors)
 ) {
-  game.addEntity(new Floor(V(x, y), V(x + width, y + height), carpetType));
+  game.addEntity(new Floor(V(x, y), V(x + width, y + height), floorType));
   game.addEntity(new Teacher(V(x + width / 2, y + 1), degToRad(90)));
   game.addEntity(new TeacherDesk(V(x + width / 2, y + 2)));
 

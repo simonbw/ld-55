@@ -10,8 +10,10 @@ const floorScales: Partial<Record<ImageName, number>> = {
   hallwayFloor: 0.003,
   bathroomFloor: 0.001,
   herringboneFloor: 0.04,
-  carpet1: 0.005,
-  carpet2: 0.03,
+  floorCarpet1: 0.02,
+  floorCarpet2: 0.02,
+  floorCarpet3: 0.02,
+  floorCarpet4: 0.02,
 };
 
 export class Floor extends SerializableEntity implements Entity {
@@ -32,7 +34,7 @@ export class Floor extends SerializableEntity implements Entity {
     this.sprite.width = bottomRight.x - topLeft.x;
     this.sprite.height = bottomRight.y - topLeft.y;
 
-    const scale = floorScales[texture] || 0.003;
+    const scale = floorScales[texture] || 0.004;
     this.sprite.tileScale.set(scale);
   }
 
