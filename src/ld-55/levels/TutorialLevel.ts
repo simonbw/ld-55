@@ -87,8 +87,8 @@ function addLevelEntities(game: Game, levelN: number) {
   game.addEntity(new Wall(V(15, 36), V(15, 40)));
 
   game.addEntity(new Wall(V(10, 36), V(11, 36)));
-  game.addEntity(new Door(V(11, 36), V(12.5, 36)));
-  game.addEntity(new Door(V(14, 36), V(12.5, 36)));
+  game.addEntity(new Door(V(11, 36), V(12.5, 36), "key"));
+  game.addEntity(new Door(V(14, 36), V(12.5, 36), "key"));
   game.addEntity(new Wall(V(14, 36), V(15, 36)));
 
   const hallwayPatroller1 = new Teacher(V(10.5, 25), 0);
