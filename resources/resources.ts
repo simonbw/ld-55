@@ -25,7 +25,8 @@ const sounds = {
   footstepLoud2: require("./audio/footstep-loud-2.flac"),
   footstepLoud1: require("./audio/footstep-loud-1.flac"),
   doorShut1: require("./audio/door-shut-1.flac"),
-  doorOpen1: require("./audio/door-open-1.flac")
+  doorOpen1: require("./audio/door-open-1.flac"),
+  backpackPickup: require("./audio/backpack-pickup.flac")
 };
 export type SoundName = keyof typeof sounds;
 
@@ -149,6 +150,9 @@ const images = {
   boy11: require("./images/npcs/boy1/boy1-1.png"),
   herringboneFloor: require("./images/floors/herringbone-floor.png"),
   hallwayFloor: require("./images/floors/hallway-floor.png"),
+  carpetFloor7: require("./images/floors/carpet-floor-7.png"),
+  carpetFloor6: require("./images/floors/carpet-floor-6.png"),
+  carpetFloor5: require("./images/floors/carpet-floor-5.png"),
   bathroomFloor: require("./images/floors/bathroom-floor.png"),
   teacherScience8: require("./images/enemies/teacher-science/teacher-science8.png"),
   teacherScience7: require("./images/enemies/teacher-science/teacher-science7.png"),
