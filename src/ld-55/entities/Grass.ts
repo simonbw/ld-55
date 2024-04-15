@@ -12,7 +12,7 @@ export class Grass extends BaseEntity implements Entity {
   constructor() {
     super();
 
-    this.sprite = TilingSprite.from(imageName("grass1"));
+    this.sprite = TilingSprite.from(imageName("floorGrass"));
     this.sprite.layerName = Layer.SUBFLOOR;
 
     this.sprite.position.set(-50, -50);

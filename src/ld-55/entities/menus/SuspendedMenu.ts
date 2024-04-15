@@ -8,8 +8,6 @@ import { fontName } from "../../../core/resources/resourceUtils";
 import { clamp, lerp, smoothStep } from "../../../core/util/MathUtil";
 import { Layer } from "../../config/layers";
 
-const FADE_OUT_TIME = process.env.NODE_ENV === "development" ? 0.1 : 2.2;
-
 export default class SuspendedMenu extends BaseEntity implements Entity {
   id: string = "suspendedMenu";
   pausable = false;
@@ -86,8 +84,8 @@ export default class SuspendedMenu extends BaseEntity implements Entity {
 
   onInputDeviceChange(usingGamepad: boolean) {
     this.restartText.text = usingGamepad
-      ? "Press START to start"
-      : "Press Enter to start";
+      ? "Press START to restart"
+      : "Press Enter to restart";
   }
 
   async restartGame() {
