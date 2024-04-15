@@ -1,12 +1,12 @@
 import { Body, Box } from "p2";
 import { Sprite } from "pixi.js";
 import { V2d } from "../../core/Vector";
+import BaseEntity from "../../core/entity/BaseEntity";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
-import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 import { CollisionGroups } from "../CollisionGroups";
 
-export class TeacherDesk extends SerializableEntity implements Entity {
+export class TeacherDesk extends BaseEntity implements Entity {
   sprite?: GameSprite & Sprite;
 
   constructor(position: V2d, angle: number = 0) {
@@ -37,12 +37,5 @@ export class TeacherDesk extends SerializableEntity implements Entity {
     this.body.addShape(shape);
 
     // TODO: Add random books, apples, etc
-  }
-
-  static deserialize(e: SerializedEntity): Entity {
-    throw new Error("Method not implemented.");
-  }
-  serialize(): SerializedEntity {
-    throw new Error("Method not implemented.");
   }
 }
