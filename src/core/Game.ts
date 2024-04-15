@@ -5,7 +5,10 @@ import ContactList, {
 } from "./ContactList";
 import EntityList from "./EntityList";
 import Entity, { WithOwner } from "./entity/Entity";
-import { GameRenderer2d } from "./graphics/GameRenderer2d";
+import {
+  GameRenderer2d,
+  GameRenderer2dOptions,
+} from "./graphics/GameRenderer2d";
 import { IOManager } from "./io/IO";
 import CustomWorld from "./physics/CustomWorld";
 import { lerp } from "./util/MathUtil";
@@ -110,8 +113,12 @@ export default class Game {
   }
 
   /** Start the event loop for the game. */
-  async init() {
-    await this.renderer.init();
+  async init({
+    rendererOptions = {},
+  }: {
+    rendererOptions?: GameRenderer2dOptions;
+  } = {}) {
+    await this.renderer.init(rendererOptions);
     //@ts-ignore(2541)
     this.io = new IOManager(this.renderer.canvas);
     this.addEntity(this.renderer.camera);

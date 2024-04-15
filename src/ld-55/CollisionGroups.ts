@@ -5,5 +5,6 @@ export const CollisionGroups = {
   Furniture: 0b10,
   Player: 0b100,
   Enemies: 0b1000,
+  Students: 0b10000,
   All: 0b11111111111111111111111111111111,
 };

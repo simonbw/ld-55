@@ -1,27 +1,25 @@
-import { Body, Circle, ContactEquation, Shape } from "p2";
-import { AnimatedSprite } from "pixi.js";
+import { ContactEquation, Shape } from "p2";
 import { ImageName, SoundName } from "../../../resources/resources";
 import { V, V2d } from "../../core/Vector";
-import Entity, { GameSprite } from "../../core/entity/Entity";
+import Entity from "../../core/entity/Entity";
 import { PositionalSound } from "../../core/sound/PositionalSound";
 import { choose } from "../../core/util/Random";
 import { CollisionGroups } from "../CollisionGroups";
 import { Persistence } from "../constants/constants";
-import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
-import { PersonShadow } from "./PersonShadow";
+import { SerializedEntity } from "../editor/serializeTypes";
+import { Human } from "./Human";
 import { VisionCone } from "./VisionCone";
-import { WalkSoundPlayer } from "./WalkSoundPlayer";
 
 const RUNNING_STEPS_PER_SECOND = 5;
 const WALKING_STEPS_PER_SECOND = 2;
 const SUSPICION_THRESHOLD_SECONDS = 1;
 
-interface TeacherStats {
+interface TeacherConfig {
   images: ImageName[];
   alertSounds: SoundName[];
 }
 
-const teacherStats: TeacherStats[] = [
+const teacherConfigs: TeacherConfig[] = [
   {
     images: [
       "teacherGym1",
@@ -50,60 +48,35 @@ const teacherStats: TeacherStats[] = [
   },
 ];
 
-export class Teacher extends SerializableEntity implements Entity {
+export class Teacher extends Human implements Entity {
   persistenceLevel: Persistence = Persistence.Game;
-  sprite: GameSprite & AnimatedSprite;
-  body: Body;
-  tags = ["enemy"];
 
   visionCone: VisionCone;
 
-  walkSoundPlayer: WalkSoundPlayer;
   foundPlayer: boolean = false;
   suspicion = 0;
-
   targetLocation: V2d;
-
-  teacherStats: TeacherStats = choose(...teacherStats);
 
   constructor(
     private position: V2d,
-    private angle: number
+    private angle: number,
+    private teacherConfig: TeacherConfig = choose(...teacherConfigs)
   ) {
-    super();
-
-    this.body = new Body({
-      mass: 0.5,
-      position: position.clone(),
-      fixedRotation: true,
+    super({
+      position,
+      angle,
+      images: teacherConfig.images,
+      collisionGroup: CollisionGroups.Enemies,
+      walkSpeed: 4,
+      runSpeed: 8,
+      tags: ["enemy"],
     });
 
-    const radius = 0.5; // meters
-
-    const shape = new Circle({ radius: radius * 0.6 });
-    shape.collisionGroup = CollisionGroups.Enemies;
-    shape.collisionMask = CollisionGroups.All;
-    this.body.addShape(shape);
-
-    this.sprite = AnimatedSprite.fromImages(this.teacherStats.images);
-    this.sprite.anchor.set(0.5);
-    this.sprite.scale = (2 * radius) / this.sprite.texture.width;
-    this.sprite.play();
-
-    this.visionCone = this.addChild(new VisionCone());
-
-    this.body.angle = angle;
-
-    this.walkSoundPlayer = this.addChild(new WalkSoundPlayer(this.body));
-    this.addChild(new PersonShadow(this.body));
     this.targetLocation = position;
+    this.visionCone = this.addChild(new VisionCone());
   }
 
   onTick(dt: number): void {
-    this.body.applyDamping(200 * dt);
-
-    let sprinting;
-    let moving;
     const player = this.game?.entities.getTagged("player")[0];
 
     const lastSuspicion = this.suspicion;
@@ -118,7 +91,7 @@ export class Teacher extends SerializableEntity implements Entity {
       this.game!.dispatch({ type: "teacherSpottedPlayer" });
       this.addChild(
         new PositionalSound(
-          choose(...this.teacherStats.alertSounds),
+          choose(...this.teacherConfig.alertSounds),
           V(this.body.position)
         )
       );
@@ -129,54 +102,21 @@ export class Teacher extends SerializableEntity implements Entity {
       this.visionCone.canSee(player) &&
       this.suspicion > SUSPICION_THRESHOLD_SECONDS
     ) {
-      const walkStrength = 180;
       const playerPosition = V(player.body!.position);
-      const diff = playerPosition.sub(this.body.position);
-      const direction = diff.normalize();
-      this.body.applyForce(direction.mul(walkStrength));
-      this.body.angle = direction.angle;
+      const direction = playerPosition.sub(this.body.position);
+      this.walkSpring.walkTowards(direction.angle, 1);
 
-      if (diff.magnitude < 1 && !this.foundPlayer) {
-        console.log("found player");
-        this.foundPlayer = true;
-        this.game?.dispatch({ type: "gameOver" });
-      }
-
-      sprinting = true;
-      moving = true;
+      this.running = true;
     } else if (this.isAtTargetLocation()) {
-      this.walkSoundPlayer.stop();
-      this.sprite.animationSpeed = 0;
-      this.sprite.currentFrame = 0;
-
-      sprinting = false;
-      moving = false;
+      this.running = false;
+      this.walkSpring.stop();
     } else {
-      const walkStrength = 40;
-      const diff = this.targetLocation.sub(this.body.position);
-      const direction = diff.normalize();
-      this.body.applyForce(direction.mul(walkStrength));
-      this.body.angle = direction.angle;
-
-      sprinting = false;
-      moving = true;
+      this.running = false;
+      const direction = this.targetLocation.sub(this.body.position);
+      this.walkSpring.walkTowards(direction.angle, 1);
     }
 
-    if (moving) {
-      const framesPerStep = 4;
-      if (sprinting) {
-        this.sprite.animationSpeed =
-          (RUNNING_STEPS_PER_SECOND / framesPerStep / 4) * this.game!.slowMo;
-      } else {
-        this.sprite.animationSpeed =
-          (WALKING_STEPS_PER_SECOND / framesPerStep / 4) * this.game!.slowMo;
-      }
-
-      this.walkSoundPlayer.advance(
-        dt * (sprinting ? RUNNING_STEPS_PER_SECOND : WALKING_STEPS_PER_SECOND),
-        sprinting
-      );
-    }
+    super.onTick(dt);
 
     this.visionCone.body.position = this.body.position;
     this.visionCone.body.angle = this.body.angle;
@@ -202,15 +142,15 @@ export class Teacher extends SerializableEntity implements Entity {
     contactEquations?: ContactEquation[] | undefined
   ): void {
     if (other?.tags?.includes("player")) {
-      // other.destroy();
+      if (this.suspicion > SUSPICION_THRESHOLD_SECONDS) {
+        this.game!.dispatch({ type: "gameOver" });
+      }
     }
   }
 
-  /** Called every frame, right before rendering */
-  onRender(dt: number): void {
-    this.sprite.position.set(...this.body.position);
-    this.sprite.rotation = this.body.angle + Math.PI / 2;
-  }
+  ///////////////////////////
+  /// SERIALIZATION STUFF ///
+  ///////////////////////////
 
   static deserialize(e: SerializedEntity): Teacher {
     return new Teacher(V(e.position), e.angle);

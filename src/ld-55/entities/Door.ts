@@ -32,7 +32,7 @@ export class Door extends SerializableEntity implements Entity {
     this.restAngle = normalizeAngle(end.sub(hinge).angle);
 
     this.body = new Body({
-      mass: 0.5,
+      mass: 0.2,
       position: hinge.clone(),
       angle: this.restAngle,
     });
@@ -90,7 +90,7 @@ export class Door extends SerializableEntity implements Entity {
     this.sprites = [graphics, shadowGraphics];
     this.sprites[0].layerName = Layer.WALLS;
     this.sprites[1].layerName = Layer.FLOOR_DECALS;
-    
+
     if (key) {
       this.body.type = Body.STATIC;
     }
@@ -109,8 +109,8 @@ export class Door extends SerializableEntity implements Entity {
         worldAnchorB: this.body.position,
         restAngle: this.restAngle,
         damping: 400,
-        stiffness: 2000,
-        maxTorque: 30,
+        stiffness: 1000,
+        maxTorque: 10,
       }),
 
       new DampedRotationalSpring(game.ground, this.body, {
@@ -135,11 +135,14 @@ export class Door extends SerializableEntity implements Entity {
   }
 
   onTick(dt: number): void {
-    if (this.body.type == Body.STATIC && this.playerProgressController?.hasItem(this.key!)) {
+    if (
+      this.body.type == Body.STATIC &&
+      this.playerProgressController?.hasItem(this.key!)
+    ) {
       this.game!.addEntity(new Door(this.hinge, this.end));
       this.destroy();
     }
-    
+
     const distanceFromClosed = Math.abs(this.body.angle - this.restAngle);
 
     const threshold = degToRad(1);

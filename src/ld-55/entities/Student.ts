@@ -1,100 +1,93 @@
-import { Body, Circle } from "p2";
+import { Body } from "p2";
 import { AnimatedSprite } from "pixi.js";
+import { ImageName } from "../../../resources/resources";
 import { V, V2d } from "../../core/Vector";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { choose } from "../../core/util/Random";
 import { CollisionGroups } from "../CollisionGroups";
 import { Persistence } from "../constants/constants";
-import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
-import { PersonShadow } from "./PersonShadow";
+import { SerializedEntity } from "../editor/serializeTypes";
+import { Human } from "./Human";
 import { WalkSoundPlayer } from "./WalkSoundPlayer";
 
-const studentBaseTextures: string[] = [
-  "boy1",
-  "boy2",
-  "boy3",
-  "girl1",
-  "girl2",
-  "girl3",
-  "girlemo",
+const studentImages: ImageName[][] = [
+  ["boy11", "boy12", "boy13", "boy14", "boy15", "boy16", "boy17", "boy18"],
+  ["boy21", "boy22", "boy23", "boy24", "boy25", "boy26", "boy27", "boy28"],
+  ["boy31", "boy32", "boy33", "boy34", "boy35", "boy36", "boy37", "boy38"],
+  [
+    "girl11",
+    "girl12",
+    "girl13",
+    "girl14",
+    "girl15",
+    "girl16",
+    "girl17",
+    "girl18",
+  ],
+  [
+    "girl21",
+    "girl22",
+    "girl23",
+    "girl24",
+    "girl25",
+    "girl26",
+    "girl27",
+    "girl28",
+  ],
+  [
+    "girl31",
+    "girl32",
+    "girl33",
+    "girl34",
+    "girl35",
+    "girl36",
+    "girl37",
+    "girl38",
+  ],
+  [
+    "girlemo1",
+    "girlemo2",
+    "girlemo3",
+    "girlemo4",
+    "girlemo5",
+    "girlemo6",
+    "girlemo7",
+    "girlemo8",
+  ],
 ];
-const WALKING_STEPS_PER_SECOND = 2;
 
 /** An example Entity to show some features of the engine */
-export class Student extends SerializableEntity implements Entity {
+export class Student extends Human implements Entity {
   persistenceLevel: Persistence = Persistence.Game;
-  sprite: GameSprite & AnimatedSprite;
-  body: Body;
-  tags = ["student"];
   targetLocation: V2d;
-  walkSoundPlayer: WalkSoundPlayer;
 
   constructor(
     private position: V2d,
-    angle: number = 0
+    angle: number = 0,
+    images: ImageName[] = choose(...studentImages)
   ) {
-    super();
-
-    this.body = new Body({
-      mass: 0.5,
-      position: position.clone(),
+    super({
+      position,
       angle,
+      images,
+      collisionGroup: CollisionGroups.Students,
+      walkSpeed: 3,
+      runSpeed: 6,
+      tags: ["student"],
     });
 
-    const radius = 0.5; // meters
-
-    const shape = new Circle({ radius: radius * 0.6 });
-    shape.collisionGroup = CollisionGroups.Player;
-    shape.collisionMask = CollisionGroups.All;
-    this.body.addShape(shape);
-
-    const baseTexture = choose(...studentBaseTextures);
-
-    this.sprite = AnimatedSprite.fromImages([
-      baseTexture + "1",
-      baseTexture + "2",
-      baseTexture + "3",
-      baseTexture + "4",
-      baseTexture + "5",
-      baseTexture + "6",
-      baseTexture + "7",
-      baseTexture + "8",
-    ]);
-    this.sprite.anchor.set(0.5);
-    this.sprite.scale = (2 * radius) / this.sprite.texture.width;
-    this.sprite.play();
-
-    this.addChild(new PersonShadow(this.body));
-    this.walkSoundPlayer = this.addChild(new WalkSoundPlayer(this.body));
     this.targetLocation = position;
   }
 
   onTick(dt: number): void {
-    this.body.applyDamping(200 * dt);
+    super.onTick(dt);
 
-    let moving;
     if (this.isAtTargetLocation()) {
-      this.walkSoundPlayer.stop();
-      this.sprite.animationSpeed = 0;
-      this.sprite.currentFrame = 0;
-
-      moving = false;
+      this.walkSpring.stop();
     } else {
-      const walkStrength = 40;
       const diff = this.targetLocation.sub(this.body.position);
       const direction = diff.normalize();
-      this.body.applyForce(direction.mul(walkStrength));
-      this.body.angle = direction.angle;
-
-      moving = true;
-    }
-
-    if (moving) {
-      const framesPerStep = 4;
-      this.sprite.animationSpeed =
-        (WALKING_STEPS_PER_SECOND / framesPerStep / 4) * this.game!.slowMo;
-
-      this.walkSoundPlayer.advance(dt * WALKING_STEPS_PER_SECOND, false);
+      this.walkSpring.walkTowards(direction.angle, 1);
     }
   }
 
@@ -115,6 +108,10 @@ export class Student extends SerializableEntity implements Entity {
     this.sprite.position.set(...this.body.position);
     this.sprite.rotation = this.body.angle + Math.PI / 2;
   }
+
+  ///////////////////////////
+  /// SERIALIZATION STUFF ///
+  ///////////////////////////
 
   static deserialize(e: SerializedEntity): Student {
     return new Student(V(e.position));

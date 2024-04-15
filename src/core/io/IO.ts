@@ -52,7 +52,7 @@ export class IOManager {
     // Because this is a polling not pushing interface
     window.setInterval(
       () => this.handleGamepads(),
-      1000 / GAMEPAD_POLLING_FREQUENCY,
+      1000 / GAMEPAD_POLLING_FREQUENCY
     );
   }
 
@@ -256,7 +256,7 @@ export class IOManager {
       }
       const gamepadRange = GAMEPAD_MAXIMUM - GAMEPAD_MINIMUM;
       axes.magnitude = clampUp(
-        (axes.magnitude - GAMEPAD_MINIMUM) / gamepadRange,
+        (axes.magnitude - GAMEPAD_MINIMUM) / gamepadRange
       );
       axes.x = clamp(axes.x, -1, 1);
       axes.y = clamp(axes.y, -1, 1);
@@ -268,5 +268,32 @@ export class IOManager {
   getButton(button: ControllerButton): number {
     const gamepad = navigator.getGamepads()[0];
     return gamepad?.buttons[button]?.value ?? 0;
+  }
+
+  // Really standard based on WASD, arrow keys, or gamepad
+  getMovementVector(): V2d {
+    const result = V(0, 0);
+
+    if (this.usingGamepad) {
+      result.iadd(this.getStick("left"));
+    }
+
+    if (this.keyIsDown("KeyW") || this.keyIsDown("ArrowUp")) {
+      result[1] -= 1;
+    }
+    if (this.keyIsDown("KeyD") || this.keyIsDown("ArrowRight")) {
+      result[0] += 1;
+    }
+    if (this.keyIsDown("KeyS") || this.keyIsDown("ArrowDown")) {
+      result[1] += 1;
+    }
+    if (this.keyIsDown("KeyA") || this.keyIsDown("ArrowLeft")) {
+      result[0] -= 1;
+    }
+
+    result[0] = clamp(result[0], -1, 1);
+    result[1] = clamp(result[1], -1, 1);
+
+    return result;
   }
 }

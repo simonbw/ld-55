@@ -19,7 +19,7 @@ export default class HelpText extends BaseEntity implements Entity {
 
   constructor(
     public position: V2d,
-    public text: string,
+    public text: string
   ) {
     super();
 
@@ -43,7 +43,8 @@ export default class HelpText extends BaseEntity implements Entity {
     });
     this.helpText.anchor.set(0.5, 0.5);
     this.sprite.addChild(this.helpText);
-    
+    this.sprite.alpha = 0.8;
+
     this.sprite.setSize(1 / 64);
     this.sprite.position.set(...position);
   }

@@ -4,6 +4,8 @@ import { GameSprite } from "../entity/Entity";
 import { Camera2d } from "./Camera2d";
 import { LayerInfo } from "./LayerInfo";
 
+export interface GameRenderer2dOptions extends Partial<Pixi.RendererOptions> {}
+
 /** The thing that renders stuff to the screen. Mostly for handling layers. */
 export class GameRenderer2d {
   layerInfos: Map<string, LayerInfo> = new Map();
@@ -30,9 +32,14 @@ export class GameRenderer2d {
     window.addEventListener("resize", () => this.handleResize());
   }
 
-  async init() {
+  async init(pixiOptions: GameRenderer2dOptions = {}) {
     await this.app
-      .init({ resizeTo: window, autoDensity: true, antialias: false })
+      .init({
+        resizeTo: window,
+        autoDensity: true,
+        antialias: false,
+        ...pixiOptions,
+      })
       .then(() => {
         document.body.appendChild(this.canvas);
 

@@ -6,38 +6,44 @@ import { EditorController } from "./EditorController";
 import { serializeLevel } from "./serializeLevel";
 import { LevelData, SerializableEntity } from "./serializeTypes";
 
-
 export class EditorPanel extends ReactEntity<any> implements Entity {
+  controller: EditorController;
 
-  controller : EditorController;
-
-  constructor(myGame: Game, private levelData: LevelData) {
-    super(() => <>
-      <select value='Wall' onChange={(e) => this.onCreateEntityTypeChange(e)}>
-        {SerializableEntity.listTypeNames().map((name: string) => <option value={name}>{name}</option>)}
-      </select>
-      {/* <button onClick={() => this.onSave(myGame) }>Add Entity</button> */}
-      <button onClick={() => this.onSave(myGame) }>Save file</button>
-    </>);
-    this.controller = new EditorController(levelData)
-    this.controller.onCreateEntityTypeChange('Wall');
-    this.addChild(this.controller); 
-  }
-
-  onCreateEntityTypeChange(e: Event) {
-    this.controller.onCreateEntityTypeChange(e.target!.value);
+  constructor(
+    myGame: Game,
+    private levelData: LevelData
+  ) {
+    super(() => (
+      <>
+        <select
+          value="Wall"
+          onChange={(e) =>
+            this.controller.onCreateEntityTypeChange(e.target.value)
+          }
+        >
+          {SerializableEntity.listTypeNames().map((name: string) => (
+            <option value={name}>{name}</option>
+          ))}
+        </select>
+        {/* <button onClick={() => this.onSave(myGame) }>Add Entity</button> */}
+        <button onClick={() => this.onSave(myGame)}>Save file</button>
+      </>
+    ));
+    this.controller = new EditorController(levelData);
+    this.controller.onCreateEntityTypeChange("Wall");
+    this.addChild(this.controller);
   }
 
   async onSave(myGame: Game) {
     const stuff = serializeLevel(myGame);
-    var file = new Blob([JSON.stringify(stuff, null, 2)], {type: 'json'});
+    var file = new Blob([JSON.stringify(stuff, null, 2)], { type: "json" });
     if ((window as any).showSaveFilePicker) {
       const handle = await (window as any).showSaveFilePicker({
-        suggestedName: 'level.json',
-        types: [{accept: {'application/json': ['.json']}}]
+        suggestedName: "level.json",
+        types: [{ accept: { "application/json": [".json"] } }],
       });
       const writable = await handle.createWritable();
-      await writable.write( file );
+      await writable.write(file);
       writable.close();
     }
   }

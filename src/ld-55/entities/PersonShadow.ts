@@ -1,5 +1,5 @@
-import { Body } from "p2";
 import { Sprite } from "pixi.js";
+import { V2d } from "../../core/Vector";
 import BaseEntity from "../../core/entity/BaseEntity";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
@@ -7,7 +7,10 @@ import { imageName } from "../../core/resources/resourceUtils";
 export class PersonShadow extends BaseEntity implements Entity {
   sprite: GameSprite & Sprite;
 
-  constructor(private personBody: Body) {
+  constructor(
+    private getPersonPosition: () => V2d,
+    private getPersonRotation: () => number
+  ) {
     super();
 
     this.sprite = Sprite.from(imageName("playerShadow"));
@@ -17,7 +20,7 @@ export class PersonShadow extends BaseEntity implements Entity {
   }
 
   onRender(): void {
-    this.sprite.position.set(...this.personBody.position);
-    this.sprite.rotation = this.personBody.angle;
+    this.sprite.position.set(...this.getPersonPosition());
+    this.sprite.rotation = this.getPersonRotation();
   }
 }

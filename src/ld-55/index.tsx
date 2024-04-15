@@ -5,7 +5,6 @@ import { GamePreloader } from "./GamePreloader.tsx";
 import { Layer, initLayers } from "./config/layers.ts";
 import PlayerProgressController from "./entities/PlayerProgressController.ts";
 import GameController from "./entities/controllers/GameController.ts";
-import ObjectiveController from "./entities/controllers/ObjectiveController.ts";
 
 // Do this so we can access the game from the console
 declare global {
@@ -19,7 +18,7 @@ async function main() {
   TextureStyle.defaultOptions.scaleMode = "nearest";
 
   const game = new Game();
-  await game.init();
+  await game.init({ rendererOptions: { backgroundColor: 0x001800 } });
   // Make the game accessible from the console
   window.DEBUG = { game };
 
@@ -31,7 +30,10 @@ async function main() {
 
   game.addEntity(new GameController());
   game.addEntity(new PlayerProgressController());
-  game.addEntity(new FPSMeter(Layer.DEBUG_HUD));
+
+  if (process.env.NODE_ENV === "development") {
+    game.addEntity(new FPSMeter(Layer.DEBUG_HUD));
+  }
 
   game.dispatch({ type: "goToMainMenu" });
 }
