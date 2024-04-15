@@ -94,9 +94,8 @@ export default class SuspendedMenu extends BaseEntity implements Entity {
     if (!this.inTransition) {
       this.inTransition = true;
       this.restartText.interactive = false;
-
-      this.game?.dispatch({ type: "restartLevel" });
-
+      this.game!.dispatch({ type: "restartLevel" });
+      this.game!.slowMo = 1;
       this.destroy();
     }
   }
