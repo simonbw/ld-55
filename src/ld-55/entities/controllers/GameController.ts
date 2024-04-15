@@ -59,7 +59,6 @@ export default class GameController extends BaseEntity implements Entity {
         ],
       });
 
-      // level = 3;
       if (level == 1) {
         TutorialLevel.addLevelEntities(game, level);
       } else if (level == 2) {

@@ -11,7 +11,7 @@ import { Player } from "../entities/Player.ts";
 import { Student } from "../entities/Student.ts";
 import { Teacher } from "../entities/Teacher.ts";
 import { Wall } from "../entities/Wall.ts";
-import { makeBathRoom, makeRoom } from "./level-utilities.ts";
+import { makeBathRoom, makeGym, makeRoom } from "./level-utilities.ts";
 
 function addLevelEntities(game: Game, levelN: number) {
   // Left side classrooms
@@ -38,7 +38,7 @@ function addLevelEntities(game: Game, levelN: number) {
   makeRoom(game, -39, -5, 7, 17);
   makeRoom(game, -39, 12, 7, 12);
   makeRoom(game, -39, 24, 7, 12);
-  makeRoom(game, -27, 12, 27, 19);
+  makeGym(game, -27, 12, 27, 19, "gymGymFloor");
 
   game.addEntity(new Floor(V(10, 0), V(15, 36), "hallwayFloor"));
   game.addEntity(new Floor(V(-27, -5), V(15, 0), "hallwayFloor"));
