@@ -3,6 +3,7 @@ import Entity from "../../../core/entity/Entity";
 import { Persistence } from "../../constants/constants";
 import ElShapedLevel from "../../levels/ElShapedLevel";
 import HallwayLevel from "../../levels/HallwayLevel";
+import TutorialLevel from "../../levels/TutorialLevel";
 import { MusicController } from "../MusicController";
 import PlayerCameraController from "../PlayerCameraController";
 import SlowMoController from "../SlowMoController";
@@ -58,6 +59,8 @@ export default class GameController extends BaseEntity implements Entity {
       });
 
       if (level == 1) {
+        TutorialLevel.addLevelEntities(game, level);
+      } else if (level == 2) {
         ElShapedLevel.addLevelEntities(game, level);
       } else {
         HallwayLevel.addLevelEntities(game, level);
