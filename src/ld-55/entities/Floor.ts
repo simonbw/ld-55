@@ -17,6 +17,7 @@ const floorScales: Partial<Record<ImageName, number>> = {
   carpetFloor5: 0.04,
   carpetFloor6: 0.04,
   carpetFloor7: 0.04,
+  gymBballCourt: 0.08,
 };
 
 export class Floor extends SerializableEntity implements Entity {

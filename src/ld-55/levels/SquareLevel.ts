@@ -38,7 +38,7 @@ function addLevelEntities(game: Game, levelN: number) {
   makeRoom(game, -39, -5, 7, 17);
   makeRoom(game, -39, 12, 7, 12);
   makeRoom(game, -39, 24, 7, 12);
-  makeGym(game, -27, 12, 27, 19, "gymGymFloor");
+  makeGym(game, -27, 12, 27, 19);
 
   game.addEntity(new Floor(V(10, 0), V(15, 36), "hallwayFloor"));
   game.addEntity(new Floor(V(-27, -5), V(15, 0), "hallwayFloor"));
