@@ -30,7 +30,8 @@ export function makeRoom(
   game.addEntity(new TeacherDesk(V(x + width / 2, y + 2)));
 
   const rows = clamp(Math.floor((height - 4) / 2), 0, 3);
-  for (let i = 0; i < 5; i++) {
+  const cols = Math.floor((width) / 2);
+  for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       game.addEntity(
         new Student(V(x + 1 + i * 2, y + 5 + j * 2), degToRad(-90))
