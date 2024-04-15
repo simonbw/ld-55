@@ -12,6 +12,8 @@ const sounds = {
   paAnnouncement3: require("./audio/pa-announcement-3.flac"),
   paAnnouncement2: require("./audio/pa-announcement-2.flac"),
   paAnnouncement1: require("./audio/pa-announcement-1.flac"),
+  musicLowIntensity: require("./audio/music-low-intensity.flac"),
+  musicHighIntensity: require("./audio/music-high-intensity.flac"),
   music1: require("./audio/music-1.flac"),
   footstepSoft3: require("./audio/footstep-soft-3.flac"),
   footstepSoft2: require("./audio/footstep-soft-2.flac"),

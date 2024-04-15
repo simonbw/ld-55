@@ -1,5 +1,6 @@
 import { Body, Circle, ContactEquation, Shape } from "p2";
 import { AnimatedSprite } from "pixi.js";
+import { ImageName } from "../../../resources/resources";
 import { V, V2d } from "../../core/Vector";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { choose } from "../../core/util/Random";
@@ -90,8 +91,17 @@ export class Teacher extends SerializableEntity implements Entity {
     let sprinting;
     let moving;
     const player = this.game?.entities.getTagged("player")[0];
+
+    const lastSuspicion = this.suspicion;
     if (player && this.visionCone.canSee(player)) {
       this.suspicion += dt;
+    }
+
+    if (
+      lastSuspicion < SUSPICION_THRESHOLD_SECONDS &&
+      this.suspicion >= SUSPICION_THRESHOLD_SECONDS
+    ) {
+      this.game!.dispatch({ type: "teacherSpottedPlayer" });
     }
 
     if (
