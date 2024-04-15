@@ -1,8 +1,9 @@
 import { Body, Circle, ContactEquation, Shape } from "p2";
 import { AnimatedSprite } from "pixi.js";
-import { ImageName } from "../../../resources/resources";
+import { ImageName, SoundName } from "../../../resources/resources";
 import { V, V2d } from "../../core/Vector";
 import Entity, { GameSprite } from "../../core/entity/Entity";
+import { PositionalSound } from "../../core/sound/PositionalSound";
 import { choose } from "../../core/util/Random";
 import { CollisionGroups } from "../CollisionGroups";
 import { Persistence } from "../constants/constants";
@@ -15,27 +16,38 @@ const RUNNING_STEPS_PER_SECOND = 5;
 const WALKING_STEPS_PER_SECOND = 2;
 const SUSPICION_THRESHOLD_SECONDS = 1;
 
-const teacherSprites: ImageName[][] = [
-  [
-    "teacherGym1",
-    "teacherGym2",
-    "teacherGym3",
-    "teacherGym4",
-    "teacherGym5",
-    "teacherGym6",
-    "teacherGym7",
-    "teacherGym8",
-  ],
-  [
-    "teacherScience1",
-    "teacherScience2",
-    "teacherScience3",
-    "teacherScience4",
-    "teacherScience5",
-    "teacherScience6",
-    "teacherScience7",
-    "teacherScience8",
-  ],
+interface TeacherStats {
+  images: ImageName[];
+  alertSounds: SoundName[];
+}
+
+const teacherStats: TeacherStats[] = [
+  {
+    images: [
+      "teacherGym1",
+      "teacherGym2",
+      "teacherGym3",
+      "teacherGym4",
+      "teacherGym5",
+      "teacherGym6",
+      "teacherGym7",
+      "teacherGym8",
+    ],
+    alertSounds: ["teacherAlert1", "teacherAlert3"],
+  },
+  {
+    images: [
+      "teacherScience1",
+      "teacherScience2",
+      "teacherScience3",
+      "teacherScience4",
+      "teacherScience5",
+      "teacherScience6",
+      "teacherScience7",
+      "teacherScience8",
+    ],
+    alertSounds: ["teacherAlert2"],
+  },
 ];
 
 export class Teacher extends SerializableEntity implements Entity {
@@ -51,6 +63,8 @@ export class Teacher extends SerializableEntity implements Entity {
   suspicion = 0;
 
   targetLocation: V2d;
+
+  teacherStats: TeacherStats = choose(...teacherStats);
 
   constructor(
     private position: V2d,
@@ -71,7 +85,7 @@ export class Teacher extends SerializableEntity implements Entity {
     shape.collisionMask = CollisionGroups.All;
     this.body.addShape(shape);
 
-    this.sprite = AnimatedSprite.fromImages(choose(...teacherSprites));
+    this.sprite = AnimatedSprite.fromImages(this.teacherStats.images);
     this.sprite.anchor.set(0.5);
     this.sprite.scale = (2 * radius) / this.sprite.texture.width;
     this.sprite.play();
@@ -102,6 +116,12 @@ export class Teacher extends SerializableEntity implements Entity {
       this.suspicion >= SUSPICION_THRESHOLD_SECONDS
     ) {
       this.game!.dispatch({ type: "teacherSpottedPlayer" });
+      this.addChild(
+        new PositionalSound(
+          choose(...this.teacherStats.alertSounds),
+          V(this.body.position)
+        )
+      );
     }
 
     if (
