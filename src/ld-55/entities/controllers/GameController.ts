@@ -3,6 +3,7 @@ import Entity from "../../../core/entity/Entity";
 import { Persistence } from "../../constants/constants";
 import ElShapedLevel from "../../levels/ElShapedLevel";
 import HallwayLevel from "../../levels/HallwayLevel";
+import SquareLevel from "../../levels/SquareLevel";
 import TutorialLevel from "../../levels/TutorialLevel";
 import { MusicController } from "../MusicController";
 import PlayerCameraController from "../PlayerCameraController";
@@ -39,7 +40,7 @@ export default class GameController extends BaseEntity implements Entity {
 
     levelStart: (event: { level: 1 | 2 | 3 }) => {
       const game = this.game!;
-      const { level } = event;
+      let { level } = event;
       game.clearScene(Persistence.Level);
 
       game.dispatch({ type: "clearLevel" });
@@ -58,10 +59,13 @@ export default class GameController extends BaseEntity implements Entity {
         ],
       });
 
+      // level = 3;
       if (level == 1) {
         TutorialLevel.addLevelEntities(game, level);
       } else if (level == 2) {
         ElShapedLevel.addLevelEntities(game, level);
+      } else if (level == 3) {
+        SquareLevel.addLevelEntities(game, level);
       } else {
         HallwayLevel.addLevelEntities(game, level);
       }
