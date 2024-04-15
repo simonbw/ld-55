@@ -3,6 +3,9 @@
 const sounds = {
     vocalModeStep2: require("./audio/vocal-mode-step-2.flac"),
   vocalModeStep1: require("./audio/vocal-mode-step-1.flac"),
+  teacherAlert3: require("./audio/teacher-alert-3.flac"),
+  teacherAlert2: require("./audio/teacher-alert-2.flac"),
+  teacherAlert1: require("./audio/teacher-alert-1.flac"),
   snap: require("./audio/snap.flac"),
   rawSoftFootsteps: require("./audio/raw_soft-footsteps.flac"),
   rawFootstepsToeHeel: require("./audio/raw_footsteps-toe-heel.flac"),

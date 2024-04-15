@@ -25,7 +25,6 @@ function addLevelEntities(game: Game, levelN: number) {
   makeRoom(game, 15, 24, 10, 8);
   makeRoom(game, 15, 32, 10, 8);
 
-  
   makeRoom(game, 15, -10, 10, 10);
   makeRoom(game, 3, -15, 12, 10);
   makeRoom(game, -7, -15, 10, 10);
@@ -33,7 +32,6 @@ function addLevelEntities(game: Game, levelN: number) {
   makeRoom(game, -27, -15, 10, 10);
   makeRoom(game, -27, 0, 14, 12);
   makeRoom(game, -13, 0, 13, 12);
-
 
   game.addEntity(new Floor(V(10, 0), V(15, 36), "hallwayFloor"));
   game.addEntity(new Floor(V(-27, -5), V(15, 0), "hallwayFloor"));
@@ -98,43 +96,33 @@ function addLevelEntities(game: Game, levelN: number) {
 
   const hallwayPatroller = new Teacher(V(14.2, 6), Math.PI / 2);
   game.addEntity(hallwayPatroller);
-  game.addEntity(new PatrolController(
-    hallwayPatroller,
-    V(14.2, 30),
-    V(14.2, 6),
-  ));
+  game.addEntity(
+    new PatrolController(hallwayPatroller, V(14.2, 30), V(14.2, 6))
+  );
 
-  const hallwayPatroller2 = new Teacher(V(10.8, 20), Math.PI/2);
+  const hallwayPatroller2 = new Teacher(V(10.8, 20), Math.PI / 2);
   game.addEntity(hallwayPatroller2);
-  game.addEntity(new PatrolController(
-    hallwayPatroller2,
-    V(10.8, 30),
-    V(10.8, 6),
-  )); 
+  game.addEntity(
+    new PatrolController(hallwayPatroller2, V(10.8, 30), V(10.8, 6))
+  );
 
   const hallwayPatroller3 = new Student(V(12.5, 20), Math.PI / 2);
   game.addEntity(hallwayPatroller3);
-  game.addEntity(new PatrolController(
-    hallwayPatroller3,
-    V(12.5, 30),
-    V(12.5, 6),
-  ));
+  game.addEntity(
+    new PatrolController(hallwayPatroller3, V(12.5, 30), V(12.5, 6))
+  );
 
   const hallwayPatroller4 = new Student(V(11.5, 13), Math.PI / 2);
   game.addEntity(hallwayPatroller4);
-  game.addEntity(new PatrolController(
-    hallwayPatroller4,
-    V(11.5, 6),
-    V(11.5, 30),
-  ));
+  game.addEntity(
+    new PatrolController(hallwayPatroller4, V(11.5, 6), V(11.5, 30))
+  );
 
   const hallwayPatroller5 = new Student(V(13.5, 23), Math.PI / 2);
   game.addEntity(hallwayPatroller5);
-  game.addEntity(new PatrolController(
-    hallwayPatroller5,
-    V(13.5, 30),
-    V(13.5, 6),
-  ));
+  game.addEntity(
+    new PatrolController(hallwayPatroller5, V(13.5, 30), V(13.5, 6))
+  );
 
   game.addEntity(new Grass());
   game.addEntity(new Key(V(12.5, 5)));
@@ -153,7 +141,7 @@ function addLevelEntities(game: Game, levelN: number) {
   game.addEntity(new Wall(V(-2, -5), V(3, -5)));
   game.addEntity(new Wall(V(3, -5), V(6, -5)));
   game.addEntity(new Wall(V(8, -5), V(15, -5)));
-  
+
   game.addEntity(new Wall(V(0, 0), V(-6, 0)));
   game.addEntity(new Wall(V(-8, 0), V(-13, 0)));
   game.addEntity(new Wall(V(-13, 0), V(-20, 0)));
