@@ -13,22 +13,28 @@ export class EditorPanel extends ReactEntity implements Entity {
     myGame: Game,
     private levelData: LevelData
   ) {
-    super(() => (
-      <>
-        <select
-          value="Wall"
-          onChange={(e) =>
-            this.controller.onCreateEntityTypeChange(e.target.value)
-          }
-        >
-          {SerializableEntity.listTypeNames().map((name: string) => (
-            <option value={name}>{name}</option>
-          ))}
-        </select>
-        {/* <button onClick={() => this.onSave(myGame) }>Add Entity</button> */}
-        <button onClick={() => this.onSave(myGame)}>Save file</button>
-      </>
-    ));
+    super(() => {
+      const mousePosition = this.game!.camera.toWorld(
+        this.game!.io.mousePosition
+      );
+      return (
+        <>
+          <select
+            value="Wall"
+            onChange={(e) =>
+              this.controller.onCreateEntityTypeChange(e.target.value)
+            }
+          >
+            {SerializableEntity.listTypeNames().map((name: string) => (
+              <option value={name}>{name}</option>
+            ))}
+          </select>
+          {/* <button onClick={() => this.onSave(myGame) }>Add Entity</button> */}
+          <button onClick={() => this.onSave(myGame)}>Save file</button>
+          <span>{JSON.stringify(mousePosition)}</span>
+        </>
+      );
+    });
     this.controller = new EditorController(levelData);
     this.controller.onCreateEntityTypeChange("Wall");
     this.addChild(this.controller);

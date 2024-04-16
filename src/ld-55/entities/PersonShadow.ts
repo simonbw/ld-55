@@ -3,6 +3,7 @@ import { V2d } from "../../core/Vector";
 import BaseEntity from "../../core/entity/BaseEntity";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { imageName } from "../../core/resources/resourceUtils";
+import { Layer } from "../config/layers";
 
 export class PersonShadow extends BaseEntity implements Entity {
   sprite: GameSprite & Sprite;
@@ -17,6 +18,7 @@ export class PersonShadow extends BaseEntity implements Entity {
     this.sprite.anchor.set(0.5);
     this.sprite.setSize(1.5);
     this.sprite.alpha = 0.5;
+    this.sprite.layerName = Layer.FLOOR_DECALS;
   }
 
   onRender(): void {

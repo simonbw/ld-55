@@ -9,10 +9,9 @@ import { Persistence } from "../constants/constants";
 import { SerializedEntity } from "../editor/serializeTypes";
 import { Human } from "./Human";
 import { VisionCone } from "./VisionCone";
+import { stepToward } from "../../core/util/MathUtil";
 
-const RUNNING_STEPS_PER_SECOND = 5;
-const WALKING_STEPS_PER_SECOND = 2;
-const SUSPICION_THRESHOLD_SECONDS = 1;
+const SUSPICION_THRESHOLD_SECONDS = 0.5;
 
 interface TeacherConfig {
   images: ImageName[];
@@ -82,6 +81,8 @@ export class Teacher extends Human implements Entity {
     const lastSuspicion = this.suspicion;
     if (player && this.visionCone.canSee(player)) {
       this.suspicion += dt;
+    } else {
+      this.suspicion = stepToward(this.suspicion, 0, dt * 0.2);
     }
 
     if (

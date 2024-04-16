@@ -62,12 +62,17 @@ export default class LevelController extends BaseEntity implements Entity {
     },
 
     playerCaught: () => {
+      const game = this.game!;
       if (this.levelPhase === "main") {
-        this.levelPhase = "post";
-        const game = this.game!;
-        if (game.entities.getById("suspendedMenu") === undefined) {
-          game.addEntity(new SuspendedMenu());
-        }
+        game.dispatch({ type: "playerSuspended" });
+      }
+    },
+
+    playerSuspended: () => {
+      const game = this.game!;
+      this.levelPhase = "post";
+      if (game.entities.getById("suspendedMenu") === undefined) {
+        game.addEntity(new SuspendedMenu());
       }
     },
 
@@ -84,7 +89,10 @@ export default class LevelController extends BaseEntity implements Entity {
   }
 
   onAdd(game: Game): void {
-    game.addEntity(new FadeFromColor());
+    const fade = game.addEntity(new FadeFromColor());
+    fade.done().then(() => {
+      this.levelPhase = "main";
+    });
 
     if (this.level == 1) {
       TutorialLevel.addLevelEntities(game, this.level);
@@ -103,7 +111,6 @@ export default class LevelController extends BaseEntity implements Entity {
     game.addEntity(new ObjectivesDisplay());
 
     announcement.waitTillEnded().then(() => {
-      this.levelPhase = "main";
       game.addEntity(new MusicController());
     });
   }

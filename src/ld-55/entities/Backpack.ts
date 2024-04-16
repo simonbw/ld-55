@@ -1,7 +1,6 @@
 import { GlowFilter } from "pixi-filters";
 import { Sprite } from "pixi.js";
-import { V2d } from "../../core/Vector";
-import BaseEntity from "../../core/entity/BaseEntity";
+import { V, V2d } from "../../core/Vector";
 import Entity, { GameSprite } from "../../core/entity/Entity";
 import { KeyCode } from "../../core/io/Keys";
 import { imageName } from "../../core/resources/resourceUtils";
@@ -9,9 +8,10 @@ import { SoundInstance } from "../../core/sound/SoundInstance";
 import { stepToward } from "../../core/util/MathUtil";
 import { Layer } from "../config/layers";
 import { Persistence } from "../constants/constants";
+import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 import { Player } from "./Player";
 
-export class Key extends BaseEntity implements Entity {
+export class Backpack extends SerializableEntity implements Entity {
   persistenceLevel: Persistence = Persistence.Game;
   sprite: GameSprite & Sprite;
   glowFilter: GlowFilter;
@@ -27,8 +27,8 @@ export class Key extends BaseEntity implements Entity {
 
     this.glowFilter = new GlowFilter({
       color: 0xffffcc,
-      distance: 16,
-      outerStrength: 4,
+      distance: 32,
+      outerStrength: 4.5,
       innerStrength: 1,
       alpha: 0,
     });
@@ -48,12 +48,14 @@ export class Key extends BaseEntity implements Entity {
 
   onRender(dt: number): void {
     const t = this.game!.elapsedTime * 5 * Math.PI;
-    const targetAlpha = this.playerWithinRange() ? 0.3 + 0.05 * Math.sin(t) : 0;
+    const targetAlpha = this.playerWithinRange()
+      ? 0.3 + 0.07 * Math.sin(t)
+      : 0.15;
 
     this.glowFilter.alpha = stepToward(
       this.glowFilter.alpha,
       targetAlpha,
-      dt * 6
+      dt * 5
     );
   }
 
@@ -71,5 +73,25 @@ export class Key extends BaseEntity implements Entity {
       this.game!.addEntity(new SoundInstance("backpackPickup"));
       this.destroy();
     }
+  }
+
+  ///////////////////////////
+  /// SERIALIZATION STUFF ///
+  ///////////////////////////
+
+  static deserialize(e: SerializedEntity): Backpack {
+    return new Backpack(V(e.position));
+  }
+
+  serialize(): SerializedEntity {
+    return {
+      position: [...this.position],
+    };
+  }
+
+  static defaultSerializedEntity(p: V2d): SerializedEntity {
+    return {
+      position: [...p],
+    };
   }
 }

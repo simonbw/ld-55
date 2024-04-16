@@ -36,6 +36,7 @@ const imagesWithbag: ImageName[] = [
 export class Player extends Human implements Entity {
   id = "player";
   soundListener: PositionalSoundListener;
+  enabled = true;
 
   constructor(private position: V2d) {
     super({
@@ -53,6 +54,8 @@ export class Player extends Human implements Entity {
 
   /** Called every update cycle */
   onTick(dt: number) {
+    if (!this.enabled) return;
+
     this.running = this.game!.io.keyIsDown("ShiftLeft");
     const walkDirection = this.game!.io.getMovementVector();
     const walkPercent = clamp(walkDirection.magnitude);
@@ -69,10 +72,30 @@ export class Player extends Human implements Entity {
         );
       }
     },
+
+    playerSuspended: () => {
+      this.enabled = false;
+    },
   };
 
+  ///////////////////////////
+  /// SERIALIZATION STUFF ///
+  ///////////////////////////
+
+  static deserialize(e: SerializedEntity): Player {
+    return new Player(V(e.position));
+  }
+
   serialize(): SerializedEntity {
-    throw new Error("Method not implemented.");
+    return {
+      position: [...this.position],
+    };
+  }
+
+  static defaultSerializedEntity(p: V2d): SerializedEntity {
+    return {
+      position: [...p],
+    };
   }
 }
 

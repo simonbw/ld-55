@@ -1,6 +1,6 @@
 import Game from "../../core/Game.ts";
 import { V } from "../../core/Vector";
-import { Key } from "../entities/Backpack.ts";
+import { Backpack } from "../entities/Backpack.ts";
 import { Door } from "../entities/Door.ts";
 import { ExitZone } from "../entities/ExitZone.ts";
 import { Floor } from "../entities/Floor.ts";
@@ -133,8 +133,8 @@ function addLevelEntities(game: Game, levelN: number) {
   );
 
   game.addEntity(new Grass());
-  game.addEntity(new Key(V(12.5, 5)));
-  game.addEntity(new ExitZone(V(12.5, 38)));
+  game.addEntity(new Backpack(V(12.5, 5)));
+  game.addEntity(new ExitZone(V(-36, 10)));
 
   game.addEntity(new Wall(V(15, -5), V(15, -3)));
   game.addEntity(new Wall(V(15, -1), V(15, 0)));
