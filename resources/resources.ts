@@ -35,7 +35,7 @@ export type SoundName = keyof typeof sounds;
 
 const images = {
     playerShadow: require("./images/player-shadow.png"),
-  favicon2: require("./images/favicon2.png"),
+  favicon: require("./images/favicon.png"),
   faviconOld: require("./images/favicon-old.png"),
   hallwayLocker: require("./images/setting/hallway/hallway-locker.png"),
   hallwayLockerDoor: require("./images/setting/hallway/hallway-locker-door.png"),
