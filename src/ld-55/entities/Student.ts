@@ -58,7 +58,6 @@ const studentImages: ImageName[][] = [
 
 /** An example Entity to show some features of the engine */
 export class Student extends Human implements Entity {
-  persistenceLevel: Persistence = Persistence.Game;
   targetLocation: V2d;
 
   constructor(

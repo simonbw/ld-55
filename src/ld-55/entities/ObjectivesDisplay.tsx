@@ -5,8 +5,6 @@ import { Persistence } from "../constants/constants";
 import { getLevelController } from "./LevelController";
 
 export class ObjectivesDisplay extends ReactEntity {
-  persistenceLevel = Persistence.Level;
-
   constructor() {
     super(() => {
       const levelController = getLevelController(this.game);

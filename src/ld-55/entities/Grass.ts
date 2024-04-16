@@ -6,7 +6,6 @@ import { Layer } from "../config/layers";
 import { Persistence } from "../constants/constants";
 
 export class Grass extends BaseEntity implements Entity {
-  persistenceLevel: Persistence = Persistence.Game;
   sprite: TilingSprite & GameSprite;
 
   constructor() {

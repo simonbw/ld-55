@@ -12,7 +12,6 @@ import { Persistence } from "../constants/constants";
 import { Body } from "p2";
 
 export default class HelpText extends BaseEntity implements Entity {
-  persistanceLevel: Persistence = Persistence.Game;
   sprite: GameSprite;
 
   helpText: Text;

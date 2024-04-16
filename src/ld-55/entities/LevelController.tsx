@@ -101,6 +101,7 @@ export default class LevelController extends BaseEntity implements Entity {
     } else if (this.level == 3) {
       SquareLevel.addLevelEntities(game, this.level);
     } else {
+      // This shouldn't happen
       HallwayLevel.addLevelEntities(game, this.level);
     }
     const announcement = game.addEntity(

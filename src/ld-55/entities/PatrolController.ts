@@ -6,7 +6,6 @@ import { Student } from "./Student";
 import { Teacher } from "./Teacher";
 
 export class PatrolController extends BaseEntity implements Entity {
-  persistenceLevel: Persistence = Persistence.Game;
   currentTarget: number;
   positions: V2d[];
 
@@ -31,5 +30,4 @@ export class PatrolController extends BaseEntity implements Entity {
       this.person.setTargetLocation(this.positions[this.currentTarget]);
     }
   }
-
 }

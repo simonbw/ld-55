@@ -14,7 +14,6 @@ import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 import { getLevelController } from "./LevelController";
 
 export class Door extends SerializableEntity implements Entity {
-  persistenceLevel: Persistence = Persistence.Game;
   body: Body;
 
   restAngle: number;

@@ -8,8 +8,6 @@ import { Persistence } from "../constants/constants";
 import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 
 export class Wall extends SerializableEntity implements Entity {
-  persistenceLevel: Persistence = Persistence.Game;
-
   constructor(
     private position1: V2d,
     private position2: V2d

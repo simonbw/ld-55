@@ -12,7 +12,6 @@ import { SerializableEntity, SerializedEntity } from "../editor/serializeTypes";
 import { Player } from "./Player";
 
 export class Backpack extends SerializableEntity implements Entity {
-  persistenceLevel: Persistence = Persistence.Game;
   sprite: GameSprite & Sprite;
   glowFilter: GlowFilter;
 

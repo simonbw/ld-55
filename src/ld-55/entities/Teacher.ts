@@ -48,8 +48,6 @@ const teacherConfigs: TeacherConfig[] = [
 ];
 
 export class Teacher extends Human implements Entity {
-  persistenceLevel: Persistence = Persistence.Game;
-
   visionCone: VisionCone;
 
   foundPlayer: boolean = false;

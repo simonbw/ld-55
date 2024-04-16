@@ -8,7 +8,6 @@ import { Layer } from "../config/layers";
 import { Persistence } from "../constants/constants";
 
 export class ExitZone extends BaseEntity implements Entity {
-  persistenceLevel: Persistence = Persistence.Game;
   body: Body;
   sprite: Graphics & GameSprite;
 
